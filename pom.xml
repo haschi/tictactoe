@@ -9,6 +9,7 @@
     <version>DEV-SNAPSHOT</version>
     <modules>
         <module>tictactoe-core</module>
+        <module>tictactoe-test</module>
     </modules>
 
 
@@ -26,14 +27,21 @@
         <maven.surefire.plugin.version>2.22.0</maven.surefire.plugin.version>
         <surefire.printSummary>false</surefire.printSummary>
 
+        <maven.failsafe.plugin.version>2.22.0</maven.failsafe.plugin.version>
+        <failsafe.printSummary>false</failsafe.printSummary>
+
         <kotlin.version>1.2.51</kotlin.version>
         <kotlin.compiler.languageVersion>1.2</kotlin.compiler.languageVersion>
         <kotlin.compiler.apiVersion>1.2</kotlin.compiler.apiVersion>
+
+        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
 
         <junit-jupiter.version>5.2.0</junit-jupiter.version>
         <junit-vintage.version>5.2.0</junit-vintage.version>
         <junit.version>4.12</junit.version>
         <junit-platform.version>1.2.0</junit-platform.version>
+
+        <cukes.version>2.4.0</cukes.version>
 
     </properties>
 
@@ -54,6 +62,13 @@
                 <version>${kotlin.version}</version>
 
             </dependency>
+
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.axonframework</groupId>
@@ -98,6 +113,13 @@
             </dependency>
 
             <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>3.10.0</version>
@@ -108,6 +130,34 @@
                 <artifactId>mockito-core</artifactId>
                 <version>2.19.1</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>${cukes.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>${cukes.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>${cukes.version}</version>
+            </dependency>
+
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -170,12 +220,34 @@
                         <args>
                             <arg>-Werror</arg>
                         </args>
+                        <compilerPlugins>
+                            <plugin>spring</plugin>
+                        </compilerPlugins>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jetbrains.kotlin</groupId>
+                            <artifactId>kotlin-maven-allopen</artifactId>
+                            <version>${kotlin.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.21.0</version>
+                    <version>2.22.0</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.junit.platform</groupId>
+                            <artifactId>junit-platform-surefire-provider</artifactId>
+                            <version>${junit-platform.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.22.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.platform</groupId>
