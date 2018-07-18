@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe.requirements
+package com.github.haschi.tictactoe
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 

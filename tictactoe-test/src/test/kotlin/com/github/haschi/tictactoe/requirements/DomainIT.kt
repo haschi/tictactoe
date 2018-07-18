@@ -5,5 +5,5 @@ import cucumber.api.junit.Cucumber
 import org.junit.runner.RunWith
 
 @RunWith(Cucumber::class)
-@CucumberOptions(plugin = ["progress"], tags = ["@domäne"])
+@CucumberOptions(plugin = ["progress"], tags = ["@domäne"], strict = true)
 class DomainIT
