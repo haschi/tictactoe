@@ -4,6 +4,7 @@ package com.github.haschi.tictactoe.requirements
 
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
+import com.github.haschi.tictactoe.domain.events.FeldBelegt
 import com.github.haschi.tictactoe.domain.events.SpielzugWurdeAkzeptiert
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
@@ -11,23 +12,27 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.requirements.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.testing.FeldConverter
 import com.github.haschi.tictactoe.requirements.testing.SpielerConverter
-import cucumber.api.PendingException
 import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
-import org.axonframework.commandhandling.gateway.CommandGateway
-import org.axonframework.eventsourcing.eventstore.EventStore
 
-class SpielsteinSetzen(val welt: DieWelt, val commandGateway: CommandGateway, val eventStore: EventStore)
+class ZeichenSetzenSteps(val welt: DieWelt)
 {
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen()
     {
-        welt.spielId = commandGateway.sendAndWait(BeginneSpiel(Aggregatkennung.neu()))
-        println(welt.spielId)
-        dump()
+        welt.spielId = Aggregatkennung.neu()
+        welt.send(BeginneSpiel(welt.spielId))
+    }
+
+    @Angenommen("^Spieler (X|O) hat sein Zeichen auf Feld ([ABC][123]) gesetzt$")
+    fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(
+            @Transform(SpielerConverter::class) spieler: Spieler,
+            @Transform(FeldConverter::class) feld: Feld)
+    {
+        welt.send(SetzeZeichen(welt.spielId, spieler, feld))
     }
 
     @Wenn("^Spieler (X|O) sein Zeichen auf Feld ([ABC][123]) setzt$")
@@ -35,9 +40,7 @@ class SpielsteinSetzen(val welt: DieWelt, val commandGateway: CommandGateway, va
             @Transform(SpielerConverter::class) spieler: Spieler,
             @Transform(FeldConverter::class) feld: Feld)
     {
-        dump()
-        println(welt.spielId)
-        commandGateway.sendAndWait<Any>(SetzeZeichen(welt.spielId, spieler, feld))
+        welt.send(SetzeZeichen(welt.spielId, spieler, feld))
     }
 
     @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")
@@ -45,15 +48,18 @@ class SpielsteinSetzen(val welt: DieWelt, val commandGateway: CommandGateway, va
             @Transform(FeldConverter::class) feld: Feld,
             @Transform(SpielerConverter::class) spieler: Spieler)
     {
+        welt.future.get()
+
         assertThat(welt.events).contains(
                 SpielzugWurdeAkzeptiert(welt.spielId, spieler, feld))
     }
 
-    fun dump()
+    @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist$")
+    fun konnte_Spieler_O_sein_Zeichen_nicht_platzieren_weil_das_Feld_belegt_gewesen_ist(
+            @Transform(SpielerConverter::class) spieler: Spieler)
     {
-        println("Event Store:")
-
-        eventStore.readEvents(welt.spielId.toString()).asStream()
-                .forEach { println(it) }
+        assertThat(welt.future)
+                .hasFailedWithThrowableThat()
+                .isEqualTo(FeldBelegt(welt.spielId, spieler))
     }
 }
