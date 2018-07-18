@@ -33,6 +33,7 @@ Funktionalität: Spielstein setzen
     Wenn Spieler O sein Zeichen auf Feld B2 setzt
     Dann konnte Spieler O sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist
 
+    @domäne
   Szenario: Spieler setzt Zeichen in falscher Reihenfolge
     Angenommen ich habe das Spiel begonnen
     Und Spieler X hat sein Zeichen auf Feld B2 gesetzt

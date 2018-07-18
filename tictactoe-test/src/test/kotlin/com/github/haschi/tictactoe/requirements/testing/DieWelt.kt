@@ -1,8 +1,7 @@
 package com.github.haschi.tictactoe.requirements.testing
 
-import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.sun.xml.internal.ws.util.CompletedFuture
+import cucumber.api.java.Before
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventhandling.EventHandler
 import org.springframework.stereotype.Component
@@ -11,6 +10,20 @@ import java.util.concurrent.CompletableFuture
 @Component
 open class DieWelt(val commandGateway: CommandGateway)
 {
+    init
+    {
+        println("Eine Neue Welt wurde geschaffen")
+    }
+
+
+    fun reset()
+    {
+        spielername = ""
+        spielId = Aggregatkennung.nil
+        future = CompletableFuture.supplyAsync { Aggregatkennung.neu() }
+        events = listOf()
+    }
+
     var events = listOf<Any>()
 
     var spielername: String = ""

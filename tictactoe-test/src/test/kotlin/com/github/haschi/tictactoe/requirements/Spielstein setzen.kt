@@ -5,6 +5,7 @@ package com.github.haschi.tictactoe.requirements
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
+import com.github.haschi.tictactoe.domain.events.SpielerNichtAndDerReiheGewesen
 import com.github.haschi.tictactoe.domain.events.SpielzugWurdeAkzeptiert
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
@@ -61,5 +62,14 @@ class ZeichenSetzenSteps(val welt: DieWelt)
         assertThat(welt.future)
                 .hasFailedWithThrowableThat()
                 .isEqualTo(FeldBelegt(welt.spielId, spieler))
+    }
+
+    @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil er nicht an der Reihe war$")
+    fun konnte_Spieler_X_sein_Zeichen_nicht_platzieren_weil_er_nicht_an_der_Reihe_war(
+            @Transform(SpielerConverter::class) spieler: Spieler)
+    {
+        assertThat(welt.future)
+                .hasFailedWithThrowableThat()
+                .isEqualTo(SpielerNichtAndDerReiheGewesen(welt.spielId, spieler))
     }
 }
