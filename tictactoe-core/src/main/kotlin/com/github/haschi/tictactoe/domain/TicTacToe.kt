@@ -43,22 +43,22 @@ class TicTacToe
     @CommandHandler
     fun setzeZeichen(command: SetzeZeichen)
     {
-        if (besetzteFelder.contains(command.feld))
+        if (besetzteFelder.contains(command.spielzug.feld))
         {
-            throw FeldBelegt(id, command.spieler)
+            throw FeldBelegt(id, command.spielzug.spieler)
         }
 
-        if (letzterSpieler == command.spieler)
+        if (letzterSpieler == command.spielzug.spieler)
         {
-            throw SpielerNichtAndDerReiheGewesen(id, command.spieler)
+            throw SpielerNichtAndDerReiheGewesen(id, command.spielzug.spieler)
         }
 
         AggregateLifecycle.apply(
-                SpielzugWurdeAkzeptiert(id, command.spieler, command.feld))
+                SpielzugWurdeAkzeptiert(id, command.spielzug.spieler, command.spielzug.feld))
 
-        if (wirdSpielerGewinnen(Spielzug(command.spieler, command.feld)))
+        if (wirdSpielerGewinnen(Spielzug(command.spielzug.spieler, command.spielzug.feld)))
         {
-            AggregateLifecycle.apply(SpielGewonnen(id, command.spieler))
+            AggregateLifecycle.apply(SpielGewonnen(id, command.spielzug.spieler))
         }
     }
 

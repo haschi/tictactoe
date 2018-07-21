@@ -10,6 +10,7 @@ import com.github.haschi.tictactoe.domain.events.SpielzugWurdeAkzeptiert
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.domain.values.Spielzug
 import com.github.haschi.tictactoe.requirements.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.testing.FeldConverter
 import com.github.haschi.tictactoe.requirements.testing.SpielerConverter
@@ -33,7 +34,7 @@ class ZeichenSetzenSteps(val welt: DieWelt)
             @Transform(SpielerConverter::class) spieler: Spieler,
             @Transform(FeldConverter::class) feld: Feld)
     {
-        welt.send(SetzeZeichen(welt.spielId, spieler, feld))
+        welt.send(SetzeZeichen(welt.spielId, Spielzug(spieler, feld)))
     }
 
     @Wenn("^Spieler (X|O) sein Zeichen auf Feld ([ABC][123]) setzt$")
@@ -41,7 +42,7 @@ class ZeichenSetzenSteps(val welt: DieWelt)
             @Transform(SpielerConverter::class) spieler: Spieler,
             @Transform(FeldConverter::class) feld: Feld)
     {
-        welt.send(SetzeZeichen(welt.spielId, spieler, feld))
+        welt.send(SetzeZeichen(welt.spielId, Spielzug(spieler, feld)))
     }
 
     @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")
