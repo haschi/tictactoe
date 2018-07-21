@@ -5,7 +5,7 @@ Funktionalität: Spielende prüfen
     Angenommen ich habe das Spiel begonnen
 
   @domäne
-  Szenariogrundriss: Spieler hat drei Zeichen nebeneinander
+  Szenariogrundriss: Spieler X gewinnt
 
     Angenommen ich habe folgenden Spielverlauf:
       | Spieler | Feld |
@@ -21,5 +21,19 @@ Funktionalität: Spielende prüfen
       | Feld | Spielergebnis  |
       | C3   | gewonnen       |
       | A3   | nicht gewonnen |
+
+  @domäne
+  Szenario: Spieler O gewinnt
+
+    Angenommen ich habe folgenden Spielverlauf:
+      | Spieler | Feld |
+      | X       | A1   |
+      | O       | B2   |
+      | X       | C3   |
+      | O       | B1   |
+      | X       | A2   |
+
+    Wenn Spieler O sein Zeichen auf Feld B3 setzt
+    Dann hat Spieler O gewonnen
 
   Szenario: Unentschieden

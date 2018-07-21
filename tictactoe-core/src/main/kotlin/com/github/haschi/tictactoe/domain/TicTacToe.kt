@@ -66,11 +66,16 @@ class TicTacToe
     {
         val gewinn = listOf(Feld('A', 1), Feld('B', 2), Feld('C', 3))
 
+        val gewinn2 = listOf(Feld('B', 1), Feld('B', 2), Feld('B', 3))
+
+        val gewinne = listOf(gewinn, gewinn2)
+
         val felderDesSpieler = (spielverlauf + spielzug)
                 .filter { it.spieler == spielzug.spieler }
                 .map { it.feld }
 
-        return felderDesSpieler.containsAll(gewinn)
+        return gewinne.map { felderDesSpieler.containsAll(it) }
+                .contains(true)
     }
 
     @EventSourcingHandler
