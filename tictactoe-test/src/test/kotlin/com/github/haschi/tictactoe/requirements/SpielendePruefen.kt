@@ -1,32 +1,49 @@
 package com.github.haschi.tictactoe.requirements
 
-import cucumber.api.PendingException
-import cucumber.api.java.de.Angenommen
-import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
+import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
+import com.github.haschi.tictactoe.domain.events.SpielGewonnen
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
+import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.requirements.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.testing.FeldConverter
 import com.github.haschi.tictactoe.requirements.testing.SpielerConverter
 import cucumber.api.Transform
+import cucumber.api.java.de.Angenommen
+import cucumber.api.java.de.Dann
+import cucumber.deps.com.thoughtworks.xstream.annotations.XStreamConverter
+import org.assertj.core.api.Assertions.assertThat
 
-class SpielendePruefen
+class SpielendePruefen(private val welt: DieWelt)
 {
     @Angenommen("^ich habe folgenden Spielverlauf:$")
     fun ich_habe_folgenden_Spielverlauf(arg1: List<Spielzug>)
     {
+        welt.spielId = Aggregatkennung.neu()
+        welt.send(BeginneSpiel(welt.spielId))
+
         arg1.forEach{
             println("Spielzug ${it.spieler} - ${it.feld}")
+            welt.send(SetzeZeichen(welt.spielId, it.spieler, it.feld))
         }
-        println(arg1)
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // List<YourType>, List<List<E>>, List<Map<K,V>> or Map<K,V>.
-        // E,K,V must be a scalar (String, Integer, Date, enum etc).
-        // Field names for YourType must match the column names in
-        // your feature file (except for spaces and capitalization).
-        throw PendingException()
+    }
+
+    @Dann("^hat Spieler (X|O) gewonnen$")
+    fun `hat_Spieler gewonnen`(@Transform(SpielerConverter::class) spieler: Spieler)
+    {
+        assertThat(welt.events)
+                .contains(SpielGewonnen(welt.spielId, spieler))
+    }
+
+    @Dann("^hat Spieler (X|O) nicht gewonnen$")
+    fun `hat Spieler nicht gewonnen`(@Transform(SpielerConverter::class) spieler: Spieler)
+    {
+        assertThat(welt.events)
+                .doesNotContain(SpielGewonnen(welt.spielId, spieler))
     }
 }
 
-class Spielzug(
-        @Transform(SpielerConverter::class) val spieler: Spieler,
-        @Transform(FeldConverter::class) val feld: Feld)
+data class Spielzug(
+        @XStreamConverter(SpielerConverter::class) val spieler: Spieler,
+        @XStreamConverter(FeldConverter::class) val feld: Feld)
