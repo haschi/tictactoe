@@ -24,7 +24,6 @@ class SpielendePruefen(private val welt: DieWelt)
         welt.send(BeginneSpiel(welt.spielId))
 
         arg1.forEach{
-            println("Spielzug ${it.spieler} - ${it.feld}")
             welt.send(SetzeZeichen(welt.spielId, com.github.haschi.tictactoe.domain.values.Spielzug(it.spieler, it.feld)))
         }
     }

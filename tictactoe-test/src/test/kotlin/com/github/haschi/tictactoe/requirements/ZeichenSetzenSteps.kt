@@ -53,7 +53,7 @@ class ZeichenSetzenSteps(val welt: DieWelt)
         welt.future.get()
 
         assertThat(welt.events).contains(
-                SpielzugWurdeAkzeptiert(welt.spielId, spieler, feld))
+                SpielzugWurdeAkzeptiert(welt.spielId, Spielzug(spieler, feld)))
     }
 
     @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist$")

@@ -1,8 +1,6 @@
 package com.github.haschi.tictactoe.domain.commands
 
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.github.haschi.tictactoe.domain.values.Feld
-import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import org.axonframework.commandhandling.TargetAggregateIdentifier
 

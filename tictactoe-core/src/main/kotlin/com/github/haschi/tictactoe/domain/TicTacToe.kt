@@ -13,7 +13,7 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.AggregateIdentifier
-import org.axonframework.commandhandling.model.AggregateLifecycle
+import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 
@@ -37,28 +37,51 @@ class TicTacToe
     @CommandHandler
     constructor(command: BeginneSpiel)
     {
-        AggregateLifecycle.apply(SpielBegonnen(command.id))
+        apply(SpielBegonnen(command.id))
     }
 
     @CommandHandler
     fun setzeZeichen(command: SetzeZeichen)
     {
-        if (besetzteFelder.contains(command.spielzug.feld))
+        fallsFeldBelegt(command.spielzug)
         {
-            throw FeldBelegt(id, command.spielzug.spieler)
+            throw FeldBelegt(id, it.spieler)
         }
 
-        if (letzterSpieler == command.spielzug.spieler)
+        fallsSpielerNichtAnDerReiheIst(command.spielzug)
         {
-            throw SpielerNichtAndDerReiheGewesen(id, command.spielzug.spieler)
+            throw SpielerNichtAndDerReiheGewesen(id, it.spieler)
         }
 
-        AggregateLifecycle.apply(
-                SpielzugWurdeAkzeptiert(id, command.spielzug.spieler, command.spielzug.feld))
+        apply(SpielzugWurdeAkzeptiert(id, command.spielzug))
 
-        if (wirdSpielerGewinnen(Spielzug(command.spielzug.spieler, command.spielzug.feld)))
+        fallsSpielerGewinnt(command.spielzug)
         {
-            AggregateLifecycle.apply(SpielGewonnen(id, command.spielzug.spieler))
+            apply(SpielGewonnen(id, it.spieler))
+        }
+    }
+
+    private fun fallsSpielerGewinnt(spielzug: Spielzug, dann: (Spielzug) -> Unit)
+    {
+        if (wirdSpielerGewinnen(spielzug))
+        {
+            dann(spielzug)
+        }
+    }
+
+    private fun fallsSpielerNichtAnDerReiheIst(spielzug: Spielzug, dann: (Spielzug) -> Unit)
+    {
+        if (letzterSpieler == spielzug.spieler)
+        {
+            dann(spielzug)
+        }
+    }
+
+    private fun fallsFeldBelegt(spielzug: Spielzug, dann: (Spielzug) -> Unit)
+    {
+        if (besetzteFelder.contains(spielzug.feld))
+        {
+            dann(spielzug)
         }
     }
 
@@ -87,6 +110,6 @@ class TicTacToe
     @EventSourcingHandler
     fun falls(event: SpielzugWurdeAkzeptiert)
     {
-        spielverlauf += Spielzug(event.spieler, event.feld)
+        spielverlauf += event.spielzug
     }
 }
