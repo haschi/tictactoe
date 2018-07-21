@@ -10,7 +10,7 @@ class FeldConverter : Transformer<Feld>()
         val regex = Regex("(?<spalte>[ABC])(?<zeile>[123])")
         val match = regex.find(feld)
         val spalte = match?.groups?.get("spalte")?.value!![0]
-        val zeile = match.groups.get("zeile")?.value?.toInt()!!
+        val zeile = match.groups["zeile"]?.value?.toInt()!!
 
         return Feld(spalte, zeile)
     }

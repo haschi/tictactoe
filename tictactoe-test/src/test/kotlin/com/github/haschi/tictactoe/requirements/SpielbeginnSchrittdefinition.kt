@@ -1,7 +1,6 @@
 package com.github.haschi.tictactoe.requirements
 
 import com.github.haschi.tictactoe.TestApplication
-import com.github.haschi.tictactoe.domain.TicTacToe
 import com.github.haschi.tictactoe.requirements.testing.DieWelt
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn

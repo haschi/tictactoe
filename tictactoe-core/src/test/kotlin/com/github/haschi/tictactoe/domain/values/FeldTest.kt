@@ -37,6 +37,6 @@ class FeldTest
     {
         assertThatCode { Feld('A', zeile) }
                 .isInstanceOf(UngültigesFeld::class.java)
-                .hasMessage("Ungültiges Feld 'A${zeile}'")
+                .hasMessage("Ungültiges Feld 'A$zeile'")
     }
 }

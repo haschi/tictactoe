@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
 @Component
-open class Infrastructure
+class Infrastructure
 {
     @Bean
     fun gatewayErzeugen(commandBus: CommandBus): TicTacToeGateway
@@ -21,7 +21,6 @@ open class Infrastructure
     @Bean
     fun eventStore() : EventStorageEngine
     {
-        println("Erzeuge Event Storage Engine")
         return InMemoryEventStorageEngine()
     }
 }

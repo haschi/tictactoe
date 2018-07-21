@@ -20,7 +20,7 @@ import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
 
-class ZeichenSetzenSteps(val welt: DieWelt)
+class ZeichenSetzenSteps(private val welt: DieWelt)
 {
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen()

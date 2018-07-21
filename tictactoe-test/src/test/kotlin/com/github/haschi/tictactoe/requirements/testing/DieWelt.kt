@@ -1,21 +1,14 @@
 package com.github.haschi.tictactoe.requirements.testing
 
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import cucumber.api.java.Before
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventhandling.EventHandler
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
 @Component
-open class DieWelt(val commandGateway: CommandGateway)
+class DieWelt(val commandGateway: CommandGateway)
 {
-    init
-    {
-        println("Eine Neue Welt wurde geschaffen")
-    }
-
-
     fun reset()
     {
         spielername = ""
@@ -41,7 +34,6 @@ open class DieWelt(val commandGateway: CommandGateway)
     @EventHandler
     fun falls(event: Any)
     {
-        println("Ereignis aufgetreten: $event")
-        events += listOf(event);
+        events += listOf(event)
     }
 }
