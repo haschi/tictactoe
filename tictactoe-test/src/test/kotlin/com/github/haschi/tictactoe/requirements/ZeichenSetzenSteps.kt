@@ -1,5 +1,3 @@
-
-
 package com.github.haschi.tictactoe.requirements
 
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
@@ -25,8 +23,10 @@ class ZeichenSetzenSteps(private val welt: DieWelt)
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen()
     {
-        welt.spielId = Aggregatkennung.neu()
-        welt.send(BeginneSpiel(welt.spielId))
+        welt.next {
+            spielId = Aggregatkennung.neu()
+            tictactoe.send(BeginneSpiel(spielId))
+        }
     }
 
     @Angenommen("^Spieler (X|O) hat sein Zeichen auf Feld ([ABC][123]) gesetzt$")

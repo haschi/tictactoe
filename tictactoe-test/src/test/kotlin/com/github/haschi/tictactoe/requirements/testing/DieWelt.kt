@@ -2,13 +2,12 @@ package com.github.haschi.tictactoe.requirements.testing
 
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.eventhandling.EventHandler
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
 @Component
-class DieWelt(val commandGateway: CommandGateway, val tictactoe: TicTacToeGateway)
+class DieWelt(val tictactoe: TicTacToeGateway)
 {
     fun reset()
     {
@@ -24,18 +23,9 @@ class DieWelt(val commandGateway: CommandGateway, val tictactoe: TicTacToeGatewa
     var spielId: Aggregatkennung = Aggregatkennung.Nil
     var future: CompletableFuture<Any> = CompletableFuture.supplyAsync { Aggregatkennung.neu() }
 
-    fun send(command: Any)
-    {
-        future = future.thenCombine(
-                commandGateway.send<Any>(command)){
-            _, second -> second
-        }
-    }
-
     fun <T> next(send: DieWelt.() -> CompletableFuture<T>)
     {
-        future = future.thenCombine(
-                send()) { _, second -> second }
+        future = future.thenCombine(send()) { _, second -> second }
     }
 
     @EventHandler

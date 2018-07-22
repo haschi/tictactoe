@@ -8,16 +8,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(classes = [TestApplication::class])
-class SpielbeginnSchrittdefinition(val welt: DieWelt)
+class SpielbeginnSteps(val welt: DieWelt)
 {
     @Wenn("^ich einer neuen Tic Tac Toe Partie betrete$")
-    fun ich_einer_neuen_tictactoe_partie_betrete()
+    fun `ich einer neuen Tic Tac Toe Partie betrete`()
     {
         welt.spielername = "Ich"
     }
 
     @Dann("^werde ich auf einen Gegenspieler warten$")
-    fun werde_ich_auf_einen_Gegenspieler_warten()
+    fun `werde ich auf einen Gegenspieler_warten`()
     {
         assertThat(welt.spielername).isEqualTo("Ich")
     }
