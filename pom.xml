@@ -7,34 +7,29 @@
     <groupId>com.github.haschi.tictactoe</groupId>
     <artifactId>tictactoe-parent</artifactId>
     <version>DEV-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Tic Tac Toe</name>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.3.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <modules>
         <module>tictactoe-core</module>
         <module>tictactoe-test</module>
     </modules>
 
-
-    <packaging>pom</packaging>
-    <name>Tic Tac Toe</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.version>3.5.1</maven.compiler.version>
-        <maven.enforcer.version>1.4.1</maven.enforcer.version>
-        <maven.dependency.plugin.version>2.10</maven.dependency.plugin.version>
-
-        <maven.surefire.plugin.version>2.22.0</maven.surefire.plugin.version>
-        <surefire.printSummary>false</surefire.printSummary>
-
-        <maven.failsafe.plugin.version>2.22.0</maven.failsafe.plugin.version>
-        <failsafe.printSummary>false</failsafe.printSummary>
-
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
         <kotlin.version>1.2.51</kotlin.version>
-        <!--<kotlin.compiler.languageVersion>1.2</kotlin.compiler.languageVersion>-->
-        <!--<kotlin.compiler.apiVersion>1.2</kotlin.compiler.apiVersion>-->
 
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <surefire.printSummary>false</surefire.printSummary>
+        <failsafe.printSummary>false</failsafe.printSummary>
 
         <junit-jupiter.version>5.2.0</junit-jupiter.version>
         <junit-vintage.version>5.2.0</junit-vintage.version>
@@ -43,7 +38,6 @@
 
         <cukes.version>2.4.0</cukes.version>
         <axon.version>3.3.2</axon.version>
-
     </properties>
 
     <licenses>
@@ -69,7 +63,6 @@
                 <version>${kotlin.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>org.axonframework</groupId>
                 <artifactId>axon-core</artifactId>
@@ -87,6 +80,7 @@
                 <artifactId>axon-spring-boot-starter</artifactId>
                 <version>${axon.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
@@ -153,31 +147,21 @@
                 <artifactId>cucumber-junit</artifactId>
                 <version>${cukes.version}</version>
             </dependency>
-
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.jetbrains.kotlin</groupId>-->
+        <!--<artifactId>kotlin-stdlib-jdk8</artifactId>-->
+        <!--<version>${kotlin.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.jetbrains.kotlin</groupId>-->
+        <!--<artifactId>kotlin-test</artifactId>-->
+        <!--<version>${kotlin.version}</version>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -186,7 +170,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.version}</version>
                     <executions>
                         <execution>
                             <id>default-compile</id>
@@ -221,9 +204,9 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <jvmTarget>1.8</jvmTarget>
                         <args>
                             <arg>-Werror</arg>
+                            <arg>-Xjsr305=strict</arg>
                         </args>
                         <compilerPlugins>
                             <plugin>spring</plugin>
@@ -240,7 +223,6 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.platform</groupId>
@@ -252,7 +234,6 @@
 
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.22.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.platform</groupId>
@@ -261,14 +242,12 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven.enforcer.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-versions</id>
@@ -291,22 +270,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <!--suppress DifferentMavenStdlibVersion -->
-                <version>${kotlin.version}</version>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 </project>
