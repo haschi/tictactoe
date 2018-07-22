@@ -121,6 +121,13 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <executions>
+                    <!--Dies ist ein Test-Projekt und enthält daher nur Quellen im Test-Ordner-->
+                    <execution>
+                        <id>compile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Dieses Projekt führt keine Komponenten-Tests aus. -->

@@ -7,7 +7,6 @@ import java.util.concurrent.CompletableFuture
 
 interface TicTacToeGateway
 {
-    fun sendAndWait(command: BeginneSpiel): Aggregatkennung
     fun send(command: BeginneSpiel): CompletableFuture<Aggregatkennung>
     fun send(command: SetzeZeichen): CompletableFuture<Unit>
 }
