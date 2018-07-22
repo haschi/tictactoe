@@ -79,6 +79,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <!--suppress DifferentMavenStdlibVersion -->
                 <version>${kotlin.version}</version>
             </plugin>
         </plugins>

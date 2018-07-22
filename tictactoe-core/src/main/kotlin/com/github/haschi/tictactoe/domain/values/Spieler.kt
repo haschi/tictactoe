@@ -11,6 +11,6 @@ data class Spieler(val zeichen: Char)
     }
     companion object
     {
-        val keiner = Spieler(' ')
+        val Keiner = Spieler(' ')
     }
 }

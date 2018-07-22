@@ -15,16 +15,21 @@ import cucumber.api.java.de.Dann
 import cucumber.deps.com.thoughtworks.xstream.annotations.XStreamConverter
 import org.assertj.core.api.Assertions.assertThat
 
-class SpielendePruefen(private val welt: DieWelt)
+class SpielendePrüfen(private val welt: DieWelt)
 {
     @Angenommen("^ich habe folgenden Spielverlauf:$")
     fun ich_habe_folgenden_Spielverlauf(arg1: List<Spielzug>)
     {
-        welt.spielId = Aggregatkennung.neu()
-        welt.send(BeginneSpiel(welt.spielId))
+        welt.next {
+            spielId = Aggregatkennung.neu()
+            tictactoe.send(BeginneSpiel(welt.spielId))
+        }
 
         arg1.forEach{
-            welt.send(SetzeZeichen(welt.spielId, com.github.haschi.tictactoe.domain.values.Spielzug(it.spieler, it.feld)))
+            welt.next {
+                tictactoe.send(SetzeZeichen(spielId,
+                        com.github.haschi.tictactoe.domain.values.Spielzug(it.spieler, it.feld)))
+            }
         }
     }
 

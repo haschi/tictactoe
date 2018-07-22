@@ -18,17 +18,15 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 
 @Aggregate
-class TicTacToe
+class TicTacToe()
 {
     @AggregateIdentifier
     private lateinit var id: Aggregatkennung
 
     private var spielverlauf = listOf<Spielzug>()
 
-    constructor()
-
     @CommandHandler
-    constructor(command: BeginneSpiel)
+    constructor(command: BeginneSpiel) : this()
     {
         apply(SpielBegonnen(command.id))
     }
@@ -72,7 +70,7 @@ class TicTacToe
     private fun fallsSpielerNichtAnDerReiheIst(spielzug: Spielzug, dann: (Spielzug) -> Unit)
     {
         if (spielverlauf.map { it.spieler }
-                .lastOrNull() ?: Spieler.keiner == spielzug.spieler)
+                        .lastOrNull() ?: Spieler.Keiner == spielzug.spieler)
         {
             dann(spielzug)
         }

@@ -16,6 +16,6 @@ data class Aggregatkennung(val id: UUID)
             return Aggregatkennung(UUID.fromString(id))
         }
 
-        val nil: Aggregatkennung = Aggregatkennung(UUID(0, 0))
+        val Nil: Aggregatkennung = Aggregatkennung(UUID(0, 0))
     }
 }

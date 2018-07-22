@@ -34,7 +34,9 @@ class ZeichenSetzenSteps(private val welt: DieWelt)
             @Transform(SpielerConverter::class) spieler: Spieler,
             @Transform(FeldConverter::class) feld: Feld)
     {
-        welt.send(SetzeZeichen(welt.spielId, Spielzug(spieler, feld)))
+        welt.next {
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
+        }
     }
 
     @Wenn("^Spieler (X|O) sein Zeichen auf Feld ([ABC][123]) setzt$")
@@ -42,7 +44,9 @@ class ZeichenSetzenSteps(private val welt: DieWelt)
             @Transform(SpielerConverter::class) spieler: Spieler,
             @Transform(FeldConverter::class) feld: Feld)
     {
-        welt.send(SetzeZeichen(welt.spielId, Spielzug(spieler, feld)))
+        welt.next {
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
+        }
     }
 
     @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")

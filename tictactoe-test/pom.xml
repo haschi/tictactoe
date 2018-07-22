@@ -119,6 +119,7 @@
             </testResource>
         </testResources>
 
+        <!--suppress DifferentMavenStdlibVersion -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -127,7 +128,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
+
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -142,7 +143,7 @@
                 <version>${spring-boot.version}</version>
             </plugin>
 
-            <!-- Dieses Projekt führt keine Komponententests aus. -->
+            <!-- Dieses Projekt führt keine Komponenten-Tests aus. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
