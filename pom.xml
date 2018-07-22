@@ -31,8 +31,8 @@
         <failsafe.printSummary>false</failsafe.printSummary>
 
         <kotlin.version>1.2.51</kotlin.version>
-        <kotlin.compiler.languageVersion>1.2</kotlin.compiler.languageVersion>
-        <kotlin.compiler.apiVersion>1.2</kotlin.compiler.apiVersion>
+        <!--<kotlin.compiler.languageVersion>1.2</kotlin.compiler.languageVersion>-->
+        <!--<kotlin.compiler.apiVersion>1.2</kotlin.compiler.apiVersion>-->
 
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
 
