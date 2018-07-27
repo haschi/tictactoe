@@ -24,7 +24,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt)
     fun ich_habe_das_Spiel_begonnen()
     {
         welt.next {
-            spielId = Aggregatkennung.neu()
+            spielId = Aggregatkennung()
             tictactoe.send(BeginneSpiel(spielId))
         }
     }

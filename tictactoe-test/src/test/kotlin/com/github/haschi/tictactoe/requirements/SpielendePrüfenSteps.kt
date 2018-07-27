@@ -21,7 +21,7 @@ class SpielendePrüfenSteps(private val welt: DieWelt)
     fun `ich habe folgenden Spielverlauf`(spielverlauf: List<Spielzug>)
     {
         welt.next {
-            spielId = Aggregatkennung.neu()
+            spielId = Aggregatkennung()
             tictactoe.send(BeginneSpiel(welt.spielId))
         }
 

@@ -13,7 +13,7 @@ class DieWelt(val tictactoe: TicTacToeGateway)
     {
         spielername = ""
         spielId = Aggregatkennung.Nil
-        future = CompletableFuture.supplyAsync { Aggregatkennung.neu() }
+        future = CompletableFuture.supplyAsync { Aggregatkennung() }
         events = listOf()
     }
 
@@ -21,7 +21,7 @@ class DieWelt(val tictactoe: TicTacToeGateway)
 
     var spielername: String = ""
     var spielId: Aggregatkennung = Aggregatkennung.Nil
-    var future: CompletableFuture<Any> = CompletableFuture.supplyAsync { Aggregatkennung.neu() }
+    var future: CompletableFuture<Any> = CompletableFuture.supplyAsync { Aggregatkennung() }
 
     fun <T> next(send: DieWelt.() -> CompletableFuture<T>)
     {
