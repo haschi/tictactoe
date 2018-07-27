@@ -2,11 +2,7 @@ package com.github.haschi.tictactoe.domain
 
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
-import com.github.haschi.tictactoe.domain.events.FeldBelegt
-import com.github.haschi.tictactoe.domain.events.SpielBegonnen
-import com.github.haschi.tictactoe.domain.events.SpielGewonnen
-import com.github.haschi.tictactoe.domain.events.SpielerNichtAndDerReiheGewesen
-import com.github.haschi.tictactoe.domain.events.SpielzugWurdeAkzeptiert
+import com.github.haschi.tictactoe.domain.events.*
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
@@ -18,22 +14,19 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 
 @Aggregate
-class TicTacToe()
-{
+class TicTacToe() {
     @AggregateIdentifier
     private lateinit var id: Aggregatkennung
 
     private var spielverlauf = listOf<Spielzug>()
 
     @CommandHandler
-    constructor(command: BeginneSpiel) : this()
-    {
+    constructor(command: BeginneSpiel) : this() {
         apply(SpielBegonnen(command.id))
     }
 
     @CommandHandler
-    fun setzeZeichen(command: SetzeZeichen)
-    {
+    fun setzeZeichen(command: SetzeZeichen) {
         fallsFeldBelegt(command.spielzug)
         {
             throw FeldBelegt(id, it.spieler)
@@ -52,8 +45,7 @@ class TicTacToe()
         }
     }
 
-    private fun fallsSpielerGewinnt(spielzug: Spielzug, dann: (Spielzug) -> Unit)
-    {
+    private fun fallsSpielerGewinnt(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
         val gewinn = listOf(Feld('A', 1), Feld('B', 2), Feld('C', 3))
         val gewinn2 = listOf(Feld('B', 1), Feld('B', 2), Feld('B', 3))
         val gewinne = listOf(gewinn, gewinn2)
@@ -61,38 +53,31 @@ class TicTacToe()
                 .filter { it.spieler == spielzug.spieler }
                 .map { it.feld }
         if (gewinne.map { felderDesSpieler.containsAll(it) }
-                .contains(true))
-        {
+                        .contains(true)) {
             dann(spielzug)
         }
     }
 
-    private fun fallsSpielerNichtAnDerReiheIst(spielzug: Spielzug, dann: (Spielzug) -> Unit)
-    {
+    private fun fallsSpielerNichtAnDerReiheIst(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
         if (spielverlauf.map { it.spieler }
-                        .lastOrNull() ?: Spieler.Keiner == spielzug.spieler)
-        {
+                        .lastOrNull() ?: Spieler.Keiner == spielzug.spieler) {
             dann(spielzug)
         }
     }
 
-    private fun fallsFeldBelegt(spielzug: Spielzug, dann: (Spielzug) -> Unit)
-    {
-        if (spielverlauf.map { it.feld }.contains(spielzug.feld))
-        {
+    private fun fallsFeldBelegt(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
+        if (spielverlauf.map { it.feld }.contains(spielzug.feld)) {
             dann(spielzug)
         }
     }
 
     @EventSourcingHandler
-    fun falls(event: SpielBegonnen)
-    {
+    fun falls(event: SpielBegonnen) {
         id = event.id
     }
 
     @EventSourcingHandler
-    fun falls(event: SpielzugWurdeAkzeptiert)
-    {
+    fun falls(event: SpielzugWurdeAkzeptiert) {
         spielverlauf += event.spielzug
     }
 }

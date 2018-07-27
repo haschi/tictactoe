@@ -61,7 +61,3 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 !/.mvn/wrapper/maven-wrapper.jar
-Würde .idea/workspace.xml löschen
-Würde tictactoe-core/src/main/resources/ löschen
-Würde tictactoe-core/src/test/ löschen
-Würde tictactoe-core/target/ löschen

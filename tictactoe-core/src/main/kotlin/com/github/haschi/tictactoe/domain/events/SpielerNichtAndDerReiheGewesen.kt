@@ -5,4 +5,4 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 
 data class SpielerNichtAndDerReiheGewesen(
         val spielId: Aggregatkennung,
-        val spieler: Spieler): Exception()
+        val spieler: Spieler) : Exception()
