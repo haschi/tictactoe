@@ -9,18 +9,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
 @Component
-class Infrastructure
-{
+class Infrastructure {
     @Bean
-    fun gatewayErzeugen(commandBus: CommandBus): TicTacToeGateway
-    {
+    fun gatewayErzeugen(commandBus: CommandBus): TicTacToeGateway {
         val factory = CommandGatewayFactory(commandBus)
         return factory.createGateway(TicTacToeGateway::class.java)
     }
 
     @Bean
-    fun eventStore() : EventStorageEngine
-    {
+    fun eventStore(): EventStorageEngine {
         return InMemoryEventStorageEngine()
     }
 }

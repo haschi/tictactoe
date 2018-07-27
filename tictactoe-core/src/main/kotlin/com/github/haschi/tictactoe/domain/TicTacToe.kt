@@ -50,17 +50,17 @@ class TicTacToe() {
         val gewinn2 = listOf(Feld('B', 1), Feld('B', 2), Feld('B', 3))
         val gewinne = listOf(gewinn, gewinn2)
         val felderDesSpieler = (spielverlauf + spielzug)
-                .filter { it.spieler == spielzug.spieler }
-                .map { it.feld }
+            .filter { it.spieler == spielzug.spieler }
+            .map { it.feld }
         if (gewinne.map { felderDesSpieler.containsAll(it) }
-                        .contains(true)) {
+                .contains(true)) {
             dann(spielzug)
         }
     }
 
     private fun fallsSpielerNichtAnDerReiheIst(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
         if (spielverlauf.map { it.spieler }
-                        .lastOrNull() ?: Spieler.Keiner == spielzug.spieler) {
+                .lastOrNull() ?: Spieler.Keiner == spielzug.spieler) {
             dann(spielzug)
         }
     }

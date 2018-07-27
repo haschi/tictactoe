@@ -7,11 +7,12 @@ import java.util.*
 data class Aggregatkennung(private val id: String = IdentifierFactory.getInstance().generateIdentifier()) {
     constructor(id: URI) : this(id.toString())
 
-    companion object {
-        val Nil: Aggregatkennung = Aggregatkennung(UUID(0, 0))
-    }
-
     constructor(randomUUID: UUID) : this(randomUUID.toString())
+
+    companion object {
+        @JvmField
+        val NIL: Aggregatkennung = Aggregatkennung(UUID(0, 0))
+    }
 
     override fun toString(): String {
         return id
