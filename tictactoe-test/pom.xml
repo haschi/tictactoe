@@ -48,6 +48,35 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--<artifactId>jackson-core</artifactId>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.datatype</groupId>-->
+        <!--<artifactId>jackson-datatype-jsr353</artifactId>-->
+        <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
         </dependency>
@@ -128,6 +157,23 @@
                         <phase>none</phase>
                     </execution>
                 </executions>
+                <configuration>
+                    <args>
+                        <arg>-Werror</arg>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+
             </plugin>
 
             <!-- Dieses Projekt führt keine Komponenten-Tests aus. -->
@@ -147,9 +193,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <!--<cucumber.api.java.ObjectFactory>-->
-                            <!--com.github.haschi.tictactoe.requirements.testing.DomainPicoFactory-->
-                        <!--</cucumber.api.java.ObjectFactory>-->
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

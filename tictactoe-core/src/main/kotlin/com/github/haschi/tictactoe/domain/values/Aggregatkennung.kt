@@ -4,7 +4,7 @@ import org.axonframework.common.IdentifierFactory
 import java.net.URI
 import java.util.*
 
-data class Aggregatkennung(private val id: String = IdentifierFactory.getInstance().generateIdentifier()) {
+data class Aggregatkennung(val id: String = IdentifierFactory.getInstance().generateIdentifier()) {
     constructor(id: URI) : this(id.toString())
 
     constructor(randomUUID: UUID) : this(randomUUID.toString())
