@@ -23,7 +23,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
     fun ich_habe_das_Spiel_begonnen() {
         welt.next {
             spielId = Aggregatkennung()
-            tictactoe.send(BeginneSpiel(spielId))
+            tictactoe.send(BeginneSpiel(spielId), spielId.toString())
         }
     }
 
@@ -33,7 +33,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         @Transform(FeldConverter::class) feld: Feld
     ) {
         welt.next {
-            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)), spielId.toString())
         }
     }
 
@@ -43,7 +43,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         @Transform(FeldConverter::class) feld: Feld
     ) {
         welt.next {
-            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)), spielId.toString())
         }
     }
 

@@ -20,7 +20,7 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
     fun `ich habe folgenden Spielverlauf`(spielverlauf: List<Spielzug>) {
         welt.next {
             spielId = Aggregatkennung()
-            tictactoe.send(BeginneSpiel(welt.spielId))
+            tictactoe.send(BeginneSpiel(welt.spielId), spielId.toString())
         }
 
         spielverlauf.forEach {
@@ -29,7 +29,8 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
                     SetzeZeichen(
                         spielId,
                         com.github.haschi.tictactoe.domain.values.Spielzug(it.spieler, it.feld)
-                    )
+                    ),
+                    spielId.toString()
                 )
             }
         }
