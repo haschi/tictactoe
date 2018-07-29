@@ -11,5 +11,8 @@
 
     <artifactId>tictactoe-ui</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>tictactoe-backend</module>
+    </modules>
 
 </project>
