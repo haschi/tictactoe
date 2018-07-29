@@ -4,7 +4,7 @@
     <option name="GLUE" value="com.github.haschi.tictactoe.domain" />
     <option name="MAIN_CLASS_NAME" value="cucumber.api.cli.Main" />
     <module name="Requirements" />
-    <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm2SMFormatter --plugin pretty" />
+    <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm2SMFormatter --plugin pretty --tags @domäne" />
     <option name="SUGGESTED_NAME" value="All Features in: requirements" />
     <extension name="coverage">
       <pattern>

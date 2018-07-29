@@ -11,7 +11,7 @@ Funktionalität: Zeichen setzen
   Grundlage:
     Angenommen ich habe das Spiel begonnen
 
-  @domäne
+  @domäne @backend
   Szenario: Zeichen setzen
     Wenn Spieler X sein Zeichen auf Feld B2 setzt
     Dann werde ich den Spielzug B2 von Spieler X akzeptiert haben
