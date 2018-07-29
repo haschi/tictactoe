@@ -20,6 +20,7 @@
     <modules>
         <module>tictactoe-core</module>
         <module>tictactoe-test</module>
+        <module>tictactoe-ui</module>
     </modules>
 
     <properties>
