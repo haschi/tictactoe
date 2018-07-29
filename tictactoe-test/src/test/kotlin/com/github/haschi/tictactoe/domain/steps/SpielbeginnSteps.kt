@@ -1,7 +1,7 @@
-package com.github.haschi.tictactoe.requirements
+package com.github.haschi.tictactoe.domain.steps
 
-import com.github.haschi.tictactoe.TestApplication
-import com.github.haschi.tictactoe.requirements.testing.DieWelt
+import com.github.haschi.tictactoe.domain.TestApplication
+import com.github.haschi.tictactoe.domain.testing.DieWelt
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat

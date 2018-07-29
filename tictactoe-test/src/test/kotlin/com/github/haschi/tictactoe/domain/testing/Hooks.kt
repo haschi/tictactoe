@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe.requirements.testing
+package com.github.haschi.tictactoe.domain.testing
 
 import cucumber.api.java.Before
 

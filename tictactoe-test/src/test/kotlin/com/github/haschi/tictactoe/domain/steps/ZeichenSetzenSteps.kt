@@ -1,17 +1,17 @@
-package com.github.haschi.tictactoe.requirements
+package com.github.haschi.tictactoe.domain.steps
 
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
 import com.github.haschi.tictactoe.domain.events.SpielerNichtAndDerReiheGewesen
 import com.github.haschi.tictactoe.domain.events.SpielzugWurdeAkzeptiert
+import com.github.haschi.tictactoe.domain.testing.DieWelt
+import com.github.haschi.tictactoe.domain.testing.FeldConverter
+import com.github.haschi.tictactoe.domain.testing.SpielerConverter
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
-import com.github.haschi.tictactoe.requirements.testing.DieWelt
-import com.github.haschi.tictactoe.requirements.testing.FeldConverter
-import com.github.haschi.tictactoe.requirements.testing.SpielerConverter
 import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann

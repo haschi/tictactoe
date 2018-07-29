@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe.requirements.testing
+package com.github.haschi.tictactoe.domain.testing
 
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import org.axonframework.commandhandling.CommandBus

@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe
+package com.github.haschi.tictactoe.domain
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
