@@ -1,6 +1,6 @@
-package com.github.haschi.tictactoe.backend
+package com.github.haschi.tictactoe
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-class BackendApplication
+class TestApplication

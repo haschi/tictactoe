@@ -1,28 +1,31 @@
 package com.github.haschi.tictactoe.backend
 
-import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
+import com.github.haschi.tictactoe.TestApplication
+import com.github.haschi.tictactoe.backend.controller.SpielResource
+import com.github.haschi.tictactoe.backend.controller.SpielzugResource
 import com.github.haschi.tictactoe.domain.testing.FeldConverter
 import com.github.haschi.tictactoe.domain.testing.SpielerConverter
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
-import cucumber.api.PendingException
+import com.github.haschi.tictactoe.domain.values.Spielfeld
 import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
+import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.RestOperations
 
 @SpringBootTest(
-    classes = [BackendApplication::class],
+    // classes = [TicTacToeBackendApplication::class],
+    classes = [TestApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles(value = ["backend"])
-class ZeichenSetzenSteps() {
-    val restTemplate = RestTemplate()
+class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val welt: RestWelt) {
     val server = "http://localhost"
 
     @LocalServerPort
@@ -30,13 +33,18 @@ class ZeichenSetzenSteps() {
 
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
-        val endpoint = server + ":" + port + "/api/command"
+        val endpoint = "$server:$port/api/spiel"
 
-        restTemplate.postForEntity(
-            endpoint,
-            BeginneSpiel(Aggregatkennung()),
-            Void::class.java
-        )
+        val resource = SpielResource(Aggregatkennung())
+        welt.spiel = restTemplate.postForLocation(endpoint, resource)!!
+    }
+
+    @Angenommen("^Spieler (X|O) hat sein Zeichen auf Feld ([ABC][123]) gesetzt$")
+    fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(
+        @Transform(SpielerConverter::class) spieler: Spieler,
+        @Transform(FeldConverter::class) feld: Feld
+    ) {
+        restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
     }
 
     @Wenn("^Spieler (X|O) sein Zeichen auf Feld ([ABC][123]) setzt$")
@@ -44,10 +52,7 @@ class ZeichenSetzenSteps() {
         @Transform(SpielerConverter::class) spieler: Spieler,
         @Transform(FeldConverter::class) feld: Feld
     ) {
-        println(spieler)
-        println(feld)
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
+        restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
     }
 
     @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")
@@ -55,10 +60,7 @@ class ZeichenSetzenSteps() {
         @Transform(FeldConverter::class) feld: Feld,
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
-        println(feld)
-        println(spieler)
-        // Write code here that turns the phrase above into concrete actions
-        throw PendingException()
+        val spielfeld = restTemplate.getForObject(welt.spiel, Spielfeld::class.java)!!
+        assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
     }
-
 }

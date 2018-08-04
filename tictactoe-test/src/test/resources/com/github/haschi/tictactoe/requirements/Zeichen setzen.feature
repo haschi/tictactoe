@@ -16,7 +16,7 @@ Funktionalität: Zeichen setzen
     Wenn Spieler X sein Zeichen auf Feld B2 setzt
     Dann werde ich den Spielzug B2 von Spieler X akzeptiert haben
 
-  @domäne
+  @domäne @backend
   Szenario: Spieler setzen abwechselnd Zeichen auf freie Felder
     Und Spieler X hat sein Zeichen auf Feld B2 gesetzt
     Wenn Spieler O sein Zeichen auf Feld B3 setzt

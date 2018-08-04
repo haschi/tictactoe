@@ -15,7 +15,7 @@ class SpielzugIT {
     private lateinit var json: JacksonTester<Spielzug>
 
     @Test
-    fun `Serialisierung eines Spielzuges klappt`() {
+    fun `Serialisierung eines Spielzugs klappt`() {
         val spielzug = Spielzug(Spieler('X'), Feld('A', 1))
         assertThat(json.write(spielzug))
             .isEqualToJson(

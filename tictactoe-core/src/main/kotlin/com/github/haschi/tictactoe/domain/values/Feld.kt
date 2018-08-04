@@ -14,4 +14,6 @@ data class Feld(val spalte: Char, val zeile: Int) {
             throw UngültigesFeld(spalte, zeile)
         }
     }
+
+    val index get() = zeile * (spalte - 'B')
 }
