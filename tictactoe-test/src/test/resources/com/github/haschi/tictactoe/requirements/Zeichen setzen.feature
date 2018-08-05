@@ -22,7 +22,7 @@ Funktionalität: Zeichen setzen
     Wenn Spieler O sein Zeichen auf Feld B3 setzt
     Dann werde ich den Spielzug B3 von Spieler O akzeptiert haben
 
-  @domäne
+  @domäne @backend
   Szenario: Spieler setzt Zeichen auf belegtes Feld
     Und Spieler X hat sein Zeichen auf Feld B2 gesetzt
     Wenn Spieler O sein Zeichen auf Feld B2 setzt

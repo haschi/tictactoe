@@ -13,13 +13,11 @@ class SpielEventListener {
 
     @QueryHandler
     fun falls(query: SpielfeldQuery): Spielfeld {
-        println(query)
         return spielfeld
     }
 
     @EventHandler
     fun falls(event: SpielzugWurdeAkzeptiert) {
-        println("Event Handler: Spielzug wurde akzeptiert: $event")
         spielfeld = spielfeld.hinzufügen(event.spielzug)
     }
 }

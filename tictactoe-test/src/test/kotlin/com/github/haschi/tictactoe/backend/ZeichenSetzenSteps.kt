@@ -3,6 +3,7 @@ package com.github.haschi.tictactoe.backend
 import com.github.haschi.tictactoe.TestApplication
 import com.github.haschi.tictactoe.backend.controller.SpielResource
 import com.github.haschi.tictactoe.backend.controller.SpielzugResource
+import com.github.haschi.tictactoe.domain.events.FeldBelegt
 import com.github.haschi.tictactoe.domain.testing.FeldConverter
 import com.github.haschi.tictactoe.domain.testing.SpielerConverter
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
@@ -17,6 +18,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestOperations
 
 @SpringBootTest(
@@ -52,7 +54,11 @@ class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val w
         @Transform(SpielerConverter::class) spieler: Spieler,
         @Transform(FeldConverter::class) feld: Feld
     ) {
-        restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
+        try {
+            restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
+        } catch (error: HttpServerErrorException) {
+            welt.error = error
+        }
     }
 
     @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")
@@ -62,5 +68,13 @@ class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val w
     ) {
         val spielfeld = restTemplate.getForObject(welt.spiel, Spielfeld::class.java)!!
         assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
+    }
+
+    @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist$")
+    fun konnte_Spieler_O_sein_Zeichen_nicht_platzieren_weil_das_Feld_belegt_gewesen_ist(
+        @Transform(SpielerConverter::class) spieler: Spieler
+    ) {
+        assertThat(welt.error)
+            .isInstanceOf(FeldBelegt::class.java)
     }
 }
