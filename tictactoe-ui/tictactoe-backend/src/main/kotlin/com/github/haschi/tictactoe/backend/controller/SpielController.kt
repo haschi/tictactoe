@@ -8,21 +8,31 @@ import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Spielfeld
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import org.axonframework.queryhandling.QueryGateway
-import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
+import java.util.concurrent.CompletableFuture
 
 
 @RestController
 // @RequestMapping("/api/spiel")
 class SpielController(private val tictactoe: TicTacToeGateway, private val queryGateway: QueryGateway) {
 
-    @RequestMapping(path = ["/api/spiel"], method = [RequestMethod.POST])
-    fun post(@RequestBody spiel: SpielResource, builder: UriComponentsBuilder): ResponseEntity<*> {
-        val id = tictactoe.send(BeginneSpiel(spiel.id), spiel.id.toString()).get()
-        val location = builder.path("/api/spiel/{id}").buildAndExpand(id)
+    @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.POST])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun post(@PathVariable("id") id: Aggregatkennung, builder: UriComponentsBuilder): HttpHeaders {
+        return tictactoe.send(BeginneSpiel(id), id.toString())
+            //.get()
+            .thenApply {
+                val location = builder.path("/api/spiel/{id}").buildAndExpand(it)
 
-        return ResponseEntity.created(location.toUri()).build<Any>()
+                val headers = HttpHeaders()
+                headers.location = location.toUri()
+
+                headers
+            }.get()
     }
 
     @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.GET])
@@ -31,12 +41,13 @@ class SpielController(private val tictactoe: TicTacToeGateway, private val query
         return spielfeldFuture.get()
     }
 
+    @Async()
     @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.PUT])
-    fun put(@PathVariable("id") id: Aggregatkennung, @RequestBody spielzug: SpielzugResource) {
-        tictactoe.send(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun put(@PathVariable("id") id: Aggregatkennung, @RequestBody spielzug: SpielzugResource): CompletableFuture<Void> {
+        return tictactoe.send(
             SetzeZeichen(id, Spielzug(spielzug.spieler, spielzug.feld)),
             id.toString()
         )
-            .get()
     }
 }
