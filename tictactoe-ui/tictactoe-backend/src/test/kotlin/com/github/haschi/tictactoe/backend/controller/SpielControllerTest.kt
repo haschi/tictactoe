@@ -2,13 +2,11 @@ package com.github.haschi.tictactoe.backend.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.application.TicTacToeGateway
+import com.github.haschi.tictactoe.domain.SpielfeldQuery
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
-import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.github.haschi.tictactoe.domain.values.Feld
-import com.github.haschi.tictactoe.domain.values.Spieler
-import com.github.haschi.tictactoe.domain.values.Spielzug
+import com.github.haschi.tictactoe.domain.values.*
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions
 import org.axonframework.queryhandling.QueryGateway
@@ -52,9 +50,11 @@ open class SpielControllerTest(
         whenever(commandGateway.send(command, spielId.toString()))
             .thenReturn(future)
 
-        mvc.perform(
+        val result = mvc.perform(
             post(URI("/api/spiel/$spielId"))
-        )
+        ).andExpect(request().asyncStarted()).andReturn()
+
+        mvc.perform(asyncDispatch(result))
             .andExpect(status().isCreated)
             .andExpect(header().string(HttpHeaders.LOCATION, "http://localhost/api/spiel/$spielId"))
     }
@@ -85,5 +85,25 @@ open class SpielControllerTest(
             mvc.perform(asyncDispatch(result))
         }.isInstanceOf(NestedServletException::class.java)
             .hasCause(FeldBelegt(spielId, Spieler('X')))
+    }
+
+    @Test
+    fun `GET Spielfeld liefert Status 200 OK`() {
+        val spielId = Aggregatkennung()
+        val spielfeld = Spielfeld(emptyList())
+        val future = CompletableFuture<Spielfeld>()
+        future.complete(spielfeld)
+
+        whenever(queryGateway.query(SpielfeldQuery(spielId), Spielfeld::class.java))
+            .thenReturn(future)
+
+        val result = mvc.perform(
+            `get`(URI("/api/spiel/$spielId"))
+        ).andExpect(request().asyncStarted())
+            .andReturn()
+
+        mvc.perform(asyncDispatch(result))
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
     }
 }
