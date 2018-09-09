@@ -3,7 +3,6 @@ package com.github.haschi.tictactoe.backend
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.TestApplication
 import com.github.haschi.tictactoe.backend.controller.SpielzugResource
-import com.github.haschi.tictactoe.backend.controller.VndError
 import com.github.haschi.tictactoe.domain.testing.FeldConverter
 import com.github.haschi.tictactoe.domain.testing.SpielerConverter
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
@@ -63,9 +62,6 @@ class ZeichenSetzenSteps(
         try {
             restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
         } catch (error: HttpStatusCodeException) {
-            println(error.responseBodyAsString)
-            val vnd = mapper.readValue(error.responseBodyAsByteArray, VndError::class.java)
-            println(vnd)
             welt.error = error
         }
     }

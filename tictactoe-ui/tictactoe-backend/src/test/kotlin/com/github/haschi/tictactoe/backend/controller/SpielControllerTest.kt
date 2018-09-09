@@ -76,7 +76,6 @@ open class SpielControllerTest(
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(mapper.writeValueAsString(resource))
         )
-            .andDo { println(it.asyncResult) }
             .andExpect(request().asyncStarted())
             .andReturn()
 
