@@ -6,9 +6,9 @@
     <module name="Requirements" />
     <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm2SMFormatter --plugin pretty --tags @domäne" />
     <option name="SUGGESTED_NAME" value="All Features in: requirements" />
-    <extension name="coverage">
+    <extension name="coverage" sample_coverage="false" track_test_folders="true">
       <pattern>
-        <option name="PATTERN" value="cucumber.api.cli.*" />
+        <option name="PATTERN" value="com.github.haschi.tictactoe.domain.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

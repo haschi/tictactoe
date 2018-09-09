@@ -11,7 +11,6 @@ import org.axonframework.queryhandling.QueryGateway
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.concurrent.CompletableFuture
@@ -46,7 +45,6 @@ class SpielController(private val tictactoe: TicTacToeGateway, private val query
         return spielfeldFuture
     }
 
-    @Async()
     @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.PUT])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun put(@PathVariable("id") id: Aggregatkennung, @RequestBody spielzug: SpielzugResource): CompletableFuture<Void> {

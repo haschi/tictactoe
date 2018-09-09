@@ -1,9 +1,9 @@
 package com.github.haschi.tictactoe.backend
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.TestApplication
-import com.github.haschi.tictactoe.backend.controller.SpielResource
 import com.github.haschi.tictactoe.backend.controller.SpielzugResource
-import com.github.haschi.tictactoe.domain.events.FeldBelegt
+import com.github.haschi.tictactoe.backend.controller.VndError
 import com.github.haschi.tictactoe.domain.testing.FeldConverter
 import com.github.haschi.tictactoe.domain.testing.SpielerConverter
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
@@ -18,7 +18,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.web.client.HttpServerErrorException
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestOperations
 
 @SpringBootTest(
@@ -27,7 +28,11 @@ import org.springframework.web.client.RestOperations
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles(value = ["backend"])
-class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val welt: RestWelt) {
+class ZeichenSetzenSteps(
+    private val restTemplate: RestOperations,
+    private val welt: RestWelt,
+    private val mapper: ObjectMapper
+) {
     val server = "http://localhost"
 
     @LocalServerPort
@@ -35,10 +40,11 @@ class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val w
 
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
-        val endpoint = "$server:$port/api/spiel"
+        val spielId = Aggregatkennung()
+        val endpoint = "$server:$port/api/spiel/$spielId"
 
-        val resource = SpielResource(Aggregatkennung())
-        welt.spiel = restTemplate.postForLocation(endpoint, resource)!!
+        // val resource = SpielResource(Aggregatkennung())
+        welt.spiel = restTemplate.postForLocation(endpoint, null)!!
     }
 
     @Angenommen("^Spieler (X|O) hat sein Zeichen auf Feld ([ABC][123]) gesetzt$")
@@ -56,7 +62,10 @@ class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val w
     ) {
         try {
             restTemplate.put(welt.spiel, SpielzugResource(spieler, feld))
-        } catch (error: HttpServerErrorException) {
+        } catch (error: HttpStatusCodeException) {
+            println(error.responseBodyAsString)
+            val vnd = mapper.readValue(error.responseBodyAsByteArray, VndError::class.java)
+            println(vnd)
             welt.error = error
         }
     }
@@ -75,6 +84,6 @@ class ZeichenSetzenSteps(private val restTemplate: RestOperations, private val w
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
         assertThat(welt.error)
-            .isInstanceOf(FeldBelegt::class.java)
+            .isInstanceOf(HttpClientErrorException::class.java)
     }
 }
