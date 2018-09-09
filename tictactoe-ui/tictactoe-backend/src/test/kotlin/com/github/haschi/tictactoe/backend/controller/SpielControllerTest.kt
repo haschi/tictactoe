@@ -74,6 +74,7 @@ open class SpielControllerTest(
         val result = mvc.perform(
             put(URI("/api/spiel/$spielId"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(VndError.mediaType, MediaType.APPLICATION_JSON_UTF8)
                 .content(mapper.writeValueAsString(resource))
         )
             .andExpect(request().asyncStarted())
@@ -81,7 +82,7 @@ open class SpielControllerTest(
 
         mvc.perform(asyncDispatch(result))
             .andExpect(status().isUnprocessableEntity)
-            .andExpect(content().contentType("application/vnd.error+json"))
+            .andExpect(content().contentType(VndError.mediaType))
             .andExpect(
                 content().json(
                     """
