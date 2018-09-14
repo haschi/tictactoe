@@ -56,7 +56,7 @@
       <option name="loggerClassName" value="" />
     </inspection_tool>
     <inspection_tool class="ObjectPropertyName" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="namePattern" value="[A-ZÖÄÜ][A-ZÖÄÜa-zöäüß\d]*" />
+      <option name="namePattern" value="[A-ZÖÄÜ][A-ZÖÄÜa-zöäüß\d_]*" />
     </inspection_tool>
     <inspection_tool class="OverridableMethodCallDuringObjectConstruction" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PackageDirectoryMismatch" enabled="true" level="ERROR" enabled_by_default="true" />

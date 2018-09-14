@@ -19,6 +19,6 @@ data class Spielfeld(val felder: List<Char>) {
     }
 
     companion object {
-        val leer = Spielfeld(listOf(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '))
+        val Leer = Spielfeld(listOf(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '))
     }
 }

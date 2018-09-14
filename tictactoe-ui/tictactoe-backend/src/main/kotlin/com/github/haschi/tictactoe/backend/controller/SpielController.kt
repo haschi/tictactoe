@@ -8,44 +8,55 @@ import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Spielfeld
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import org.axonframework.queryhandling.QueryGateway
+import org.springframework.hateoas.EntityLinks
+import org.springframework.hateoas.ExposesResourceFor
+import org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8_VALUE
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.util.UriComponentsBuilder
+import org.springframework.web.bind.annotation.RequestMethod.*
 import java.util.concurrent.CompletableFuture
 
 
 @RestController
-// @RequestMapping("/api/spiel")
-class SpielController(private val tictactoe: TicTacToeGateway, private val queryGateway: QueryGateway) {
+@ExposesResourceFor(Spielfeld::class)
+@RequestMapping("/api/spiel")
+class SpielController(
+    private val tictactoe: TicTacToeGateway,
+    private val queryGateway: QueryGateway,
+    private val links: EntityLinks
+) {
 
-    @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.POST])
+    @RequestMapping(path = ["{id}"], method = [POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun post(@PathVariable("id") id: Aggregatkennung, builder: UriComponentsBuilder): CompletableFuture<HttpHeaders> {
+    fun post(@PathVariable("id") id: Aggregatkennung): CompletableFuture<HttpHeaders> {
         return tictactoe.send(BeginneSpiel(id), id.toString())
             .thenApply {
-                val location = builder.path("/api/spiel/{id}").buildAndExpand(it)
-
                 val headers = HttpHeaders()
-                headers.location = location.toUri()
+                headers.location = links.linkForSingleResource(Spielfeld::class.java, id).toUri()
 
                 headers
             }
     }
 
     @RequestMapping(
-        path = ["/api/spiel/{id}"],
-        method = [RequestMethod.GET],
-        produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
+        path = ["{id}"],
+        method = [GET],
+        produces = [HAL_JSON_UTF8_VALUE]
     )
     @ResponseStatus(HttpStatus.OK)
-    fun `get`(@PathVariable("id") id: Aggregatkennung): CompletableFuture<Spielfeld> {
-        val spielfeldFuture = queryGateway.query(SpielfeldQuery(id), Spielfeld::class.java)
-        return spielfeldFuture
+    fun `get`(@PathVariable("id") id: Aggregatkennung): CompletableFuture<SpielfeldResource> {
+        val l = links.linkForSingleResource(Spielfeld::class.java, id.toString())
+        println(l)
+        return queryGateway.query(SpielfeldQuery(id), Spielfeld::class.java)
+            .thenApply {
+                val ls = SpielfeldResource(it)
+                ls.add(links.linkForSingleResource(Spielfeld::class.java, id.toString()).withSelfRel())
+                ls
+            }
     }
 
-    @RequestMapping(path = ["/api/spiel/{id}"], method = [RequestMethod.PUT])
+    @RequestMapping(path = ["{id}"], method = [PUT])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun put(@PathVariable("id") id: Aggregatkennung, @RequestBody spielzug: SpielzugResource): CompletableFuture<Void> {
         return tictactoe.send(

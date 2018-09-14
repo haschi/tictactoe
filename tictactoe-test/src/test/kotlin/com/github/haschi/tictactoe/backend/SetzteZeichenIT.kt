@@ -17,10 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @JsonTest()
 @SpringBootTest(classes = [(TicTacToeBackendApplication::class)])
-class SetzteZeichenIT {
-    @Autowired
-    private lateinit var json: JacksonTester<SetzeZeichen>
-
+class SetzteZeichenIT @Autowired constructor(private val json: JacksonTester<SetzeZeichen>) {
     @Test
     fun `SetzeZeichen kann serialisiert werde`() {
 
@@ -32,7 +29,7 @@ class SetzteZeichenIT {
 
         val erwartet = """
                 {
-                    "spielId" : "${aggregatkennung}",
+                    "spielId" : "$aggregatkennung",
                     "spielzug" : {
                         "spieler" : {
                             "zeichen" : "X"

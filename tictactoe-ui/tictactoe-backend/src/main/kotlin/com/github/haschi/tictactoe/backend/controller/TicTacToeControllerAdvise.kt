@@ -2,12 +2,14 @@ package com.github.haschi.tictactoe.backend.controller
 
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import javax.servlet.http.HttpServletRequest
 
 @ControllerAdvice
-@RequestMapping(produces = ["application/vnd.error+json"])
 class TicTacToeControllerAdvise : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(FeldBelegt::class)

@@ -1,6 +1,8 @@
 package com.github.haschi.tictactoe.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.hateoas.config.EnableEntityLinks
 
 @SpringBootApplication
+@EnableEntityLinks
 class TicTacToeBackendApplication

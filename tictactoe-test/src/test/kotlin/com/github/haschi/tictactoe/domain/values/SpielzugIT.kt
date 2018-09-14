@@ -10,9 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @JsonTest
-class SpielzugIT {
-    @Autowired
-    private lateinit var json: JacksonTester<Spielzug>
+class SpielzugIT @Autowired constructor(private val json: JacksonTester<Spielzug>) {
 
     @Test
     fun `Serialisierung eines Spielzugs klappt`() {

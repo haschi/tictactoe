@@ -15,7 +15,7 @@ class TestKonfiguration(private val objectMapper: ObjectMapper) {
     @Bean
     fun mappingJacksonHttpMessageConverter(): MappingJackson2HttpMessageConverter {
         val converter = MappingJackson2HttpMessageConverter()
-        converter.setObjectMapper(objectMapper)
+        converter.objectMapper = objectMapper
         return converter
     }
 

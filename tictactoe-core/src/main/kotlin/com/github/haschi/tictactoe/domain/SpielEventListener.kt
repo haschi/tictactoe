@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class SpielEventListener {
 
-    var spielfeld = Spielfeld.leer
+    var spielfeld = Spielfeld.Leer
 
     @QueryHandler
     fun falls(query: SpielfeldQuery): Spielfeld {

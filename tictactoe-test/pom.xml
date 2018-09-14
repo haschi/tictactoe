@@ -171,7 +171,6 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
-
             </plugin>
 
             <!-- Dieses Projekt führt keine Komponenten-Tests aus. -->

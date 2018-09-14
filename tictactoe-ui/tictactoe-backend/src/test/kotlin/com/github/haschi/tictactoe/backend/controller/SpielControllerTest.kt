@@ -14,12 +14,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8
+import org.springframework.hateoas.UriTemplate
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.net.URI
 import java.util.concurrent.CompletableFuture
@@ -74,7 +77,7 @@ open class SpielControllerTest(
         val result = mvc.perform(
             put(URI("/api/spiel/$spielId"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(VndError.mediaType, MediaType.APPLICATION_JSON_UTF8)
+                .accept(VndError.ERROR_JSON_UTF8, HAL_JSON_UTF8)
                 .content(mapper.writeValueAsString(resource))
         )
             .andExpect(request().asyncStarted())
@@ -82,7 +85,7 @@ open class SpielControllerTest(
 
         mvc.perform(asyncDispatch(result))
             .andExpect(status().isUnprocessableEntity)
-            .andExpect(content().contentType(VndError.mediaType))
+            .andExpect(content().contentType(VndError.ERROR_JSON_UTF8))
             .andExpect(
                 content().json(
                     """
@@ -93,6 +96,8 @@ open class SpielControllerTest(
                 )
             )
     }
+
+    private val server = UriTemplate("http://localhost/{path}")
 
     @Test
     fun `GET Spielfeld liefert Status 200 OK`() {
@@ -106,12 +111,20 @@ open class SpielControllerTest(
 
         val result = mvc.perform(
             `get`(URI("/api/spiel/$spielId"))
+                .accept(HAL_JSON_UTF8)
         )
             .andExpect(request().asyncStarted())
             .andReturn()
 
+        val uri = server.expand(UriTemplate("/api/spiel/{id}").expand(spielId)).toString()
+
         mvc.perform(asyncDispatch(result))
+            .andDo { println(it.response.contentAsString) }
             .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().contentType(HAL_JSON_UTF8))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$._links.self.href")
+                    .value(uri)
+            )
     }
 }

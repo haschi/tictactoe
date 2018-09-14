@@ -1,6 +1,5 @@
 package com.github.haschi.tictactoe.backend
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.TestApplication
 import com.github.haschi.tictactoe.backend.controller.SpielzugResource
 import com.github.haschi.tictactoe.domain.testing.FeldConverter
@@ -22,15 +21,13 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestOperations
 
 @SpringBootTest(
-    // classes = [TicTacToeBackendApplication::class],
     classes = [TestApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles(value = ["backend"])
 class ZeichenSetzenSteps(
     private val restTemplate: RestOperations,
-    private val welt: RestWelt,
-    private val mapper: ObjectMapper
+    private val welt: RestWelt
 ) {
     val server = "http://localhost"
 
