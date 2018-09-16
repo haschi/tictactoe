@@ -27,24 +27,22 @@ class SetzteZeichenIT @Autowired constructor(private val json: JacksonTester<Set
             Spielzug(Spieler('X'), Feld('B', 2))
         )
 
-        val erwartet = """
-                {
-                    "spielId" : "$aggregatkennung",
-                    "spielzug" : {
-                        "spieler" : {
-                            "zeichen" : "X"
-                        },
-                        "feld" : {
-                            "spalte" : "B",
-                            "zeile" : 2
-                        }
-                    }
-                }
-            """.trimIndent()
-
         assertThat(json.write(command))
             .isEqualToJson(
-                erwartet
+                """
+                    {
+                        "spielId" : "$aggregatkennung",
+                        "spielzug" : {
+                            "spieler" : {
+                                "zeichen" : "X"
+                            },
+                            "feld" : {
+                                "spalte" : "B",
+                                "zeile" : 2
+                            }
+                        }
+                    }
+                """
             )
     }
 }
