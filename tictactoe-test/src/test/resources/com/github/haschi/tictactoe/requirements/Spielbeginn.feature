@@ -4,7 +4,10 @@ Funktionalität: Spielbeginn
   Als Spieler möchte ich einer neuen Tic Tac Toe Partie beitreten
   um gegen einen anderen Spieler zu spielen
 
-  @domäne
-  Szenario: Spieler beginnt neue Tic Tac Toe Partie
-    Wenn ich einer neuen Tic Tac Toe Partie betrete
-    Dann werde ich auf einen Gegenspieler warten
+  Grundlage:
+    Angenommen ich bin der Anwender "Matthias"
+    Und ich habe das Symbol "X" ausgewählt
+
+  Szenario: Einer Partie beitreten
+    Wenn wenn der Anwender "Martin" das Symbol"O" auswählt
+    Dann beginne ich mit dem Anwender "Martin" eine Partie Tic Tac Toe

@@ -8,5 +8,7 @@ class VndError(val message: String) : ResourceSupport() {
     companion object {
         @JvmStatic
         val ERROR_JSON_UTF8 = MediaType.asMediaType(MimeType.valueOf("application/vnd.error+json;charset=UTF-8"))
+
+        const val ERROR_JSON_UTF8_VALUE = "application/vnd.error+json;charset=UTF-8"
     }
 }

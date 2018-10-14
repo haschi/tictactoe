@@ -4,7 +4,7 @@ Funktionalität: Spielende prüfen
   Grundlage:
     Angenommen ich habe das Spiel begonnen
 
-  @domäne
+  @core
   Szenariogrundriss: Spieler X gewinnt
 
     Angenommen ich habe folgenden Spielverlauf:
@@ -22,7 +22,7 @@ Funktionalität: Spielende prüfen
       | C3   | gewonnen       |
       | A3   | nicht gewonnen |
 
-  @domäne
+  @core
   Szenario: Spieler O gewinnt
 
     Angenommen ich habe folgenden Spielverlauf:

@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe.backend
+package com.github.haschi.tictactoe.requirements.backend.testing
 
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
@@ -9,10 +9,10 @@ import org.axonframework.commandhandling.gateway.CommandGatewayFactory
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine
 import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.springframework.context.annotation.Bean
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
-class Infrastruktur {
+@Service
+class Infrastructure {
     @Bean
     fun ticTacToeGateway(commandBus: CommandBus): TicTacToeGateway {
         val factory = CommandGatewayFactory(commandBus)

@@ -7,7 +7,7 @@ import java.util.*
 data class Aggregatkennung(val id: String = IdentifierFactory.getInstance().generateIdentifier()) {
     constructor(id: URI) : this(id.toString())
 
-    constructor(randomUUID: UUID) : this(randomUUID.toString())
+    constructor(uuid: UUID) : this(uuid.toString())
 
     companion object {
         @JvmField
