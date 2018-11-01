@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.net.URI
+import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
@@ -44,12 +45,12 @@ open class SpielControllerTest(
 
     @Test
     fun `Beginne Spiel liefert Response mit Status 201 Created`() {
-        val spielId = Aggregatkennung()
+        val spielId = Aggregatkennung(UUID.randomUUID())
         val beginneSpiel = BeginneSpiel(spielId)
         val future = CompletableFuture<Aggregatkennung>()
         future.complete(spielId)
 
-        whenever(this.command.send(beginneSpiel, spielId.toString()))
+        whenever(this.command.send(beginneSpiel))
             .thenReturn(future)
 
         val result = mvc.perform(
@@ -64,14 +65,14 @@ open class SpielControllerTest(
     @Test
     fun `Feld belegt führt zu Response mit Status 422 Unprocessable Entity`() {
 
-        val spielId = Aggregatkennung()
+        val spielId = Aggregatkennung(UUID.randomUUID())
         val setzeZeichen = SetzeZeichen(spielId, Spielzug(Spieler('X'), Feld('A', 1)))
         val future = CompletableFuture<Void>()
         val resource = SpielzugResource(setzeZeichen.spielzug.spieler, setzeZeichen.spielzug.feld)
 
         future.completeExceptionally(FeldBelegt(spielId, Spieler('X')))
 
-        whenever(this.command.send(setzeZeichen, spielId.toString()))
+        whenever(this.command.send(setzeZeichen))
             .thenReturn(future)
 
         val result = mvc.perform(
@@ -101,7 +102,7 @@ open class SpielControllerTest(
 
     @Test
     fun `GET Spielfeld liefert Status 200 OK`() {
-        val spielId = Aggregatkennung()
+        val spielId = Aggregatkennung(UUID.randomUUID())
         val spielfeld = Spielfeld(emptyList())
         val future = CompletableFuture<Spielfeld>()
         future.complete(spielfeld)
@@ -119,7 +120,6 @@ open class SpielControllerTest(
         val uri = server.expand(UriTemplate("/api/spiel/{id}").expand(spielId)).toString()
 
         mvc.perform(asyncDispatch(result))
-            .andDo { println(it.response.contentAsString) }
             .andExpect(status().isOk)
             .andExpect(content().contentType(HAL_JSON_UTF8))
             .andExpect(

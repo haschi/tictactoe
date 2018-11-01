@@ -1,13 +1,10 @@
 package com.github.haschi.tictactoe.backend
 
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
+import com.github.haschi.tictactoe.application.SpielerGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import org.axonframework.commandhandling.CommandBus
-import org.axonframework.commandhandling.CommandTargetResolver
-import org.axonframework.commandhandling.MetaDataCommandTargetResolver
 import org.axonframework.commandhandling.gateway.CommandGatewayFactory
-import org.axonframework.eventsourcing.eventstore.EventStorageEngine
-import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 
@@ -16,7 +13,6 @@ class Infrastruktur {
     @Bean
     fun ticTacToeGateway(commandBus: CommandBus): TicTacToeGateway {
         val factory = CommandGatewayFactory(commandBus)
-
         return factory.createGateway(TicTacToeGateway::class.java)
     }
 
@@ -27,12 +23,8 @@ class Infrastruktur {
     }
 
     @Bean
-    fun eventStore(): EventStorageEngine {
-        return InMemoryEventStorageEngine()
-    }
-
-    @Bean
-    fun metaDataCommandTargetResolver(): CommandTargetResolver {
-        return MetaDataCommandTargetResolver("id")
+    fun spielerGateway(commandBus: CommandBus): SpielerGateway {
+        val factory = CommandGatewayFactory(commandBus)
+        return factory.createGateway(SpielerGateway::class.java)
     }
 }

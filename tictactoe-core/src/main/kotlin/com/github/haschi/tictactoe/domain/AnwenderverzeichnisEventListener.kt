@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class AnwenderverzeichnisEventListener {
     @QueryHandler
-    fun falls(query: `WelcheAnwenderSindBekannt`): Anwenderübersicht {
+    fun falls(query: WelcheAnwenderSindBekannt): Anwenderübersicht {
         return Anwenderübersicht.Leer
     }
 }

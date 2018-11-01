@@ -3,11 +3,7 @@ package com.github.haschi.tictactoe.requirements.backend.testing
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import org.axonframework.commandhandling.CommandBus
-import org.axonframework.commandhandling.CommandTargetResolver
-import org.axonframework.commandhandling.MetaDataCommandTargetResolver
 import org.axonframework.commandhandling.gateway.CommandGatewayFactory
-import org.axonframework.eventsourcing.eventstore.EventStorageEngine
-import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 
@@ -24,15 +20,5 @@ class Infrastructure {
     fun anwenderverzeichnisGateway(commandBus: CommandBus): AnwenderverzeichnisGateway {
         val factory = CommandGatewayFactory(commandBus)
         return factory.createGateway(AnwenderverzeichnisGateway::class.java)
-    }
-
-    @Bean
-    fun eventStore(): EventStorageEngine {
-        return InMemoryEventStorageEngine()
-    }
-
-    @Bean
-    fun metaDataCommandTargetResolver(): CommandTargetResolver {
-        return MetaDataCommandTargetResolver("id")
     }
 }

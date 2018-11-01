@@ -5,8 +5,10 @@ import com.github.haschi.tictactoe.domain.commands.AnwenderNichtGefunden
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.events.AnwenderRegistriert
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Anwenderübersicht
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
+import com.github.haschi.tictactoe.requirements.core.testing.Person
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
@@ -23,8 +25,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     fun ich_das_Anwenderverzeichnis_anlege() {
         welt.next {
             anwenderverzeichnis.send(
-                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID),
-                LegeAnwenderverzeichnisAn.ID.toString()
+                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID)
             )
         }
     }
@@ -44,8 +45,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
         welt.next {
             anwenderverzeichnis.send(
-                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID),
-                LegeAnwenderverzeichnisAn.ID.toString()
+                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID)
             )
         }
     }
@@ -56,8 +56,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1),
-                LegeAnwenderverzeichnisAn.ID.toString()
+                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
             )
         }
     }
@@ -73,10 +72,12 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe mich als Anwender \"([^\"]*)\" registriert$")
     fun ich_habe_mich_als_Anwender_registriert(arg1: String) {
         Logger.debug { "Angenommen ich habe mich als Anwender $arg1 registriert" }
+
+        welt.ich = Person(arg1, Aggregatkennung.NIL)
+
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1),
-                LegeAnwenderverzeichnisAn.ID.toString()
+                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
             )
         }
     }
@@ -86,8 +87,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
         Logger.debug { "Wenn ich mich erneut als Anwender $arg1 registriere" }
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1),
-                LegeAnwenderverzeichnisAn.ID.toString()
+                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
             )
         }
     }

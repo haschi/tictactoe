@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestOperations
+import java.util.*
 
 @ActiveProfiles(value = ["backend"])
 @ContextConfiguration
@@ -38,7 +39,7 @@ class ZeichenSetzenSteps(
 
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
-        val spielId = Aggregatkennung()
+        val spielId = Aggregatkennung(UUID.randomUUID())
         val endpoint = "$server:$port/api/spiel/$spielId"
 
         welt.spiel = restTemplate.postForLocation(endpoint, null)!!

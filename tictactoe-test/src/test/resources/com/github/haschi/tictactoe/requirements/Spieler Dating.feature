@@ -1,25 +1,27 @@
 #language: de
 Funktionalität: Spieler Dating
 
-  Als Spieler möchte ich auf einen Gegenspieler warten, damit ich Tic Tac Toe spielen kann
+  Als Spieler möchte ich einen Gegenspieler zugewiesen bekommen, um eine
+  Partie Tic Tac Toe mit ihm Spielen zu können.
 
   Grundlage:
+    Angenommen ich habe das Anwenderverzeichnis angelegt
+    Angenommen ich habe mich als Anwender "Matthias" registriert
 
+
+  @core
   Szenariogrundriss: Zeichen aussuchen
     Wenn ich <mein Zeichen> als mein Zeichen für die nächste Partie Tic Tac Toe aussuche
-    Dann werde ich <mein Zeichen> für die nächste Partie Tic Tac Toe ausgesucht haben
+    Dann werde ich den Dating Room als Spieler mit <mein Zeichen> betreten haben
+    Dann Dann werde ich auf einen Spieler warten, der <sein Zeichen> ausgesucht hat
 
     Beispiele:
-      | mein Zeichen |
-      | X            |
-      | O            |
+      | mein Zeichen | sein Zeichen |
+      | O            | X            |
+      | X            | O            |
 
-  Szenario: Auf Gegenspieler warten
-    Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht
-    Wenn ein Gegenspieler O als sein Zeichen für die nächste Partie auswählt
-    Dann werde ich mit dem Gegenspieler eine Partie Tic Tac Toe begonnen haben
 
-  Szenario: Nur eine Partie gleichzeitig starten
+  Szenario: Dating erfolglos beenden
     Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht
-    Wenn ich O als mein Zeichen für die nächste Partie Tic Tac Toe aussuche
-    Dann Fehler
+    Wenn Wenn nach fünf Minuten kein Spieler O als sein Zeichen ausgesucht hat
+    Dann werde ich nicht mehr auf einen Gegenspieler warten

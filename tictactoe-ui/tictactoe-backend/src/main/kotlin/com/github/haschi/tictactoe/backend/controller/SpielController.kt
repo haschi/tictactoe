@@ -15,8 +15,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.*
+import java.util.*
 import java.util.concurrent.CompletableFuture
-
 
 @RestController
 @ExposesResourceFor(Spielfeld::class)
@@ -29,8 +29,9 @@ class SpielController(
 
     @RequestMapping(path = ["{id}"], method = [POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun post(@PathVariable("id") id: Aggregatkennung): CompletableFuture<HttpHeaders> {
-        return tictactoe.send(BeginneSpiel(id), id.toString())
+    fun post(@PathVariable("id") id: UUID): CompletableFuture<HttpHeaders> {
+        // logger.info { "POST /api/spiel/$id" }
+        return tictactoe.send(BeginneSpiel(Aggregatkennung(id)))
             .thenApply {
                 val headers = HttpHeaders()
                 headers.location = links.linkForSingleResource(Spielfeld::class.java, id).toUri()
@@ -45,10 +46,8 @@ class SpielController(
         produces = [HAL_JSON_UTF8_VALUE]
     )
     @ResponseStatus(HttpStatus.OK)
-    fun `get`(@PathVariable("id") id: Aggregatkennung): CompletableFuture<SpielfeldResource> {
-        val l = links.linkForSingleResource(Spielfeld::class.java, id.toString())
-        println(l)
-        return queryGateway.query(SpielfeldQuery(id), Spielfeld::class.java)
+    fun `get`(@PathVariable("id") id: UUID): CompletableFuture<SpielfeldResource> {
+        return queryGateway.query(SpielfeldQuery(Aggregatkennung(id)), Spielfeld::class.java)
             .thenApply {
                 val ls = SpielfeldResource(it)
                 ls.add(links.linkForSingleResource(Spielfeld::class.java, id.toString()).withSelfRel())
@@ -58,10 +57,11 @@ class SpielController(
 
     @RequestMapping(path = ["{id}"], method = [PUT])
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun put(@PathVariable("id") id: Aggregatkennung, @RequestBody spielzug: SpielzugResource): CompletableFuture<Void> {
+    fun put(@PathVariable("id") id: UUID, @RequestBody spielzug: SpielzugResource): CompletableFuture<Void> {
         return tictactoe.send(
-            SetzeZeichen(id, Spielzug(spielzug.spieler, spielzug.feld)),
-            id.toString()
+            SetzeZeichen(Aggregatkennung(id), Spielzug(spielzug.spieler, spielzug.feld))
         )
     }
+
+    // companion object: KLogging()
 }

@@ -9,10 +9,11 @@ import org.axonframework.commandhandling.model.AggregateLifecycle
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
 
+// @Aggregate(commandTargetResolver = "metaDataCommandTargetResolver")
 @Aggregate
 class Anwender() {
     @AggregateIdentifier
-    lateinit var id: String
+    private lateinit var id: String
 
     constructor(name: String) : this() {
         AggregateLifecycle.apply(AnwenderRegistriert(name))

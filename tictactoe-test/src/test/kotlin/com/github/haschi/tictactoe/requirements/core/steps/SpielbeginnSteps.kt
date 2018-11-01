@@ -27,7 +27,7 @@ class SpielbeginnSteps(val welt: DieWelt) {
     @Angenommen("^ich habe das Symbol \"([^\"]*)\" ausgewählt$")
     fun `ich habe das Symbol ausgewählt`(arg1: Char) {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(ich, Spieler(arg1)), ich)
+            anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler(arg1)))
         }
     }
 

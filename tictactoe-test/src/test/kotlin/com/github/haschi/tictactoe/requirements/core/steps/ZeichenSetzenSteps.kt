@@ -17,13 +17,14 @@ import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
+import java.util.*
 
 class ZeichenSetzenSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
         welt.next {
-            spielId = Aggregatkennung()
-            tictactoe.send(BeginneSpiel(spielId), spielId.toString())
+            spielId = Aggregatkennung(UUID.randomUUID())
+            tictactoe.send(BeginneSpiel(spielId))
         }
     }
 
@@ -33,7 +34,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         @Transform(FeldConverter::class) feld: Feld
     ) {
         welt.next {
-            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)), spielId.toString())
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
         }
     }
 
@@ -43,7 +44,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         @Transform(FeldConverter::class) feld: Feld
     ) {
         welt.next {
-            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)), spielId.toString())
+            tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
         }
     }
 

@@ -9,7 +9,7 @@ class AggregatkennungTest {
     @Test
     fun `Jede neue Aggregatkennung ist verschieden`() {
 
-        assertThat(Aggregatkennung()).isNotEqualTo(Aggregatkennung())
+        assertThat(Aggregatkennung(UUID.randomUUID())).isNotEqualTo(Aggregatkennung(UUID.randomUUID()))
     }
 
     @Test

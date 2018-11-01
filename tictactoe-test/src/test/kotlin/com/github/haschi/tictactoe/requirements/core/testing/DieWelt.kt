@@ -1,6 +1,7 @@
 package com.github.haschi.tictactoe.requirements.core.testing
 
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
+import com.github.haschi.tictactoe.application.SpielerGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import org.axonframework.eventhandling.EventHandler
@@ -12,10 +13,11 @@ import java.util.concurrent.CompletableFuture
 class DieWelt(
     val tictactoe: TicTacToeGateway,
     val anwenderverzeichnis: AnwenderverzeichnisGateway,
+    val spieler: SpielerGateway,
     val queryGateway: QueryGateway
 ) {
     fun reset() {
-        ich = ""
+        ich = Person("", Aggregatkennung.NIL)
         spielId = Aggregatkennung.NIL
         future = CompletableFuture.supplyAsync { Aggregatkennung() }
         events = listOf()
@@ -23,7 +25,7 @@ class DieWelt(
 
     var events = listOf<Any>()
 
-    var ich: String = ""
+    var ich = Person("", Aggregatkennung.NIL)
     var spielId: Aggregatkennung = Aggregatkennung.NIL
     var future: CompletableFuture<Any> = CompletableFuture.supplyAsync { Aggregatkennung() }
 

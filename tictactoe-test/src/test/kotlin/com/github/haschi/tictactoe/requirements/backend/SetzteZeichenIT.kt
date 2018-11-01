@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.json.JacksonTester
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @JsonTest()
@@ -22,7 +23,7 @@ class SetzteZeichenIT @Autowired constructor(private val json: JacksonTester<Set
     @Test
     fun `SetzeZeichen kann serialisiert werde`() {
 
-        val aggregatkennung = Aggregatkennung()
+        val aggregatkennung = Aggregatkennung(UUID.randomUUID())
         val command = SetzeZeichen(
             aggregatkennung,
             Spielzug(Spieler('X'), Feld('B', 2))
