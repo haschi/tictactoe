@@ -7,10 +7,9 @@ import java.util.*
 data class Aggregatkennung(val id: String) {
 
     constructor() : this(UUID.randomUUID())
-    //
+
     constructor(id: URI) : this(id.toString())
 
-    //
     constructor(uuid: UUID) : this(uuid.toString())
 
     override fun toString(): String {

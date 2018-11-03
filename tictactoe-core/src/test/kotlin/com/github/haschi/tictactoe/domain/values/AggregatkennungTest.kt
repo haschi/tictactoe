@@ -24,5 +24,6 @@ class AggregatkennungTest {
         val uri = URI.create("isbn:4711")
         assertThat(Aggregatkennung(uri)).isEqualTo(Aggregatkennung(uri))
         assertThat(Aggregatkennung(uri).toString()).isEqualTo(uri.toString())
+        assertThat(Aggregatkennung(uri).toString()).isEqualTo("isbn:4711")
     }
 }

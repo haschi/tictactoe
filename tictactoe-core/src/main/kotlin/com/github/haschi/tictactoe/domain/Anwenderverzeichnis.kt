@@ -1,9 +1,9 @@
 package com.github.haschi.tictactoe.domain
 
-import com.github.haschi.tictactoe.domain.commands.AnwenderNichtGefunden
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.events.AnwenderGefunden
+import com.github.haschi.tictactoe.domain.events.AnwenderNichtGefunden
 import com.github.haschi.tictactoe.domain.events.AnwenderverzeichnisAngelegt
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import org.axonframework.commandhandling.CommandHandler
