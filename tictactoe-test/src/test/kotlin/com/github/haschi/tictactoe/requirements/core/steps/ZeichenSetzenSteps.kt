@@ -55,7 +55,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
     ) {
         welt.future.get()
 
-        assertThat(welt.events).contains(
+        assertThat(welt.fakten).contains(
             SpielzugWurdeAkzeptiert(welt.spielId, Spielzug(spieler, feld))
         )
     }

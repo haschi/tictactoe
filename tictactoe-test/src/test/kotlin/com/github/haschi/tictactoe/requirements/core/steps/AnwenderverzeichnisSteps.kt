@@ -66,7 +66,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     fun werde_ich_den_Anwender_im_Anwenderverzeichnis_nicht_gefunden_haben(arg1: String) {
         Logger.debug { "Dann werde ich den Anwender $arg1 im Anwenderverzeichnis nicht gefunden haben" }
         welt.future.get()
-        Assertions.assertThat(welt.events)
+        Assertions.assertThat(welt.fakten)
             .contains(AnwenderNichtGefunden(arg1))
     }
 
@@ -106,7 +106,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     fun werde_ich_den_Anwender_im_Anwenderverzeichnis_gefunden_haben(arg1: String) {
         Logger.debug { "Dann werde ich den Anwender $arg1 im Anwenderverzeichnis gefunden haben" }
         welt.future.get()
-        Assertions.assertThat(welt.events)
+        Assertions.assertThat(welt.fakten)
             .containsOnlyOnce(AnwenderRegistriert(arg1))
     }
 

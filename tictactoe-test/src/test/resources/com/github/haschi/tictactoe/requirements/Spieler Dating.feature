@@ -15,7 +15,6 @@ Funktionalität: Spieler Dating
   Szenariogrundriss: Zeichen aussuchen
     Wenn ich <mein Zeichen> als mein Zeichen für die nächste Partie Tic Tac Toe aussuche
     Dann werde ich den Dating Room als Spieler mit <mein Zeichen> betreten haben
-    Dann Dann werde ich auf einen Spieler warten, der <sein Zeichen> ausgesucht hat
 
     Beispiele:
       | mein Zeichen | sein Zeichen |
