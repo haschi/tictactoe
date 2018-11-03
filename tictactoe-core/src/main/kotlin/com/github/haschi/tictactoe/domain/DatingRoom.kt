@@ -3,8 +3,10 @@ package com.github.haschi.tictactoe.domain
 import com.github.haschi.tictactoe.domain.commands.BetreteDatingRoom
 import com.github.haschi.tictactoe.domain.commands.RichteDatingRoomEin
 import com.github.haschi.tictactoe.domain.events.SpielerHatDatingRoomBetreten
+import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.DatingRoomEingerichtet
+import com.github.haschi.tictactoe.domain.values.Spieler
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle
@@ -25,7 +27,11 @@ class DatingRoom() {
 
     @CommandHandler
     fun verarbeite(command: BetreteDatingRoom) {
-        AggregateLifecycle.apply(SpielerHatDatingRoomBetreten(command.spielerId, command.spieler))
+        partnerLoseSpieler
+            .asSequence()
+            .firstOrNull { it.value.zeichen != command.spieler.zeichen }
+            ?.let { AggregateLifecycle.apply(SpielpartnerGefunden(it.value, command.spieler)) }
+            ?: AggregateLifecycle.apply(SpielerHatDatingRoomBetreten(command.spielerId, command.spieler))
     }
 
     @EventSourcingHandler
@@ -33,9 +39,21 @@ class DatingRoom() {
         id = event.id
     }
 
+    private var partnerLoseSpieler: Map<String, Spieler> = emptyMap()
+
+    @EventSourcingHandler
+    fun falls(event: SpielerHatDatingRoomBetreten) {
+        partnerLoseSpieler += event.id to event.spieler
+    }
+
+    @EventSourcingHandler
+    fun falls(event: SpielpartnerGefunden) {
+        partnerLoseSpieler -= event.x.anwender
+        partnerLoseSpieler -= event.y.anwender
+    }
+
     companion object {
         val ID = Aggregatkennung(
-
             URI("singleton", "DatingRoom", "")
         )
     }

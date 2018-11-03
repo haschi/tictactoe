@@ -5,6 +5,6 @@ import cucumber.api.Transformer
 
 class SpielerConverter : Transformer<Spieler>() {
     override fun transform(zeichen: String): Spieler {
-        return Spieler(zeichen[0])
+        return Spieler(zeichen[0], "")
     }
 }

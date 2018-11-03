@@ -18,7 +18,7 @@ class SpielzugIT @Autowired constructor(private val json: JacksonTester<Spielzug
     @Test
     fun `Serialisierung eines Spielzugs klappt`() {
         val spielzug = Spielzug(
-            Spieler('X'),
+            Spieler('X', "Matthias"),
             Feld('A', 1)
         )
         assertThat(json.write(spielzug))
@@ -26,7 +26,8 @@ class SpielzugIT @Autowired constructor(private val json: JacksonTester<Spielzug
                 """
                 {
                     "spieler": {
-                        "zeichen": "X"
+                        "zeichen": "X",
+                        "anwender": "Matthias"
                     },
                     "feld": {
                         "spalte": "A",

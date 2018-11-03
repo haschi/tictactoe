@@ -11,6 +11,7 @@ import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.spring.stereotype.Aggregate
+import java.net.URI
 import java.util.*
 
 //@Aggregate(commandTargetResolver = "metaDataCommandTargetResolver")
@@ -47,5 +48,9 @@ class Anwenderverzeichnis() {
     @EventSourcingHandler
     fun falls(event: AnwenderNichtGefunden) {
         anwender += event.name to Aggregatkennung(UUID.randomUUID())
+    }
+
+    companion object {
+        val ID = Aggregatkennung(URI("singleton", "Anwenderverzeichnis", ""))
     }
 }

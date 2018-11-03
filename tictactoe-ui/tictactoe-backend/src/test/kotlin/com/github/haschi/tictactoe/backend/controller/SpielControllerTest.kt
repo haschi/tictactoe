@@ -66,11 +66,11 @@ open class SpielControllerTest(
     fun `Feld belegt führt zu Response mit Status 422 Unprocessable Entity`() {
 
         val spielId = Aggregatkennung(UUID.randomUUID())
-        val setzeZeichen = SetzeZeichen(spielId, Spielzug(Spieler('X'), Feld('A', 1)))
+        val setzeZeichen = SetzeZeichen(spielId, Spielzug(Spieler('X', ""), Feld('A', 1)))
         val future = CompletableFuture<Void>()
         val resource = SpielzugResource(setzeZeichen.spielzug.spieler, setzeZeichen.spielzug.feld)
 
-        future.completeExceptionally(FeldBelegt(spielId, Spieler('X')))
+        future.completeExceptionally(FeldBelegt(spielId, Spieler('X', "")))
 
         whenever(this.command.send(setzeZeichen))
             .thenReturn(future)

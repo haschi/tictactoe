@@ -7,6 +7,8 @@ Funktionalität: Spieler Dating
   Grundlage:
     Angenommen ich habe das Anwenderverzeichnis angelegt
     Angenommen ich habe mich als Anwender "Matthias" registriert
+    Angenommen "Martin" hat sich als Anwender registriert
+    Angenommen "Maria" hat sich als Anwender registriert
 
 
   @core
@@ -20,6 +22,18 @@ Funktionalität: Spieler Dating
       | O            | X            |
       | X            | O            |
 
+
+  @core
+  Szenario: Zwei passende Spieler werden gefunden
+    Angenommen ich habe den Dating Room als Spieler mit dem Zeichen X betreten
+    Wenn Der Anwender "Martin" den Dating Room als Spieler mit dem Zeichen O betritt
+    Dann werde ich mit "Martin" einen Spielpartner gefunden haben
+
+  @core
+  Szenario: Spieler hat Dating Room verlassen
+    Angenommen die Anwender Martin und Matthias haben sich als Spielpartner gefunden
+    Wenn Die Anwenderin "Maria" den Dating Room als Spieler mit dem Zeichen O betritt
+    Dann wird die Anwenderin "Maria" den Dating Room mit O betreten haben
 
   Szenario: Dating erfolglos beenden
     Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht

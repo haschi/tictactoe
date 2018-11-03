@@ -1,6 +1,7 @@
 package com.github.haschi.tictactoe.domain.values
 
-data class Spieler(val zeichen: Char) {
+data class Spieler(val zeichen: Char, val anwender: String) {
+
     init {
         if (!listOf('X', 'O', ' ').contains(zeichen)) {
             throw UnzulässigesZeichen(zeichen)
@@ -8,6 +9,6 @@ data class Spieler(val zeichen: Char) {
     }
 
     companion object {
-        val Keiner = Spieler(' ')
+        val Keiner = Spieler(' ', "")
     }
 }

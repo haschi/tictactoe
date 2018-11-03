@@ -1,6 +1,6 @@
 package com.github.haschi.tictactoe.requirements.core.steps
 
-import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
+import com.github.haschi.tictactoe.domain.Anwenderverzeichnis
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.commands.WaehleZeichenAus
 import com.github.haschi.tictactoe.domain.values.Spieler
@@ -20,14 +20,14 @@ class SpielbeginnSteps(val welt: DieWelt) {
     @Angenommen("^ich bin der Anwender \"([^\"]*)\"$")
     fun ich_bin_der_Anwender(name: String) {
         welt.next {
-            tictactoe.send(RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, name))
+            tictactoe.send(RegistriereAnwender(Anwenderverzeichnis.ID, name))
         }
     }
 
     @Angenommen("^ich habe das Symbol \"([^\"]*)\" ausgewählt$")
     fun `ich habe das Symbol ausgewählt`(arg1: Char) {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler(arg1)))
+            anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler(arg1, ich.name)))
         }
     }
 

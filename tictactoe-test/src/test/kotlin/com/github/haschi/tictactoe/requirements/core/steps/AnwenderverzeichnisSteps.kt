@@ -1,5 +1,6 @@
 package com.github.haschi.tictactoe.requirements.core.steps
 
+import com.github.haschi.tictactoe.domain.Anwenderverzeichnis
 import com.github.haschi.tictactoe.domain.WelcheAnwenderSindBekannt
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
@@ -25,7 +26,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     fun ich_das_Anwenderverzeichnis_anlege() {
         welt.next {
             anwenderverzeichnis.send(
-                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID)
+                LegeAnwenderverzeichnisAn(Anwenderverzeichnis.ID)
             )
         }
     }
@@ -45,7 +46,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
         welt.next {
             anwenderverzeichnis.send(
-                LegeAnwenderverzeichnisAn(LegeAnwenderverzeichnisAn.ID)
+                LegeAnwenderverzeichnisAn(Anwenderverzeichnis.ID)
             )
         }
     }
@@ -56,7 +57,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
+                RegistriereAnwender(Anwenderverzeichnis.ID, arg1)
             )
         }
     }
@@ -77,7 +78,16 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
+                RegistriereAnwender(Anwenderverzeichnis.ID, arg1)
+            )
+        }
+    }
+
+    @Angenommen("^\"([^\"]*)\" hat sich als Anwender registriert$")
+    fun hat_sich_als_Anwender_registriert(anwender: String) {
+        welt.next {
+            anwenderverzeichnis.send(
+                RegistriereAnwender(Anwenderverzeichnis.ID, anwender)
             )
         }
     }
@@ -87,7 +97,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
         Logger.debug { "Wenn ich mich erneut als Anwender $arg1 registriere" }
         welt.next {
             anwenderverzeichnis.send(
-                RegistriereAnwender(LegeAnwenderverzeichnisAn.ID, arg1)
+                RegistriereAnwender(Anwenderverzeichnis.ID, arg1)
             )
         }
     }

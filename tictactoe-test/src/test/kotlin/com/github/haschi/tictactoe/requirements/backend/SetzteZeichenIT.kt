@@ -26,7 +26,7 @@ class SetzteZeichenIT @Autowired constructor(private val json: JacksonTester<Set
         val aggregatkennung = Aggregatkennung(UUID.randomUUID())
         val command = SetzeZeichen(
             aggregatkennung,
-            Spielzug(Spieler('X'), Feld('B', 2))
+            Spielzug(Spieler('X', "Matthias"), Feld('B', 2))
         )
 
         assertThat(json.write(command))
@@ -36,7 +36,8 @@ class SetzteZeichenIT @Autowired constructor(private val json: JacksonTester<Set
                         "spielId" : "$aggregatkennung",
                         "spielzug" : {
                             "spieler" : {
-                                "zeichen" : "X"
+                                "zeichen" : "X",
+                                "anwender" : "Matthias"
                             },
                             "feld" : {
                                 "spalte" : "B",
