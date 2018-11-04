@@ -14,9 +14,6 @@ import org.axonframework.spring.stereotype.Aggregate
 import java.net.URI
 import java.util.*
 
-//@Aggregate(commandTargetResolver = "metaDataCommandTargetResolver")
-typealias ag = Aggregatkennung
-
 @Aggregate
 class Anwenderverzeichnis() {
 
