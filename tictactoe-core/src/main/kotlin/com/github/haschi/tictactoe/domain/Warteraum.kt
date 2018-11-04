@@ -1,8 +1,8 @@
 package com.github.haschi.tictactoe.domain
 
-import com.github.haschi.tictactoe.domain.commands.BetreteDatingRoom
+import com.github.haschi.tictactoe.domain.commands.BetreteWarteraum
 import com.github.haschi.tictactoe.domain.commands.LegeMaximaleWartezeitFest
-import com.github.haschi.tictactoe.domain.commands.RichteDatingRoomEin
+import com.github.haschi.tictactoe.domain.commands.RichteWarteraumEin
 import com.github.haschi.tictactoe.domain.events.DatingRoomVerlassen
 import com.github.haschi.tictactoe.domain.events.MaximaleWartezeitFestgelegt
 import com.github.haschi.tictactoe.domain.events.SpielerHatDatingRoomBetreten
@@ -21,7 +21,7 @@ import java.net.URI
 import java.time.Duration
 
 @Aggregate
-class DatingRoom() {
+class Warteraum() {
 
     @AggregateIdentifier
     private lateinit var id: Aggregatkennung
@@ -29,12 +29,12 @@ class DatingRoom() {
     private var wartezeit = Duration.ofMinutes(5)
 
     @CommandHandler
-    constructor(command: RichteDatingRoomEin) : this() {
+    constructor(command: RichteWarteraumEin) : this() {
         AggregateLifecycle.apply(DatingRoomEingerichtet(command.id))
     }
 
     @CommandHandler
-    fun verarbeite(command: BetreteDatingRoom, deadlineManager: DeadlineManager) {
+    fun verarbeite(command: BetreteWarteraum, deadlineManager: DeadlineManager) {
         val partner = partnerLoseSpieler
             .asSequence()
             .firstOrNull { it.value.zeichen != command.spieler.zeichen }
@@ -85,7 +85,7 @@ class DatingRoom() {
 
     companion object {
         val ID = Aggregatkennung(
-            URI("singleton", "DatingRoom", "")
+            URI("singleton", "Warteraum", "")
         )
     }
 }

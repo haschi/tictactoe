@@ -1,7 +1,7 @@
 package com.github.haschi.tictactoe.requirements.core.testing
 
-import com.github.haschi.tictactoe.domain.DatingRoom
-import com.github.haschi.tictactoe.domain.commands.RichteDatingRoomEin
+import com.github.haschi.tictactoe.domain.Warteraum
+import com.github.haschi.tictactoe.domain.commands.RichteWarteraumEin
 import cucumber.api.java.Before
 
 class Hooks(private val welt: DieWelt) {
@@ -9,7 +9,7 @@ class Hooks(private val welt: DieWelt) {
     fun reset() {
         welt.reset()
         welt.next {
-            anwenderverzeichnis.send(RichteDatingRoomEin(DatingRoom.ID))
+            anwenderverzeichnis.send(RichteWarteraumEin(Warteraum.ID))
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.github.haschi.tictactoe.requirements.core.steps
 
-import com.github.haschi.tictactoe.domain.DatingRoom
+import com.github.haschi.tictactoe.domain.Warteraum
 import com.github.haschi.tictactoe.domain.commands.LegeMaximaleWartezeitFest
 import com.github.haschi.tictactoe.domain.commands.WaehleZeichenAus
 import com.github.haschi.tictactoe.domain.events.DatingRoomVerlassen
@@ -27,7 +27,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
         welt.next {
             anwenderverzeichnis.send(
                 LegeMaximaleWartezeitFest(
-                    DatingRoom.ID,
+                    Warteraum.ID,
                     Duration.ofMillis(wartezeit)
                 )
             )

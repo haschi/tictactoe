@@ -8,7 +8,7 @@ interface AnwenderverzeichnisGateway {
     fun send(command: LegeAnwenderverzeichnisAn): CompletableFuture<Aggregatkennung>
     fun send(command: RegistriereAnwender): CompletableFuture<Void>
     fun send(command: WaehleZeichenAus): CompletableFuture<Void>
-    fun send(command: RichteDatingRoomEin): CompletableFuture<Void>
-    fun send(command: BetreteDatingRoom): CompletableFuture<Void>
+    fun send(command: RichteWarteraumEin): CompletableFuture<Void>
+    fun send(command: BetreteWarteraum): CompletableFuture<Void>
     fun send(command: LegeMaximaleWartezeitFest): CompletableFuture<Void>
 }
