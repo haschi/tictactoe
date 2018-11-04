@@ -9,7 +9,7 @@ class Hooks(private val welt: DieWelt) {
     fun reset() {
         welt.reset()
         welt.next {
-            anwenderverzeichnis.send(RichteWarteraumEin(Warteraum.ID))
+            warteraum.send(RichteWarteraumEin(Warteraum.ID))
         }
     }
 }

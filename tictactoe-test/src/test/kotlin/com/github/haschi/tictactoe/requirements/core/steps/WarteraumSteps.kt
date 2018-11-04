@@ -16,16 +16,15 @@ import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
-import org.axonframework.deadline.DeadlineManager
 import java.time.Duration
 
 
-class WarteraumSteps(private val welt: DieWelt, private val deadlineManager: DeadlineManager) {
+class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("^ich habe eine maximale Wartezeit von (\\d+) Millisekunden für den Warteraum festgelegt$")
     fun ich_habe_eine_maximale_Wartezeit_von_Millisekunden_für_den_Warteraum_festgelegt(wartezeit: Long) {
         welt.next {
-            anwenderverzeichnis.send(
+            warteraum.send(
                 LegeMaximaleWartezeitFest(
                     Warteraum.ID,
                     Duration.ofMillis(wartezeit)
