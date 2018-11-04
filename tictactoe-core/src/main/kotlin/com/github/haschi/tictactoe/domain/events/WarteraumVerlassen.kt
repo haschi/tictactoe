@@ -1,3 +1,3 @@
 package com.github.haschi.tictactoe.domain.events
 
-data class DatingRoomVerlassen(val id: String)
+data class WarteraumVerlassen(val id: String)

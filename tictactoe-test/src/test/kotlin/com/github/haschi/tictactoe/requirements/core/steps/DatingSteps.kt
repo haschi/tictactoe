@@ -3,10 +3,10 @@ package com.github.haschi.tictactoe.requirements.core.steps
 import com.github.haschi.tictactoe.domain.Warteraum
 import com.github.haschi.tictactoe.domain.commands.LegeMaximaleWartezeitFest
 import com.github.haschi.tictactoe.domain.commands.WaehleZeichenAus
-import com.github.haschi.tictactoe.domain.events.DatingRoomVerlassen
 import com.github.haschi.tictactoe.domain.events.MaximaleWartezeitFestgelegt
-import com.github.haschi.tictactoe.domain.events.SpielerHatDatingRoomBetreten
+import com.github.haschi.tictactoe.domain.events.SpielerHatWarteraumBetreten
 import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
+import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
@@ -70,7 +70,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
     @Dann("^werde ich den Dating Room ohne Spielpartner verlassen haben$")
     fun werde_ich_den_Dating_Room_ohne_Spielpartner_verlassen_haben() {
         welt {
-            tatsachen bestätigen DatingRoomVerlassen(ich.name)
+            tatsachen bestätigen WarteraumVerlassen(ich.name)
         }
     }
 
@@ -92,7 +92,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
     fun wird_die_Anwenderin_Maria_den_Dating_Room_mit_O_betreten_haben(anwender: String) {
 
         welt {
-            tatsachen bestätigen SpielerHatDatingRoomBetreten(
+            tatsachen bestätigen SpielerHatWarteraumBetreten(
                 anwender,
                 Spieler('O', anwender)
             )
@@ -104,7 +104,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
         welt {
-            tatsachen bestätigen SpielerHatDatingRoomBetreten(
+            tatsachen bestätigen SpielerHatWarteraumBetreten(
                 ich.name,
                 Spieler(spieler.zeichen, ich.name)
             )

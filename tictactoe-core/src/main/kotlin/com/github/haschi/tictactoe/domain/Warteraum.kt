@@ -3,13 +3,13 @@ package com.github.haschi.tictactoe.domain
 import com.github.haschi.tictactoe.domain.commands.BetreteWarteraum
 import com.github.haschi.tictactoe.domain.commands.LegeMaximaleWartezeitFest
 import com.github.haschi.tictactoe.domain.commands.RichteWarteraumEin
-import com.github.haschi.tictactoe.domain.events.DatingRoomVerlassen
 import com.github.haschi.tictactoe.domain.events.MaximaleWartezeitFestgelegt
-import com.github.haschi.tictactoe.domain.events.SpielerHatDatingRoomBetreten
+import com.github.haschi.tictactoe.domain.events.SpielerHatWarteraumBetreten
 import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
+import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.github.haschi.tictactoe.domain.values.DatingRoomEingerichtet
 import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.domain.values.WarteraumEingerichtet
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.AggregateIdentifier
 import org.axonframework.commandhandling.model.AggregateLifecycle
@@ -30,7 +30,7 @@ class Warteraum() {
 
     @CommandHandler
     constructor(command: RichteWarteraumEin) : this() {
-        AggregateLifecycle.apply(DatingRoomEingerichtet(command.id))
+        AggregateLifecycle.apply(WarteraumEingerichtet(command.id))
     }
 
     @CommandHandler
@@ -40,7 +40,7 @@ class Warteraum() {
             .firstOrNull { it.value.zeichen != command.spieler.zeichen }
 
         if (partner == null) {
-            AggregateLifecycle.apply(SpielerHatDatingRoomBetreten(command.spielerId, command.spieler))
+            AggregateLifecycle.apply(SpielerHatWarteraumBetreten(command.spielerId, command.spieler))
             deadlineManager.schedule(wartezeit, "wartezeitBeendet", command.spielerId)
         } else {
             AggregateLifecycle.apply(SpielpartnerGefunden(partner.value, command.spieler))
@@ -55,14 +55,14 @@ class Warteraum() {
     }
 
     @EventSourcingHandler
-    fun falls(event: DatingRoomEingerichtet) {
+    fun falls(event: WarteraumEingerichtet) {
         id = event.id
     }
 
     private var partnerLoseSpieler: Map<String, Spieler> = emptyMap()
 
     @EventSourcingHandler
-    fun falls(event: SpielerHatDatingRoomBetreten) {
+    fun falls(event: SpielerHatWarteraumBetreten) {
         partnerLoseSpieler += event.id to event.spieler
     }
 
@@ -75,7 +75,7 @@ class Warteraum() {
     @DeadlineHandler(deadlineName = "wartezeitBeendet")
     fun falls(payload: String) {
         this.partnerLoseSpieler -= payload
-        AggregateLifecycle.apply(DatingRoomVerlassen(payload))
+        AggregateLifecycle.apply(WarteraumVerlassen(payload))
     }
 
     @EventSourcingHandler
