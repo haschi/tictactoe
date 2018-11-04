@@ -10,6 +10,7 @@ import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
+import com.github.haschi.tictactoe.requirements.core.testing.DurationConverter
 import com.github.haschi.tictactoe.requirements.core.testing.SpielerConverter
 import com.github.haschi.tictactoe.requirements.core.testing.ZeichenConverter
 import cucumber.api.Transform
@@ -18,17 +19,15 @@ import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import java.time.Duration
 
-
 class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("^ich habe eine maximale Wartezeit von (\\d+) Millisekunden für den Warteraum festgelegt$")
-    fun ich_habe_eine_maximale_Wartezeit_von_Millisekunden_für_den_Warteraum_festgelegt(wartezeit: Long) {
+    fun `Abgenommen ich habe eine maximale Wartezeit für den Warteraum festgelegt`(
+        @Transform(DurationConverter::class) wartezeit: Duration
+    ) {
         welt.next {
             warteraum.send(
-                LegeMaximaleWartezeitFest(
-                    Warteraum.ID,
-                    Duration.ofMillis(wartezeit)
-                )
+                LegeMaximaleWartezeitFest(Warteraum.ID, wartezeit)
             )
         }
     }
@@ -42,14 +41,14 @@ class WarteraumSteps(private val welt: DieWelt) {
     }
 
     @Angenommen("^ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht$")
-    fun ich_habe_X_als_mein_Zeichen_für_die_nächste_Partie_Tic_Tac_Toe_ausgesucht() {
+    fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
         welt.next {
             anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
         }
     }
 
     @Wenn("^ich die maximale Wartezeit überschritten habe$")
-    fun ich_die_maximale_Wartezeit_überschritten_habe() {
+    fun `Wenn ich die maximale Wartezeit überschritten habe`() {
 
         welt {
             future.get()
@@ -62,19 +61,15 @@ class WarteraumSteps(private val welt: DieWelt) {
         }
     }
 
-    @Wenn("^Wenn nach fünf Minuten kein Spieler O als sein Zeichen ausgesucht hat$")
-    fun wenn_nach_fünf_Minuten_kein_Spieler_O_als_sein_Zeichen_ausgesucht_hat() {
-    }
-
     @Dann("^werde ich den Warteraum ohne Spielpartner verlassen haben$")
     fun werde_ich_den_Warteraum_ohne_Spielpartner_verlassen_haben() {
         welt {
-            tatsachen bestätigen WarteraumVerlassen(ich.name)
+            tatsachen bestaetigen WarteraumVerlassen(ich.name)
         }
     }
 
     @Wenn("^ich (X|O) als mein Zeichen für die nächste Partie Tic Tac Toe aussuche$")
-    fun ich_X_als_mein_Zeichen_für_die_nächste_Partie_Tic_Tac_Toe_aussuche(
+    fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(
         @Transform(ZeichenConverter::class) zeichen: Zeichen
     ) {
         welt.next { anwenderverzeichnis.send(WaehleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
@@ -91,7 +86,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     fun wird_die_Anwenderin_Maria_den_Warteraum_mit_O_betreten_haben(anwender: String) {
 
         welt {
-            tatsachen bestätigen SpielerHatWarteraumBetreten(
+            tatsachen bestaetigen SpielerHatWarteraumBetreten(
                 anwender,
                 Spieler('O', anwender)
             )
@@ -103,7 +98,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
         welt {
-            tatsachen bestätigen SpielerHatWarteraumBetreten(
+            tatsachen bestaetigen SpielerHatWarteraumBetreten(
                 ich.name,
                 Spieler(spieler.zeichen, ich.name)
             )
@@ -129,7 +124,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Dann("^werde ich mit \"([^\"]*)\" einen Spielpartner gefunden haben$")
     fun werde_ich_mit_einen_Spielpartner_gefunden_haben(anwender: String) {
         welt {
-            tatsachen bestätigen SpielpartnerGefunden(
+            tatsachen bestaetigen SpielpartnerGefunden(
                 Spieler('X', ich.name),
                 Spieler('O', anwender)
             )

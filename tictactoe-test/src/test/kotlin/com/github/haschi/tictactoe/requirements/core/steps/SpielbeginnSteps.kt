@@ -32,7 +32,7 @@ class SpielbeginnSteps(val welt: DieWelt) {
     }
 
     @Wenn("^wenn der Anwender \"([^\"]*)\" das Symbol\"([^\"]*)\" auswählt$")
-    fun wenn_der_Anwender_das_Symbol_auswählt(arg1: String, arg2: String) {
+    fun `Wenn der Anwender das Symbol auswählt`(arg1: String, arg2: String) {
         // Write code here that turns the phrase above into concrete actions
         throw PendingException()
     }
