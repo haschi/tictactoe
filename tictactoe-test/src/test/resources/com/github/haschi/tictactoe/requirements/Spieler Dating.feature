@@ -34,7 +34,10 @@ Funktionalität: Spieler Dating
     Wenn Die Anwenderin "Maria" den Dating Room als Spieler mit dem Zeichen O betritt
     Dann wird die Anwenderin "Maria" den Dating Room mit O betreten haben
 
+  @core
   Szenario: Dating erfolglos beenden
+    Angenommen ich habe eine maximale Wartezeit von 500 Millisekunden für den Dating Room festgelegt
     Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht
     Wenn Wenn nach fünf Minuten kein Spieler O als sein Zeichen ausgesucht hat
-    Dann werde ich nicht mehr auf einen Gegenspieler warten
+    Wenn ich die maximale Wartezeit überschritten habe
+    Dann werde ich den Dating Room ohne Spielpartner verlassen haben

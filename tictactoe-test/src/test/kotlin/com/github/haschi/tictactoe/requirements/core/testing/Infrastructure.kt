@@ -6,8 +6,13 @@ import com.github.haschi.tictactoe.application.SpielerGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.gateway.CommandGatewayFactory
+import org.axonframework.common.transaction.TransactionManager
+import org.axonframework.config.ConfigurationScopeAwareProvider
+import org.axonframework.deadline.DeadlineManager
+import org.axonframework.deadline.SimpleDeadlineManager
 import org.axonframework.serialization.Serializer
 import org.axonframework.serialization.json.JacksonSerializer
+import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
@@ -45,5 +50,13 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
     @Bean()
     fun messageSerializer(): Serializer {
         return JacksonSerializer(mapper)
+    }
+
+    @Bean
+    fun deadlineManager(configuration: AxonConfiguration, tm: TransactionManager): DeadlineManager {
+        return SimpleDeadlineManager(
+            ConfigurationScopeAwareProvider(configuration),
+            tm
+        )
     }
 }

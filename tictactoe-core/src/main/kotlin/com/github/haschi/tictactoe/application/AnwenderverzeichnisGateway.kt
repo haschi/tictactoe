@@ -10,4 +10,5 @@ interface AnwenderverzeichnisGateway {
     fun send(command: WaehleZeichenAus): CompletableFuture<Void>
     fun send(command: RichteDatingRoomEin): CompletableFuture<Void>
     fun send(command: BetreteDatingRoom): CompletableFuture<Void>
+    fun send(command: LegeMaximaleWartezeitFest): CompletableFuture<Void>
 }
