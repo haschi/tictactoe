@@ -9,7 +9,7 @@ import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Future
+import java.util.concurrent.CompletionStage
 
 @Component
 class DieWelt(
@@ -22,10 +22,10 @@ class DieWelt(
         ich = Person("", Aggregatkennung.NIL)
         spielId = Aggregatkennung.NIL
         future = CompletableFuture.supplyAsync { Aggregatkennung() }
-        fakten = listOf()
+        ereignisse = listOf()
     }
 
-    var fakten = listOf<Any>()
+    var ereignisse = listOf<Any>()
 
     var ich = Person("", Aggregatkennung.NIL)
     var spielId: Aggregatkennung = Aggregatkennung.NIL
@@ -50,32 +50,22 @@ class DieWelt(
 
     @EventHandler
     fun falls(event: Any) {
-        fakten += listOf(event)
+        ereignisse += listOf(event)
     }
 
-    class Fakten(private val fakten: CompletableFuture<List<Any>>) : Future<List<Any>> by fakten {
+    class Fakten(fakten: CompletionStage<List<Any>>) : CompletionStage<List<Any>> by fakten {
         infix fun bestätigen(event: Any) {
-            assertThat(fakten)
-                .isCompletedWithValueMatching({ it.contains(event) }, "Enthält Ereignis $event")
+            assertThat(this)
+                .isCompletedWithValueMatching(
+                    { it.contains(event) },
+                    "Enthält Ereignis $event"
+                )
         }
     }
 
-    val tatsachen: Fakten get() = Fakten(future.thenApply { fakten })
-
-//    private fun assert(event: Any) {
-//        tatsachen bestätigen  event
-//    }
+    val tatsachen: Fakten get() = Fakten(future.thenApply { ereignisse })
 
     operator fun invoke(body: DieWelt.() -> Unit) {
         body()
     }
-
-//    infix fun bestäge(block: DieWelt.() -> Any) {
-//        assert(block())
-//    }
-
-//    infix fun bestätige(fakt: Any) {
-//        assert(fakt)
-//    }
 }
-
