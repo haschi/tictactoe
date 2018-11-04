@@ -20,9 +20,9 @@ import org.axonframework.deadline.DeadlineManager
 import java.time.Duration
 
 
-class DatingSteps(private val welt: DieWelt, private val deadlineManager: DeadlineManager) {
+class WarteraumSteps(private val welt: DieWelt, private val deadlineManager: DeadlineManager) {
 
-    @Angenommen("^ich habe eine maximale Wartezeit von (\\d+) Millisekunden für den Dating Room festgelegt$")
+    @Angenommen("^ich habe eine maximale Wartezeit von (\\d+) Millisekunden für den Warteraum festgelegt$")
     fun ich_habe_eine_maximale_Wartezeit_von_Millisekunden_für_den_Dating_Room_festgelegt(wartezeit: Long) {
         welt.next {
             anwenderverzeichnis.send(
@@ -67,7 +67,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
     fun wenn_nach_fünf_Minuten_kein_Spieler_O_als_sein_Zeichen_ausgesucht_hat() {
     }
 
-    @Dann("^werde ich den Dating Room ohne Spielpartner verlassen haben$")
+    @Dann("^werde ich den Warteraum ohne Spielpartner verlassen haben$")
     fun werde_ich_den_Dating_Room_ohne_Spielpartner_verlassen_haben() {
         welt {
             tatsachen bestätigen WarteraumVerlassen(ich.name)
@@ -81,15 +81,15 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
         welt.next { anwenderverzeichnis.send(WaehleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
     }
 
-    @Wenn("^Die Anwenderin \"([^\"]*)\" den Dating Room als Spieler mit dem Zeichen O betritt$")
+    @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun die_Anwenderin_den_Dating_Room_als_Spieler_mit_dem_Zeichen_O_betritt(anwender: String) {
         welt.next {
             anwenderverzeichnis.send(WaehleZeichenAus(anwender, Spieler('O', anwender)))
         }
     }
 
-    @Dann("^wird die Anwenderin \"([^\"]*)\" den Dating Room mit O betreten haben$")
-    fun wird_die_Anwenderin_Maria_den_Dating_Room_mit_O_betreten_haben(anwender: String) {
+    @Dann("^wird die Anwenderin \"([^\"]*)\" den Warteraum mit O betreten haben$")
+    fun wird_die_Anwenderin_Maria_den_Warteraum_mit_O_betreten_haben(anwender: String) {
 
         welt {
             tatsachen bestätigen SpielerHatWarteraumBetreten(
@@ -99,7 +99,7 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
         }
     }
 
-    @Dann("^werde ich den Dating Room als Spieler mit (X|O) betreten haben$")
+    @Dann("^werde ich den Warteraum als Spieler mit (X|O) betreten haben$")
     fun werde_ich_den_Dating_Room_als_Spieler_mit_X_betreten_haben(
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
@@ -111,14 +111,14 @@ class DatingSteps(private val welt: DieWelt, private val deadlineManager: Deadli
         }
     }
 
-    @Angenommen("^ich habe den Dating Room als Spieler mit dem Zeichen X betreten$")
+    @Angenommen("^ich habe den Warteraum als Spieler mit dem Zeichen X betreten$")
     fun ich_habe_den_Dating_Room_als_Spieler_mit_dem_Zeichen_X_betreten() {
         welt.next {
             anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
         }
     }
 
-    @Wenn("^Der Anwender \"([^\"]*)\" den Dating Room als Spieler mit dem Zeichen O betritt$")
+    @Wenn("^Der Anwender \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun der_Anwender_den_Dating_Room_als_Spieler_mit_dem_Zeichen_O_betritt(
         anwender: String
     ) {
