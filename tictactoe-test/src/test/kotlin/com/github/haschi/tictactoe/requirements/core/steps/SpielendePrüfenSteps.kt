@@ -39,13 +39,13 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
     @Dann("^hat Spieler (X|O) gewonnen$")
     fun `hat Spieler gewonnen`(@Transform(SpielerConverter::class) spieler: Spieler) {
         welt.future.get()
-        assertThat(welt.fakten)
+        assertThat(welt.ereignisse)
             .contains(SpielGewonnen(welt.spielId, spieler))
     }
 
     @Dann("^hat Spieler (X|O) nicht gewonnen$")
     fun `hat Spieler nicht gewonnen`(@Transform(SpielerConverter::class) spieler: Spieler) {
-        assertThat(welt.fakten)
+        assertThat(welt.ereignisse)
             .doesNotContain(SpielGewonnen(welt.spielId, spieler))
     }
 }
