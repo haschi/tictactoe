@@ -34,7 +34,7 @@ Funktionalität: Warteraum
 
   @core
   Szenario: Warteraum nach Ablauf der maximalen Wartezeit verlassen
-    Angenommen ich habe eine maximale Wartezeit von 500 Millisekunden für den Warteraum festgelegt
+    Angenommen ich habe eine maximale Wartezeit von "PT1s" für den Warteraum festgelegt
     Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht
     Wenn ich die maximale Wartezeit überschritten habe
     Dann werde ich den Warteraum ohne Spielpartner verlassen haben

@@ -21,7 +21,7 @@ import java.time.Duration
 
 class WarteraumSteps(private val welt: DieWelt) {
 
-    @Angenommen("^ich habe eine maximale Wartezeit von (\\d+) Millisekunden für den Warteraum festgelegt$")
+    @Angenommen("^ich habe eine maximale Wartezeit von \"([^\"]*)\" für den Warteraum festgelegt$")
     fun `Abgenommen ich habe eine maximale Wartezeit für den Warteraum festgelegt`(
         @Transform(DurationConverter::class) wartezeit: Duration
     ) {

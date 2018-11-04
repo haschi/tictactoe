@@ -5,6 +5,7 @@ import java.time.Duration
 
 class DurationConverter : Transformer<Duration>() {
     override fun transform(value: String): Duration {
-        return Duration.ofMillis(value.toLong())
+        return Duration.parse(value)
+        // return Duration.ofMillis(value.toLong())
     }
 }
