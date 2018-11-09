@@ -10,9 +10,6 @@ import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
-import com.github.haschi.tictactoe.requirements.core.testing.FeldConverter
-import com.github.haschi.tictactoe.requirements.core.testing.SpielerConverter
-import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
@@ -28,31 +25,22 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         }
     }
 
-    @Angenommen("^Spieler (X|O) hat sein Zeichen auf Feld ([ABC][123]) gesetzt$")
-    fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(
-        @Transform(SpielerConverter::class) spieler: Spieler,
-        @Transform(FeldConverter::class) feld: Feld
-    ) {
+    @Angenommen("Spieler {spieler} hat sein Zeichen auf Feld {feld} gesetzt")
+    fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(spieler: Spieler, feld: Feld) {
         welt.next {
             tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
         }
     }
 
-    @Wenn("^Spieler (X|O) sein Zeichen auf Feld ([ABC][123]) setzt$")
-    fun spieler_X_sein_Zeichen_auf_Feld_B_setzt(
-        @Transform(SpielerConverter::class) spieler: Spieler,
-        @Transform(FeldConverter::class) feld: Feld
-    ) {
+    @Wenn("Spieler {spieler} sein Zeichen auf Feld {feld} setzt")
+    fun spieler_X_sein_Zeichen_auf_Feld_B_setzt(spieler: Spieler, feld: Feld) {
         welt.next {
             tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
         }
     }
 
-    @Dann("^werde ich den Spielzug ([ABC][123]) von Spieler (X|O) akzeptiert haben$")
-    fun werde_ich_den_Spielzug_B_von_Spieler_X_akzeptiert_haben(
-        @Transform(FeldConverter::class) feld: Feld,
-        @Transform(SpielerConverter::class) spieler: Spieler
-    ) {
+    @Dann("werde ich den Spielzug {feld} von Spieler {spieler} akzeptiert haben")
+    fun werde_ich_den_Spielzug_B_von_Spieler_X_akzeptiert_haben(feld: Feld, spieler: Spieler) {
         welt.future.get()
 
         assertThat(welt.ereignisse).contains(
@@ -60,19 +48,15 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         )
     }
 
-    @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist$")
-    fun konnte_Spieler_O_sein_Zeichen_nicht_platzieren_weil_das_Feld_belegt_gewesen_ist(
-        @Transform(SpielerConverter::class) spieler: Spieler
-    ) {
+    @Dann("konnte Spieler {spieler} sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist")
+    fun konnte_Spieler_O_sein_Zeichen_nicht_platzieren_weil_das_Feld_belegt_gewesen_ist(spieler: Spieler) {
         assertThat(welt.future)
             .hasFailedWithThrowableThat()
             .isEqualTo(FeldBelegt(welt.spielId, spieler))
     }
 
-    @Dann("^konnte Spieler (X|O) sein Zeichen nicht platzieren, weil er nicht an der Reihe war$")
-    fun konnte_Spieler_X_sein_Zeichen_nicht_platzieren_weil_er_nicht_an_der_Reihe_war(
-        @Transform(SpielerConverter::class) spieler: Spieler
-    ) {
+    @Dann("konnte Spieler {spieler} sein Zeichen nicht platzieren, weil er nicht an der Reihe war")
+    fun konnte_Spieler_X_sein_Zeichen_nicht_platzieren_weil_er_nicht_an_der_Reihe_war(spieler: Spieler) {
         assertThat(welt.future)
             .hasFailedWithThrowableThat()
             .isEqualTo(SpielerNichtAndDerReiheGewesen(welt.spielId, spieler))

@@ -37,7 +37,7 @@
         <junit.version>4.12</junit.version>
         <junit-platform.version>1.2.0</junit-platform.version>
 
-        <cukes.version>2.4.0</cukes.version>
+        <cukes.version>3.0.2</cukes.version>
         <axon.version>3.3.6</axon.version>
         <jackson.version>2.9.5</jackson.version>
         <mockito-kotlin.version>1.6.0</mockito-kotlin.version>

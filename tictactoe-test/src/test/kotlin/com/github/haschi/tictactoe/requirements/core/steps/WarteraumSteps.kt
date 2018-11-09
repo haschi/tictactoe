@@ -10,10 +10,6 @@ import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
-import com.github.haschi.tictactoe.requirements.core.testing.DurationConverter
-import com.github.haschi.tictactoe.requirements.core.testing.SpielerConverter
-import com.github.haschi.tictactoe.requirements.core.testing.ZeichenConverter
-import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
@@ -21,10 +17,8 @@ import java.time.Duration
 
 class WarteraumSteps(private val welt: DieWelt) {
 
-    @Angenommen("^ich habe eine maximale Wartezeit von \"([^\"]*)\" für den Warteraum festgelegt$")
-    fun `Abgenommen ich habe eine maximale Wartezeit für den Warteraum festgelegt`(
-        @Transform(DurationConverter::class) wartezeit: Duration
-    ) {
+    @Angenommen("ich habe eine maximale Wartezeit von {zeitraum} für den Warteraum festgelegt")
+    fun `Abgenommen ich habe eine maximale Wartezeit für den Warteraum festgelegt`(wartezeit: Duration) {
         welt.next {
             warteraum.send(
                 LegeMaximaleWartezeitFest(Warteraum.ID, wartezeit)
@@ -32,7 +26,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         }
     }
 
-    @Angenommen("^die Anwender Martin und Matthias haben sich als Spielpartner gefunden$")
+    @Angenommen("die Anwender Martin und Matthias haben sich als Spielpartner gefunden")
     fun die_Anwender_Martin_und_Matthias_haben_sich_als_Spielpartner_gefunden() {
         welt.schritt(
             { anwenderverzeichnis.send(WaehleZeichenAus("Matthias", Spieler('X', "Matthias"))) },
@@ -40,14 +34,14 @@ class WarteraumSteps(private val welt: DieWelt) {
         )
     }
 
-    @Angenommen("^ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht$")
+    @Angenommen("ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht")
     fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
         welt.next {
             anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
         }
     }
 
-    @Wenn("^ich die maximale Wartezeit überschritten habe$")
+    @Wenn("ich die maximale Wartezeit überschritten habe")
     fun `Wenn ich die maximale Wartezeit überschritten habe`() {
 
         welt {
@@ -61,16 +55,16 @@ class WarteraumSteps(private val welt: DieWelt) {
         }
     }
 
-    @Dann("^werde ich den Warteraum ohne Spielpartner verlassen haben$")
+    @Dann("werde ich den Warteraum ohne Spielpartner verlassen haben")
     fun werde_ich_den_Warteraum_ohne_Spielpartner_verlassen_haben() {
         welt {
             tatsachen bestaetigen WarteraumVerlassen(ich.name)
         }
     }
 
-    @Wenn("^ich (X|O) als mein Zeichen für die nächste Partie Tic Tac Toe aussuche$")
+    @Wenn("ich {zeichen} als mein Zeichen für die nächste Partie Tic Tac Toe aussuche")
     fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(
-        @Transform(ZeichenConverter::class) zeichen: Zeichen
+        zeichen: Zeichen
     ) {
         welt.next { anwenderverzeichnis.send(WaehleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
     }
@@ -93,10 +87,8 @@ class WarteraumSteps(private val welt: DieWelt) {
         }
     }
 
-    @Dann("^werde ich den Warteraum als Spieler mit (X|O) betreten haben$")
-    fun werde_ich_den_Warteraum_als_Spieler_mit_X_betreten_haben(
-        @Transform(SpielerConverter::class) spieler: Spieler
-    ) {
+    @Dann("werde ich den Warteraum als Spieler mit {spieler} betreten haben")
+    fun werde_ich_den_Warteraum_als_Spieler_mit_X_betreten_haben(spieler: Spieler) {
         welt {
             tatsachen bestaetigen SpielerHatWarteraumBetreten(
                 ich.name,
@@ -105,7 +97,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         }
     }
 
-    @Angenommen("^ich habe den Warteraum als Spieler mit dem Zeichen X betreten$")
+    @Angenommen("ich habe den Warteraum als Spieler mit dem Zeichen X betreten")
     fun ich_habe_den_Warteraum_als_Spieler_mit_dem_Zeichen_X_betreten() {
         welt.next {
             anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
