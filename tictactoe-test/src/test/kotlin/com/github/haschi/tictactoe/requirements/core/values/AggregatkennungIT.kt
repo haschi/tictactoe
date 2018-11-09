@@ -14,7 +14,7 @@ import java.util.*
 @ExtendWith(SpringExtension::class)
 @JsonTest
 @DisplayName("Marshalling Aggregatkennung")
-open class AggregatkennungIT @Autowired constructor(val json: JacksonTester<Aggregatkennung>) {
+open class AggregatkennungIT @Autowired constructor(private val json: JacksonTester<Aggregatkennung>) {
 
     @Test
     fun `Aggregatkennung wird wie ein String serialisiert`() {

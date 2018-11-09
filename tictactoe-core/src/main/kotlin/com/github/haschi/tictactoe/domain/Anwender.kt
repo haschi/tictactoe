@@ -1,6 +1,6 @@
 package com.github.haschi.tictactoe.domain
 
-import com.github.haschi.tictactoe.domain.commands.WaehleZeichenAus
+import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.events.AnwenderRegistriert
 import com.github.haschi.tictactoe.domain.events.ZeichenAusgewählt
 import org.axonframework.commandhandling.CommandHandler
@@ -20,7 +20,7 @@ class Anwender() {
     }
 
     @CommandHandler
-    fun verarbeite(command: WaehleZeichenAus) {
+    fun verarbeite(command: WähleZeichenAus) {
         AggregateLifecycle.apply(ZeichenAusgewählt(id, command.spieler))
     }
 

@@ -56,7 +56,7 @@ class DieWelt(
     }
 
     class Fakten(fakten: CompletionStage<List<Any>>) : CompletionStage<List<Any>> by fakten {
-        infix fun bestaetigen(event: Any) {
+        infix fun bestätigen(event: Any) {
             assertThat(this)
                 .isCompletedWithValueMatching(
                     { it.contains(event) },

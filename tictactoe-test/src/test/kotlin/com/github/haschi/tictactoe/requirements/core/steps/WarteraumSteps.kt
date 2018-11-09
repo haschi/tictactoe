@@ -2,7 +2,7 @@ package com.github.haschi.tictactoe.requirements.core.steps
 
 import com.github.haschi.tictactoe.domain.Warteraum
 import com.github.haschi.tictactoe.domain.commands.LegeMaximaleWartezeitFest
-import com.github.haschi.tictactoe.domain.commands.WaehleZeichenAus
+import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.events.MaximaleWartezeitFestgelegt
 import com.github.haschi.tictactoe.domain.events.SpielerHatWarteraumBetreten
 import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
@@ -35,15 +35,15 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^die Anwender Martin und Matthias haben sich als Spielpartner gefunden$")
     fun die_Anwender_Martin_und_Matthias_haben_sich_als_Spielpartner_gefunden() {
         welt.schritt(
-            { anwenderverzeichnis.send(WaehleZeichenAus("Matthias", Spieler('X', "Matthias"))) },
-            { anwenderverzeichnis.send(WaehleZeichenAus("Martin", Spieler('O', "Martin"))) }
+            { anwenderverzeichnis.send(WähleZeichenAus("Matthias", Spieler('X', "Matthias"))) },
+            { anwenderverzeichnis.send(WähleZeichenAus("Martin", Spieler('O', "Martin"))) }
         )
     }
 
     @Angenommen("^ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht$")
     fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name)))
         }
     }
 
@@ -64,7 +64,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Dann("^werde ich den Warteraum ohne Spielpartner verlassen haben$")
     fun werde_ich_den_Warteraum_ohne_Spielpartner_verlassen_haben() {
         welt {
-            tatsachen bestaetigen WarteraumVerlassen(ich.name)
+            tatsachen bestätigen WarteraumVerlassen(ich.name)
         }
     }
 
@@ -72,13 +72,13 @@ class WarteraumSteps(private val welt: DieWelt) {
     fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(
         @Transform(ZeichenConverter::class) zeichen: Zeichen
     ) {
-        welt.next { anwenderverzeichnis.send(WaehleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
+        welt.next { anwenderverzeichnis.send(WähleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
     }
 
     @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun die_Anwenderin_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(anwender: String) {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(anwender, Spieler('O', anwender)))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender)))
         }
     }
 
@@ -86,7 +86,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     fun wird_die_Anwenderin_Maria_den_Warteraum_mit_O_betreten_haben(anwender: String) {
 
         welt {
-            tatsachen bestaetigen SpielerHatWarteraumBetreten(
+            tatsachen bestätigen SpielerHatWarteraumBetreten(
                 anwender,
                 Spieler('O', anwender)
             )
@@ -98,7 +98,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         @Transform(SpielerConverter::class) spieler: Spieler
     ) {
         welt {
-            tatsachen bestaetigen SpielerHatWarteraumBetreten(
+            tatsachen bestätigen SpielerHatWarteraumBetreten(
                 ich.name,
                 Spieler(spieler.zeichen, ich.name)
             )
@@ -108,7 +108,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe den Warteraum als Spieler mit dem Zeichen X betreten$")
     fun ich_habe_den_Warteraum_als_Spieler_mit_dem_Zeichen_X_betreten() {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(ich.name, Spieler('X', ich.name)))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name)))
         }
     }
 
@@ -117,14 +117,14 @@ class WarteraumSteps(private val welt: DieWelt) {
         anwender: String
     ) {
         welt.next {
-            anwenderverzeichnis.send(WaehleZeichenAus(anwender, Spieler('O', anwender)))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender)))
         }
     }
 
     @Dann("^werde ich mit \"([^\"]*)\" einen Spielpartner gefunden haben$")
     fun werde_ich_mit_einen_Spielpartner_gefunden_haben(anwender: String) {
         welt {
-            tatsachen bestaetigen SpielpartnerGefunden(
+            tatsachen bestätigen SpielpartnerGefunden(
                 Spieler('X', ich.name),
                 Spieler('O', anwender)
             )
