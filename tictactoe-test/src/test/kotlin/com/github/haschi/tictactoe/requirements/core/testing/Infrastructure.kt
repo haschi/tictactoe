@@ -2,7 +2,6 @@ package com.github.haschi.tictactoe.requirements.core.testing
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
-import com.github.haschi.tictactoe.application.SpielerGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.application.WarteraumGateway
 import org.axonframework.commandhandling.CommandBus
@@ -33,12 +32,6 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
     fun anwenderverzeichnisGateway(commandBus: CommandBus): AnwenderverzeichnisGateway {
         val factory = CommandGatewayFactory(commandBus)
         return factory.createGateway(AnwenderverzeichnisGateway::class.java)
-    }
-
-    @Bean
-    fun spielerGateway(commandBus: CommandBus): SpielerGateway {
-        val factory = CommandGatewayFactory(commandBus)
-        return factory.createGateway(SpielerGateway::class.java)
     }
 
     @Bean

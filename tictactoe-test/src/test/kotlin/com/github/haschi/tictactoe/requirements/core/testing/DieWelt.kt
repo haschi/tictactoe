@@ -1,7 +1,6 @@
 package com.github.haschi.tictactoe.requirements.core.testing
 
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
-import com.github.haschi.tictactoe.application.SpielerGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.application.WarteraumGateway
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
@@ -17,7 +16,6 @@ class DieWelt(
     val tictactoe: TicTacToeGateway,
     val anwenderverzeichnis: AnwenderverzeichnisGateway,
     val warteraum: WarteraumGateway,
-    val spieler: SpielerGateway,
     val queryGateway: QueryGateway
 ) {
     fun reset() {
