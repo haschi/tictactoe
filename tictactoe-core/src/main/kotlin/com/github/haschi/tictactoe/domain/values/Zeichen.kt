@@ -6,4 +6,8 @@ data class Zeichen(val wert: Char) {
             throw UnzulässigesZeichen(wert)
         }
     }
+
+    companion object {
+        val Keins: Zeichen get() = Zeichen(' ')
+    }
 }
