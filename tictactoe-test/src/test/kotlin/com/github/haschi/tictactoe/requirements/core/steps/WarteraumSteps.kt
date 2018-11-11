@@ -8,11 +8,9 @@ import com.github.haschi.tictactoe.domain.events.SpielerHatWarteraumBetreten
 import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
 import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Spieler
-import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.core.testing.DurationConverter
 import com.github.haschi.tictactoe.requirements.core.testing.SpielerConverter
-import com.github.haschi.tictactoe.requirements.core.testing.ZeichenConverter
 import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
@@ -66,13 +64,6 @@ class WarteraumSteps(private val welt: DieWelt) {
         welt {
             tatsachen bestätigen WarteraumVerlassen(ich.name)
         }
-    }
-
-    @Wenn("^ich (X|O) als mein Zeichen für die nächste Partie Tic Tac Toe aussuche$")
-    fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(
-        @Transform(ZeichenConverter::class) zeichen: Zeichen
-    ) {
-        welt.next { anwenderverzeichnis.send(WähleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
     }
 
     @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")

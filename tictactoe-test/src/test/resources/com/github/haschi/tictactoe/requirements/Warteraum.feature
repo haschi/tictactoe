@@ -10,8 +10,6 @@ Funktionalität: Warteraum
     Angenommen "Martin" hat sich als Anwender registriert
     Angenommen "Maria" hat sich als Anwender registriert
 
-
-
   @core
   Szenario: Spieler findet einen Partner
     Angenommen ich habe den Warteraum als Spieler mit dem Zeichen X betreten
