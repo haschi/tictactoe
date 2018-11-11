@@ -1,5 +1,6 @@
 package com.github.haschi.tictactoe.requirements.core.steps
 
+import com.github.haschi.tictactoe.domain.AuswahlNichtMöglich
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
@@ -20,8 +21,11 @@ class AnwenderSteps(private val welt: DieWelt) {
         welt.next { anwenderverzeichnis.send(WähleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
     }
 
-    @Dann("^werde ich eine Fehlermeldung erhalten$")
-    fun `Dann werde ich eine Fehlermeldung erhalten`() {
-        assertThat(welt.future).isCompletedExceptionally
+    @Dann("^werde ich eine Fehlermeldung erhalten:$")
+    fun `Dann werde ich eine Fehlermeldung erhalten`(meldung: String) {
+        assertThat(welt.future)
+            .hasFailedWithThrowableThat()
+            .isInstanceOf(AuswahlNichtMöglich::class.java)
+            .hasMessage(meldung)
     }
 }

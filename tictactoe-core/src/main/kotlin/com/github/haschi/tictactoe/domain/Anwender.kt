@@ -25,7 +25,8 @@ class Anwender() {
     @CommandHandler
     fun verarbeite(command: WähleZeichenAus) {
         if (zeichen != Zeichen.Keins) {
-            throw IllegalStateException()
+            val meldung = "Du hast bereits das Zeichen ${zeichen.wert} ausgewählt"
+            throw AuswahlNichtMöglich(meldung)
         }
 
         AggregateLifecycle.apply(ZeichenAusgewählt(id, command.spieler))

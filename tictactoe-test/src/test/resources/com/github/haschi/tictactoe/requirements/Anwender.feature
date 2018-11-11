@@ -20,5 +20,8 @@ Funktionalität: Anwender
   Szenario: Anwender kann immer nur ein Zeichen als Spieler besitzen
     Angenommen ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht
     Wenn ich X als mein Zeichen für die nächste Partie Tic Tac Toe aussuche
-    Dann werde ich eine Fehlermeldung erhalten
+    Dann werde ich eine Fehlermeldung erhalten:
+    """
+    Du hast bereits das Zeichen X ausgewählt
+    """
 
