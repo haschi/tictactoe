@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Backend</name>
     <artifactId>tictactoe-backend</artifactId>
-
 
     <dependencies>
         <dependency>
