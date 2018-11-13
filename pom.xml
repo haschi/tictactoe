@@ -26,8 +26,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <java.version>1.8</java.version>
         <kotlin.version>1.3.0</kotlin.version>
+        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
+        <kotlin.compiler.languageVersion>1.3</kotlin.compiler.languageVersion>
+        <kotlin.compiler.apiVersion>1.3</kotlin.compiler.apiVersion>
 
         <surefire.printSummary>false</surefire.printSummary>
         <failsafe.printSummary>false</failsafe.printSummary>
@@ -182,6 +186,10 @@
     </dependencyManagement>
 
     <build>
+        <!-- Voreinstellung für alle Child Modules: Nur Kotlin, kein Java -->
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -239,16 +247,6 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M1</version>
-                </plugin>
-
-                <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
                     <version>3.3.2</version>
@@ -260,35 +258,20 @@
                         </execution>
                     </executions>
                 </plugin>
-
             </plugins>
         </pluginManagement>
         <plugins>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>[3.3,)</version>
-                                </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <version>1.8</version>
-                                </requireJavaVersion>
-                                <requireOS>
-                                    <family>unix</family>
-                                </requireOS>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M1</version>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+
         </plugins>
     </build>
 </project>
