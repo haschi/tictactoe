@@ -8,7 +8,9 @@
     <artifactId>tictactoe-parent</artifactId>
     <version>DEV-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <name>Tic Tac Toe</name>
+    <description>Ein Multi Player Tic Tac Toe Spiel</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -268,13 +270,7 @@
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>3.0.0-M1</version>
                 </plugin>
-
             </plugins>
         </pluginManagement>
-        <plugins>
-
-
-
-        </plugins>
     </build>
 </project>
