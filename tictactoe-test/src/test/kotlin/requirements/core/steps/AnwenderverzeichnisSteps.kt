@@ -7,7 +7,7 @@ import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.events.AnwenderNichtGefunden
 import com.github.haschi.tictactoe.domain.events.AnwenderRegistriert
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.github.haschi.tictactoe.domain.values.Anwenderübersicht
+import com.github.haschi.tictactoe.domain.values.AnwenderÜbersicht
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.core.testing.Person
 import cucumber.api.java.de.Angenommen
@@ -34,11 +34,11 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     @Dann("^wird das Anwenderverzeichnis keine Anwender enthalten$")
     fun wird_das_Anwenderverzeichnis_keine_Anwender_enthalten() {
         welt.next {
-            ask(WelcheAnwenderSindBekannt, Anwenderübersicht::class.java)
+            ask(WelcheAnwenderSindBekannt, AnwenderÜbersicht::class.java)
         }
 
         assertThat(welt.future)
-            .isCompletedWithValue(Anwenderübersicht.Leer)
+            .isCompletedWithValue(AnwenderÜbersicht.Leer)
     }
 
     @Angenommen("^ich habe das Anwenderverzeichnis angelegt$")
