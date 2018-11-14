@@ -35,17 +35,19 @@ class Warteraum() {
 
     @CommandHandler
     fun verarbeite(command: BetreteWarteraum, deadlineManager: DeadlineManager) {
-        val partner = partnerLoseSpieler
-            .asSequence()
-            .firstOrNull { it.value.zeichen != command.spieler.zeichen }
+        val partner = partnerLoseSpieler.entries
+            .map { it.value }
+            .firstOrNull { it.zeichen != command.spieler.zeichen }
 
         if (partner == null) {
             AggregateLifecycle.apply(SpielerHatWarteraumBetreten(command.spielerId, command.spieler))
             deadlineManager.schedule(wartezeit, "wartezeitBeendet", command.spielerId)
         } else {
-            AggregateLifecycle.apply(SpielpartnerGefunden(partner.value, command.spieler))
+            AggregateLifecycle.apply(SpielpartnerGefunden(partner, command.spieler))
         }
     }
+
+    private fun x() {}
 
     @CommandHandler
     fun verarbeite(command: LegeMaximaleWartezeitFest) {
