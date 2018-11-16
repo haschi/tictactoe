@@ -2,7 +2,6 @@ package com.github.haschi.tictactoe.requirements.core.steps
 
 import com.github.haschi.tictactoe.domain.AuswahlNichtMöglich
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
-import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.core.testing.ZeichenConverter
@@ -21,7 +20,6 @@ class AnwenderSteps(private val welt: DieWelt) {
             anwenderverzeichnis.send(
                 WähleZeichenAus(
                     welt.ich.name,
-                    Spieler(zeichen.wert, welt.ich.name),
                     zeichen
                 )
             )

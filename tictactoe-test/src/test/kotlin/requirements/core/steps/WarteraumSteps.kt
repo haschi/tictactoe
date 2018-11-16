@@ -34,15 +34,15 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^die Anwender Martin und Matthias haben sich als Spielpartner gefunden$")
     fun die_Anwender_Martin_und_Matthias_haben_sich_als_Spielpartner_gefunden() {
         welt.schritt(
-            { anwenderverzeichnis.send(WähleZeichenAus("Matthias", Spieler('X', "Matthias"), Zeichen.X)) },
-            { anwenderverzeichnis.send(WähleZeichenAus("Martin", Spieler('O', "Martin"), Zeichen.O)) }
+            { anwenderverzeichnis.send(WähleZeichenAus("Matthias", Zeichen.X)) },
+            { anwenderverzeichnis.send(WähleZeichenAus("Martin", Zeichen.O)) }
         )
     }
 
     @Angenommen("^ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht$")
     fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name), Zeichen.X))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Zeichen.X))
         }
     }
 
@@ -70,7 +70,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun die_Anwenderin_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(anwender: String) {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender), Zeichen.O))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Zeichen.O))
         }
     }
 
@@ -98,7 +98,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe den Warteraum als Spieler mit dem Zeichen X betreten$")
     fun ich_habe_den_Warteraum_als_Spieler_mit_dem_Zeichen_X_betreten() {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name), Zeichen.X))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Zeichen.X))
         }
     }
 
@@ -107,7 +107,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         anwender: String
     ) {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender), Zeichen.O))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Zeichen.O))
         }
     }
 

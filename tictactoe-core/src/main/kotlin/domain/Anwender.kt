@@ -3,6 +3,7 @@ package com.github.haschi.tictactoe.domain
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.events.AnwenderRegistriert
 import com.github.haschi.tictactoe.domain.events.ZeichenAusgewählt
+import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.commandhandling.model.AggregateIdentifier
@@ -28,7 +29,7 @@ class Anwender() {
             throw AuswahlNichtMöglich(meldung)
         }
 
-        AggregateLifecycle.apply(ZeichenAusgewählt(id, command.spieler))
+        AggregateLifecycle.apply(ZeichenAusgewählt(id, Spieler(command.zeichen.wert, command.anwender)))
     }
 
     @EventSourcingHandler
