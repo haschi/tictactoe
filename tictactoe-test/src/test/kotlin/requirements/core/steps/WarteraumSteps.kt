@@ -8,6 +8,7 @@ import com.github.haschi.tictactoe.domain.events.SpielerHatWarteraumBetreten
 import com.github.haschi.tictactoe.domain.events.SpielpartnerGefunden
 import com.github.haschi.tictactoe.domain.events.WarteraumVerlassen
 import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.core.testing.DurationConverter
 import com.github.haschi.tictactoe.requirements.core.testing.SpielerConverter
@@ -33,15 +34,15 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^die Anwender Martin und Matthias haben sich als Spielpartner gefunden$")
     fun die_Anwender_Martin_und_Matthias_haben_sich_als_Spielpartner_gefunden() {
         welt.schritt(
-            { anwenderverzeichnis.send(WähleZeichenAus("Matthias", Spieler('X', "Matthias"))) },
-            { anwenderverzeichnis.send(WähleZeichenAus("Martin", Spieler('O', "Martin"))) }
+            { anwenderverzeichnis.send(WähleZeichenAus("Matthias", Spieler('X', "Matthias"), Zeichen.X)) },
+            { anwenderverzeichnis.send(WähleZeichenAus("Martin", Spieler('O', "Martin"), Zeichen.O)) }
         )
     }
 
     @Angenommen("^ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht$")
     fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name)))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name), Zeichen.X))
         }
     }
 
@@ -69,7 +70,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun die_Anwenderin_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(anwender: String) {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender)))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender), Zeichen.O))
         }
     }
 
@@ -78,7 +79,6 @@ class WarteraumSteps(private val welt: DieWelt) {
 
         welt {
             tatsachen bestätigen SpielerHatWarteraumBetreten(
-                anwender,
                 Spieler('O', anwender)
             )
         }
@@ -90,7 +90,6 @@ class WarteraumSteps(private val welt: DieWelt) {
     ) {
         welt {
             tatsachen bestätigen SpielerHatWarteraumBetreten(
-                ich.name,
                 Spieler(spieler.zeichen, ich.name)
             )
         }
@@ -99,7 +98,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe den Warteraum als Spieler mit dem Zeichen X betreten$")
     fun ich_habe_den_Warteraum_als_Spieler_mit_dem_Zeichen_X_betreten() {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name)))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler('X', ich.name), Zeichen.X))
         }
     }
 
@@ -108,7 +107,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         anwender: String
     ) {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender)))
+            anwenderverzeichnis.send(WähleZeichenAus(anwender, Spieler('O', anwender), Zeichen.O))
         }
     }
 

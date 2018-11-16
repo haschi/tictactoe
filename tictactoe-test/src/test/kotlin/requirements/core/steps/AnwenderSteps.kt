@@ -17,7 +17,15 @@ class AnwenderSteps(private val welt: DieWelt) {
     fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(
         @Transform(ZeichenConverter::class) zeichen: Zeichen
     ) {
-        welt.next { anwenderverzeichnis.send(WähleZeichenAus(welt.ich.name, Spieler(zeichen.wert, welt.ich.name))) }
+        welt.next {
+            anwenderverzeichnis.send(
+                WähleZeichenAus(
+                    welt.ich.name,
+                    Spieler(zeichen.wert, welt.ich.name),
+                    zeichen
+                )
+            )
+        }
     }
 
     @Dann("^werde ich eine Fehlermeldung erhalten:$")

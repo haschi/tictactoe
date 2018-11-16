@@ -40,7 +40,7 @@ class Warteraum() {
             .firstOrNull { it.zeichen != command.spieler.zeichen }
 
         if (partner == null) {
-            AggregateLifecycle.apply(SpielerHatWarteraumBetreten(command.spielerId, command.spieler))
+            AggregateLifecycle.apply(SpielerHatWarteraumBetreten(command.spieler))
             deadlineManager.schedule(wartezeit, "wartezeitBeendet", command.spielerId)
         } else {
             AggregateLifecycle.apply(SpielpartnerGefunden(partner, command.spieler))
@@ -63,7 +63,7 @@ class Warteraum() {
 
     @EventSourcingHandler
     fun falls(event: SpielerHatWarteraumBetreten) {
-        partnerLoseSpieler += event.id to event.spieler
+        partnerLoseSpieler += event.spieler.anwender to event.spieler
     }
 
     @EventSourcingHandler

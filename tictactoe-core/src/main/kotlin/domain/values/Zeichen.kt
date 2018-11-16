@@ -9,5 +9,8 @@ data class Zeichen(val wert: Char) {
 
     companion object {
         val Keins: Zeichen get() = Zeichen(' ')
+
+        val X = Zeichen('X')
+        val O = Zeichen('O')
     }
 }

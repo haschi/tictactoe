@@ -4,9 +4,12 @@ import com.github.haschi.tictactoe.domain.Anwenderverzeichnis
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.values.Spieler
+import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.TestApplication
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
+import com.github.haschi.tictactoe.requirements.core.testing.ZeichenConverter
 import cucumber.api.PendingException
+import cucumber.api.Transform
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
@@ -25,9 +28,9 @@ class SpielbeginnSteps(val welt: DieWelt) {
     }
 
     @Angenommen("^ich habe das Symbol \"([^\"]*)\" ausgewählt$")
-    fun `ich habe das Symbol ausgewählt`(arg1: Char) {
+    fun `ich habe das Symbol ausgewählt`(@Transform(ZeichenConverter::class) zeichen: Zeichen) {
         welt.next {
-            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler(arg1, ich.name)))
+            anwenderverzeichnis.send(WähleZeichenAus(ich.name, Spieler(zeichen.wert, ich.name), zeichen))
         }
     }
 
