@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class AnwenderverzeichnisEventListener {
     @QueryHandler(queryName = "com.github.haschi.tictactoe.domain.WelcheAnwenderSindBekannt")
-    fun falls(query: WelcheAnwenderSindBekannt): AnwenderÜbersicht {
+    fun beantworte(frage: WelcheAnwenderSindBekannt): AnwenderÜbersicht {
         return AnwenderÜbersicht.Leer
     }
 }

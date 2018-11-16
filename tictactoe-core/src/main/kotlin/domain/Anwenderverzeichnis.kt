@@ -28,7 +28,7 @@ class Anwenderverzeichnis() {
     }
 
     @CommandHandler
-    fun verarbeite(command: RegistriereAnwender) {
+    fun bearbeite(command: RegistriereAnwender) {
         if (!anwender.containsKey(command.name)) {
             AggregateLifecycle.apply(AnwenderNichtGefunden(command.name))
             AggregateLifecycle.createNew(Anwender::class.java) { Anwender(command.name) }

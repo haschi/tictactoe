@@ -12,7 +12,7 @@ class SpielEventListener {
     var spielfeld = Spielfeld.Leer
 
     @QueryHandler
-    fun falls(query: SpielfeldQuery): Spielfeld {
+    fun beantworte(frage: SpielfeldQuery): Spielfeld {
         return spielfeld
     }
 

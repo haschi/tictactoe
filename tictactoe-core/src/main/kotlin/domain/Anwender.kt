@@ -22,7 +22,7 @@ class Anwender() {
     }
 
     @CommandHandler
-    fun verarbeite(command: WähleZeichenAus) {
+    fun bearbeite(command: WähleZeichenAus) {
         if (zeichen != Zeichen.Keins) {
             val meldung = "Du hast bereits das Zeichen ${zeichen.wert} ausgewählt"
             throw AuswahlNichtMöglich(meldung)

@@ -11,7 +11,6 @@ import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
 
-
 class AnwenderSteps(private val welt: DieWelt) {
 
     @Wenn("^ich (X|O) als mein Zeichen für die nächste Partie Tic Tac Toe aussuche$")

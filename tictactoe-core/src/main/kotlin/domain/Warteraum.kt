@@ -34,7 +34,7 @@ class Warteraum() {
     }
 
     @CommandHandler
-    fun verarbeite(command: BetreteWarteraum, deadlineManager: DeadlineManager) {
+    fun bearbeite(command: BetreteWarteraum, deadlineManager: DeadlineManager) {
         val partner = partnerLoseSpieler.entries
             .map { it.value }
             .firstOrNull { it.zeichen != command.spieler.zeichen }
@@ -47,10 +47,8 @@ class Warteraum() {
         }
     }
 
-    private fun x() {}
-
     @CommandHandler
-    fun verarbeite(command: LegeMaximaleWartezeitFest) {
+    fun bearbeite(command: LegeMaximaleWartezeitFest) {
         AggregateLifecycle.apply(
             MaximaleWartezeitFestgelegt(command.wartezeit)
         )

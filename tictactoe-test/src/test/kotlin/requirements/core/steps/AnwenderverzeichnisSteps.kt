@@ -18,7 +18,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.platform.commons.logging.Logger
 import org.junit.platform.commons.logging.LoggerFactory
 
-
 class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
 

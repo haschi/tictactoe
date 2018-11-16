@@ -26,7 +26,7 @@ class TicTacToe() {
     }
 
     @CommandHandler
-    fun setzeZeichen(command: SetzeZeichen) {
+    fun bearbeite(command: SetzeZeichen) {
         fallsFeldBelegt(command.spielzug)
         {
             throw FeldBelegt(id, it.spieler)
