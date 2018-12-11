@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Abnahmetests (Core)" type="JUnit" factoryName="JUnit">
-    <module name="tictactoe-test" />
+    <module name="Requirements" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.github.haschi.tictactoe.requirements.core.*" />
