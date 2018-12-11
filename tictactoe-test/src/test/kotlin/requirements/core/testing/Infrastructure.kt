@@ -85,10 +85,14 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
         transactionManager: PlatformTransactionManager
     ): EventStore {
 
+//        val serializer = configuration.serializer()
+//        val command = serializer.serialize(BeginneSpiel(Aggregatkennung()), String::class.java)
+//        println(command.data)
+
         val storage = JpaEventStorageEngine.builder()
             .entityManagerProvider(SimpleEntityManagerProvider(entityManager))
             .transactionManager(SpringTransactionManager(transactionManager))
-
+            .eventSerializer(configuration.eventSerializer())
             .build()
 
         return EmbeddedEventStore.builder().storageEngine(storage).build()

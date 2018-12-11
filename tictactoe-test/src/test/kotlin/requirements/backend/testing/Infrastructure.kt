@@ -88,7 +88,7 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
         val storage = JpaEventStorageEngine.builder()
             .entityManagerProvider(SimpleEntityManagerProvider(entityManager))
             .transactionManager(SpringTransactionManager(transactionManager))
-
+            .eventSerializer(configuration.eventSerializer())
             .build()
 
         return EmbeddedEventStore.builder().storageEngine(storage).build()
