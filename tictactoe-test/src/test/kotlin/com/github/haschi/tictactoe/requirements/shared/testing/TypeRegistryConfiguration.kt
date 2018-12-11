@@ -1,4 +1,4 @@
-package com.github.haschi.tictactoe.requirements.core.testing
+package com.github.haschi.tictactoe.requirements.shared.testing
 
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
@@ -27,8 +27,8 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
             Spieler(spieler[0], "")
         })
 
-        registry.defineParameterType(ParameterType("zeitraum", ".*", Duration::class.java) { zeitdauer: String ->
-            println(zeitdauer)
+        registry.defineParameterType(ParameterType("zeitraum", ".*", Duration::class.java) { _: String ->
+            //println(zeitdauer)
             Duration.ofMillis(500)
 //            val pattern = Pattern.compile("^((?<wert>\\d+) (?<einheit>Sekunde(n*)|Millisekunde(n*)))$")
 //            val matcher = pattern.matcher(zeitdauer)

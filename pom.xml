@@ -238,24 +238,23 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-surefire-provider</artifactId>
-                            <version>${junit-platform.version}</version>
-                        </dependency>
-                    </dependencies>
+                    <version>3.0.0-M2</version>
+                    <!--<dependencies>-->
+                    <!--<dependency>-->
+                    <!--<groupId>org.junit.platform</groupId>-->
+                    <!--<artifactId>junit-platform-surefire-provider</artifactId>-->
+                    <!--<version>${junit-platform.version}</version>-->
+                    <!--</dependency>-->
+                    <!--</dependencies>-->
+                    <configuration>
+                        <threadCount>1</threadCount>
+
+                    </configuration>
                 </plugin>
 
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-surefire-provider</artifactId>
-                            <version>${junit-platform.version}</version>
-                        </dependency>
-                    </dependencies>
+                    <version>3.0.0-M2</version>
                 </plugin>
 
                 <plugin>

@@ -97,9 +97,9 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <configuration>
-                    <args>
-                        <arg>-XXLanguage:+InlineClasses</arg>
-                    </args>
+                    <!--<args>-->
+                    <!--<arg>-XXLanguage:+InlineClasses</arg>-->
+                    <!--</args>-->
                 </configuration>
             </plugin>
         </plugins>
