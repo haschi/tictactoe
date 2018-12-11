@@ -29,6 +29,12 @@
             <groupId>com.github.haschi.tictactoe</groupId>
             <artifactId>tictactoe-backend</artifactId>
             <version>DEV-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>axon-server-connector</artifactId>
+                    <groupId>org.axonframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -72,6 +78,12 @@
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>axon-server-connector</artifactId>
+                    <groupId>org.axonframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
