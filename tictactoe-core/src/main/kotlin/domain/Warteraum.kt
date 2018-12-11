@@ -11,11 +11,11 @@ import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.WarteraumEingerichtet
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.AggregateIdentifier
-import org.axonframework.commandhandling.model.AggregateLifecycle
 import org.axonframework.deadline.DeadlineManager
 import org.axonframework.deadline.annotation.DeadlineHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
+import org.axonframework.modelling.command.AggregateIdentifier
+import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
 import java.net.URI
 import java.time.Duration

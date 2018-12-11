@@ -8,9 +8,9 @@ import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.commandhandling.model.AggregateIdentifier
-import org.axonframework.commandhandling.model.AggregateLifecycle.apply
 import org.axonframework.eventsourcing.EventSourcingHandler
+import org.axonframework.modelling.command.AggregateIdentifier
+import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
 
 @Aggregate
@@ -22,7 +22,7 @@ class TicTacToe() {
 
     @CommandHandler
     constructor(command: BeginneSpiel) : this() {
-        apply(SpielBegonnen(command.id))
+        AggregateLifecycle.apply(SpielBegonnen(command.id))
     }
 
     @CommandHandler
@@ -37,11 +37,11 @@ class TicTacToe() {
             throw SpielerNichtAndDerReiheGewesen(id, it.spieler)
         }
 
-        apply(SpielzugWurdeAkzeptiert(id, command.spielzug))
+        AggregateLifecycle.apply(SpielzugWurdeAkzeptiert(id, command.spielzug))
 
         fallsSpielerGewinnt(command.spielzug)
         {
-            apply(SpielGewonnen(id, it.spieler))
+            AggregateLifecycle.apply(SpielGewonnen(id, it.spieler))
         }
     }
 
