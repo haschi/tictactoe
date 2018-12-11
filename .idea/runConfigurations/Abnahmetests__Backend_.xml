@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Abnahmetests (Backend)" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java" singleton="true">
     <option name="FILE_PATH" value="$PROJECT_DIR$/tictactoe-test/src/test/resources/com/github/haschi/tictactoe/requirements" />
-    <option name="GLUE" value="com.github.haschi.tictactoe.requirements.backend" />
+    <option name="GLUE" value="com.github.haschi.tictactoe.requirements.backend com.github.haschi.tictactoe.requirements.shared" />
     <option name="MAIN_CLASS_NAME" value="cucumber.api.cli.Main" />
-    <module name="Requirements" />
+    <module name="tictactoe-test" />
     <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm2SMFormatter --plugin pretty --tags @backend" />
     <option name="SUGGESTED_NAME" value="All Features in: requirements" />
     <extension name="coverage">
