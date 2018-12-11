@@ -6,7 +6,8 @@ import org.junit.runner.RunWith
 
 @RunWith(Cucumber::class)
 @CucumberOptions(
-    features = ["src/test/resources/com/github/haschi/tictactoe/requirements"],
+    glue = ["com.github.haschi.tictactoe.requirements.shared", "com.github.haschi.tictactoe.requirements.core"],
+    features = ["classpath:com/github/haschi/tictactoe/requirements"],
     plugin = ["progress"],
     tags = ["@core"],
     strict = true

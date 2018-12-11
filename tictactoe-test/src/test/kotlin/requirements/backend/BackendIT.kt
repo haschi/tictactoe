@@ -2,11 +2,14 @@ package com.github.haschi.tictactoe.requirements.backend
 
 import cucumber.api.CucumberOptions
 import cucumber.api.junit.Cucumber
+import org.junit.Ignore
 import org.junit.runner.RunWith
 
+@Ignore
 @RunWith(Cucumber::class)
 @CucumberOptions(
-    features = ["src/test/resources/com/github/haschi/tictactoe/requirements"],
+    glue = ["com.github.haschi.tictactoe.requirements.shared", "com.github.haschi.tictactoe.requirements.backend"],
+    features = ["classpath:com/github/haschi/tictactoe/requirements"],
     plugin = ["progress"],
     tags = ["@backend"],
     strict = true

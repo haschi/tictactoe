@@ -22,41 +22,59 @@ import org.springframework.stereotype.Service
 @Service
 class Infrastructure(@Autowired private val mapper: ObjectMapper) {
     @Bean
-    fun ticTacToeGateway(commandBus: CommandBus): TicTacToeGateway {
-        val factory = CommandGatewayFactory(commandBus)
-
-        return factory.createGateway(TicTacToeGateway::class.java)
+    fun commandGatewayFactory(commandBus: CommandBus): CommandGatewayFactory {
+        return CommandGatewayFactory.builder()
+            .commandBus(commandBus)
+            .build()
     }
 
     @Bean
-    fun anwenderverzeichnisGateway(commandBus: CommandBus): AnwenderverzeichnisGateway {
-        val factory = CommandGatewayFactory(commandBus)
-        return factory.createGateway(AnwenderverzeichnisGateway::class.java)
+    fun ticTacToeGateway(commandGatewayFactory: CommandGatewayFactory): TicTacToeGateway {
+        return commandGatewayFactory.createGateway(TicTacToeGateway::class.java)
     }
 
     @Bean
-    fun warteraumGateway(commandBus: CommandBus): WarteraumGateway {
-        val factory = CommandGatewayFactory(commandBus)
-        return factory.createGateway(WarteraumGateway::class.java)
+    fun anwenderverzeichnisGateway(commandGatewayFactory: CommandGatewayFactory): AnwenderverzeichnisGateway {
+        return commandGatewayFactory.createGateway(AnwenderverzeichnisGateway::class.java)
     }
 
-    @Bean()
+    @Bean
+    fun warteraumGateway(commandGatewayFactory: CommandGatewayFactory): WarteraumGateway {
+        return commandGatewayFactory.createGateway(WarteraumGateway::class.java)
+    }
+
+    @Bean
     @Qualifier("eventSerializer")
     fun serializer(): Serializer {
-        return JacksonSerializer(mapper)
+        return JacksonSerializer.builder()
+            .objectMapper(mapper)
+            .build()
     }
 
     @Qualifier("messageSerializer")
-    @Bean()
+    @Bean
     fun messageSerializer(): Serializer {
-        return JacksonSerializer(mapper)
+        return JacksonSerializer.builder()
+            .objectMapper(mapper)
+            .build()
     }
 
     @Bean
     fun deadlineManager(configuration: AxonConfiguration, tm: TransactionManager): DeadlineManager {
-        return SimpleDeadlineManager(
-            ConfigurationScopeAwareProvider(configuration),
-            tm
-        )
+        return SimpleDeadlineManager.builder()
+            .scopeAwareProvider(ConfigurationScopeAwareProvider(configuration))
+            .transactionManager(tm)
+            .build()
     }
+
+//    @Bean
+//    fun eventBus(configuration: AxonConfiguration): EventBus {
+//        return configuration.eventBus()
+//    }
+
+//    val axonServerConfiguration = AxonServerAutoConfiguration
+//    @Bean fun eventBus(): EventBus {
+//
+//        AxonServerEventStore()
+//    }
 }
