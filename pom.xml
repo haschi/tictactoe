@@ -253,7 +253,7 @@
                     <version>3.0.0-M2</version>
                     <configuration>
                         <forkCount>1.5C</forkCount>
-                        <forkMode>always</forkMode>
+                        <reuseForks>true</reuseForks>
                     </configuration>
                 </plugin>
 
@@ -262,7 +262,7 @@
                     <version>3.0.0-M2</version>
                     <configuration>
                         <forkCount>1.5C</forkCount>
-                        <forkMode>always</forkMode>
+                        <reuseForks>true</reuseForks>
                     </configuration>
                 </plugin>
 
