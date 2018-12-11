@@ -23,3 +23,48 @@ Test
 Standards
 
 * [vnd.error](https://github.com/blongden/vnd.error)
+
+## Konventionen
+
+### Commands und Command Handler
+
+Commands sind Anweisungen an die Anwendung. Sie stellen einen Befehl
+dar. Sie werden deshalb im Imperativ formuliert.
+
+Beispiel:
+
+> Richte Warteraum ein
+
+Command Handler sind Funktionen, welche die durch Commands angefragten
+Anweisungen bearbeiten: 
+
+> bearbeite "Richte Warteraum ein" 
+
+### Events und Event Handler
+Ereignisse sind beobachtbare Geschehnisse, die in der Regel eine 
+Zustandsänderung beschreiben. Ereignisse passieren als Reaktion
+auf Anweisungen. Aus der Sicht des Beobachters sind nur vergangene
+Ereignisse bekannt. Da Ereignisse somit eine in der Vergangenheit
+abgeschlossene Handlung beschreiben werden sie im Perfekt formuliert.
+
+Beispiel
+
+> Spieler hat Warteraum betreten
+ 
+Event Handler sind Funktionen, mit denen Zustände geändert werden,
+falls ein bestimmtes Ereignis eingetreten ist:
+
+> falls "Spieler hat Warteraum betreten"
+ 
+### Queries und Query Handler
+
+Queries sind Fragen zur Ermittlung eines Zustandes, die an das System
+gestellt werden.
+
+Beispiel:
+
+> Welche Anwender sind bekannt?
+
+Query Handler sind Funktionen, die Fragen beantworten. 
+
+> beantworte "Welche Anwender sind bekannt?" 

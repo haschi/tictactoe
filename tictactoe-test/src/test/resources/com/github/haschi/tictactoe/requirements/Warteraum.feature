@@ -11,16 +11,6 @@ Funktionalität: Warteraum
     Angenommen "Maria" hat sich als Anwender registriert
 
   @core
-  Szenariogrundriss: Zeichen aussuchen
-    Wenn ich <mein Zeichen> als mein Zeichen für die nächste Partie Tic Tac Toe aussuche
-    Dann werde ich den Warteraum als Spieler mit <mein Zeichen> betreten haben
-
-    Beispiele:
-      | mein Zeichen |
-      | O            |
-      | X            |
-
-  @core
   Szenario: Spieler findet einen Partner
     Angenommen ich habe den Warteraum als Spieler mit dem Zeichen X betreten
     Wenn Der Anwender "Martin" den Warteraum als Spieler mit dem Zeichen O betritt

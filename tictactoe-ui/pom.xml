@@ -8,6 +8,7 @@
         <version>DEV-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <name>User Interface</name>
 
     <artifactId>tictactoe-ui</artifactId>
     <packaging>pom</packaging>
