@@ -8,17 +8,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Application Core" />
         <module name="Backend" />
+        <module name="Infrastructure.JPA" />
         <module name="Requirements" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Tic Tac Toe" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Application Core" options="-parameters" />
       <module name="Backend" options="-parameters" />
+      <module name="Infrastructure" options="-parameters" />
+      <module name="Infrastructure.JPA" options="-parameters" />
       <module name="Requirements" options="-parameters" />
     </option>
   </component>

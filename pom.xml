@@ -23,6 +23,7 @@
         <module>tictactoe-core</module>
         <module>tictactoe-test</module>
         <module>tictactoe-ui</module>
+        <module>tictactoe-infrastructure</module>
     </modules>
 
     <properties>
@@ -178,6 +179,11 @@
                 <version>${kotlin-logging.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.haschi.tictactoe</groupId>
+                <artifactId>tictactoe-infrastructure</artifactId>
+                <version>DEV-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -274,6 +280,30 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-storage-profile</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireActiveProfile>
+                                    <profiles>H2,Axon Server</profiles>
+                                    <all>false</all>
+                                </requireActiveProfile>
+                            </rules>
+                        </configuration>
+                        <inherited>false</inherited>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
@@ -284,9 +314,32 @@
             </activation>
             <properties>
                 <h2.version>1.4.197</h2.version>
+                <spring.profiles.active>h2</spring.profiles.active>
             </properties>
             <dependencyManagement>
                 <dependencies>
+                    <dependency>
+                        <groupId>com.github.haschi.tictactoe</groupId>
+                        <artifactId>tictactoe-backend</artifactId>
+                        <version>DEV-SNAPSHOT</version>
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>axon-server-connector</artifactId>
+                                <groupId>org.axonframework</groupId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.axonframework</groupId>
+                        <artifactId>axon-spring-boot-starter</artifactId>
+                        <version>${axon.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>axon-server-connector</artifactId>
+                                <groupId>org.axonframework</groupId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
                     <dependency>
                         <groupId>com.h2database</groupId>
                         <artifactId>h2</artifactId>
@@ -304,6 +357,23 @@
         </profile>
         <profile>
             <id>Axon Server</id>
+            <properties>
+                <spring.profiles.active>axon</spring.profiles.active>
+            </properties>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.haschi.tictactoe</groupId>
+                        <artifactId>tictactoe-backend</artifactId>
+                        <version>DEV-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.axonframework</groupId>
+                        <artifactId>axon-spring-boot-starter</artifactId>
+                        <version>${axon.version}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
         </profile>
     </profiles>
 </project>
