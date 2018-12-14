@@ -67,11 +67,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
@@ -144,9 +139,12 @@
             <id>H2</id>
             <dependencies>
                 <dependency>
-                    <groupId>com.github.haschi.tictactoe</groupId>
-                    <artifactId>tictactoe-infrastructure-jpa</artifactId>
-                    <version>DEV-SNAPSHOT</version>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jpa</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
                 </dependency>
             </dependencies>
         </profile>
