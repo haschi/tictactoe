@@ -9,6 +9,11 @@ Funktionalität: Anwenderverzeichnis
     Dann wird das Anwenderverzeichnis keine Anwender enthalten
 
   @core
+  Szenario: Für jedes Anwenderverzeichnis wird ein Warteraum angelegt
+    Wenn ich das Anwenderverzeichnis anlege
+    Dann werde ich einen Warteraum dazu eingerichtet haben
+
+  @core
   Szenario: Anwender registrieren
     Angenommen ich habe das Anwenderverzeichnis angelegt
     Wenn ich mich als Anwender "Matthias" registriere

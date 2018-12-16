@@ -1,3 +1,8 @@
 package com.github.haschi.tictactoe.domain.events
 
-data class AnwenderRegistriert(val name: String)
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
+
+data class AnwenderRegistriert(
+    val name: String,
+    val zugewiesenerWarteraum: Aggregatkennung
+)

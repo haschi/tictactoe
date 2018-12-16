@@ -9,5 +9,7 @@ import java.util.concurrent.CompletableFuture
 interface AnwenderverzeichnisGateway {
     fun send(command: LegeAnwenderverzeichnisAn): CompletableFuture<Aggregatkennung>
     fun send(command: RegistriereAnwender): CompletableFuture<Void>
+
+    // TODO: Refactor Move to anwenderGateway
     fun send(command: WähleZeichenAus): CompletableFuture<Void>
 }

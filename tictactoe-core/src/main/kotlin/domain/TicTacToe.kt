@@ -29,12 +29,12 @@ class TicTacToe() {
     fun bearbeite(command: SetzeZeichen) {
         fallsFeldBelegt(command.spielzug)
         {
-            throw FeldBelegt(id, it.spieler)
+            throw FeldBelegt(it.spieler)
         }
 
         fallsSpielerNichtAnDerReiheIst(command.spielzug)
         {
-            throw SpielerNichtAndDerReiheGewesen(id, it.spieler)
+            throw SpielerNichtAndDerReiheGewesen(it.spieler)
         }
 
         AggregateLifecycle.apply(SpielzugWurdeAkzeptiert(id, command.spielzug))

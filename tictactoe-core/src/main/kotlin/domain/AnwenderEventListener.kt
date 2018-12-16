@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service
 class AnwenderEventListener(val gateway: WarteraumGateway) {
     @EventHandler
     fun falls(event: ZeichenAusgewählt) {
-        gateway.send(BetreteWarteraum(Warteraum.ID, event.id, event.spieler))
+        gateway.send(BetreteWarteraum(event.zugewiesenerWarteraum, event.id, event.spieler))
     }
 }

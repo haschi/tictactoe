@@ -3,6 +3,7 @@ package com.github.haschi.tictactoe.domain
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.events.AnwenderRegistriert
 import com.github.haschi.tictactoe.domain.events.ZeichenAusgewählt
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import org.axonframework.commandhandling.CommandHandler
@@ -16,10 +17,11 @@ class Anwender() {
     @AggregateIdentifier
     private lateinit var id: String
 
+    private lateinit var zugewiesenerWarteraum: Aggregatkennung
     private var zeichen: Zeichen = Zeichen.Keins
 
-    constructor(name: String) : this() {
-        AggregateLifecycle.apply(AnwenderRegistriert(name))
+    constructor(name: String, zugewiesenerWarteraum: Aggregatkennung) : this() {
+        AggregateLifecycle.apply(AnwenderRegistriert(name, zugewiesenerWarteraum))
     }
 
     @CommandHandler
@@ -29,12 +31,19 @@ class Anwender() {
             throw AuswahlNichtMöglich(meldung)
         }
 
-        AggregateLifecycle.apply(ZeichenAusgewählt(id, Spieler(command.zeichen.wert, command.anwender)))
+        AggregateLifecycle.apply(
+            ZeichenAusgewählt(
+                id,
+                Spieler(command.zeichen.wert, command.anwender),
+                zugewiesenerWarteraum
+            )
+        )
     }
 
     @EventSourcingHandler
     fun falls(event: AnwenderRegistriert) {
         id = event.name
+        zugewiesenerWarteraum = event.zugewiesenerWarteraum
     }
 
     @EventSourcingHandler

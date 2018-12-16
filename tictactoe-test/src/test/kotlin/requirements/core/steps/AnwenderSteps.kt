@@ -13,21 +13,19 @@ class AnwenderSteps(private val welt: DieWelt) {
 
     @Wenn("ich {zeichen} als mein Zeichen für die nächste Partie Tic Tac Toe aussuche")
     fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(zeichen: Zeichen) {
-        welt.next {
-            anwenderverzeichnis.send(
-                WähleZeichenAus(
-                    welt.ich.name,
-                    zeichen
-                )
-            )
+        welt.step {
+            welt.anwenderverzeichnis.send(WähleZeichenAus(ich.name, zeichen))
+                .thenApply { this }
         }
     }
 
     @Dann("^werde ich eine Fehlermeldung erhalten:$")
     fun `Dann werde ich eine Fehlermeldung erhalten`(meldung: String) {
-        assertThat(welt.future)
-            .hasFailedWithThrowableThat()
-            .isInstanceOf(AuswahlNichtMöglich::class.java)
-            .hasMessage(meldung)
+        welt.join {
+            assertThat(welt.zustand)
+                .hasFailedWithThrowableThat()
+                .isInstanceOf(AuswahlNichtMöglich::class.java)
+                .hasMessage(meldung)
+        }
     }
 }

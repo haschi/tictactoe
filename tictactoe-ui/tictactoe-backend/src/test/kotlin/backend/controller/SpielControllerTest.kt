@@ -70,7 +70,7 @@ open class SpielControllerTest(
         val future = CompletableFuture<Void>()
         val resource = SpielzugResource(setzeZeichen.spielzug.spieler, setzeZeichen.spielzug.feld)
 
-        future.completeExceptionally(FeldBelegt(spielId, Spieler('X', "")))
+        future.completeExceptionally(FeldBelegt(Spieler('X', "")))
 
         whenever(this.command.send(setzeZeichen))
             .thenReturn(future)

@@ -26,7 +26,20 @@
 
         <dependency>
             <groupId>org.axonframework</groupId>
-            <artifactId>axon-spring-boot-starter</artifactId>
+            <artifactId>axon-messaging</artifactId>
+            <version>${axon.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-eventsourcing</artifactId>
+            <version>${axon.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring</artifactId>
+            <version>${axon.version}</version>
         </dependency>
 
         <dependency>

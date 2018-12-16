@@ -76,17 +76,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>axon-server-connector</artifactId>
-                    <groupId>org.axonframework</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -158,16 +147,54 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>com.h2database</groupId>-->
+        <!--<artifactId>h2</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring-boot-starter</artifactId>
         </dependency>
+
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>jpa</id>
+            <!--<activation>-->
+            <!--<activeByDefault>true</activeByDefault>-->
+            <!--</activation>-->
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jpa</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.axonframework</groupId>
+                    <artifactId>axon-spring-boot-starter</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>axon-server-connector</artifactId>
+                            <groupId>org.axonframework</groupId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <resources>

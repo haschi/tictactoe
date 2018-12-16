@@ -1,7 +1,6 @@
 package com.github.haschi.tictactoe.requirements.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.hateoas.config.EnableEntityLinks
 
 @SpringBootApplication(
@@ -13,5 +12,4 @@ import org.springframework.hateoas.config.EnableEntityLinks
         "com.github.haschi.tictactoe.backend.marshalling"]
 )
 @EnableEntityLinks
-@EnableJpaRepositories
 class TestApplication
