@@ -67,18 +67,9 @@ class DieWelt(
                 Ergebnis(zustand.get(), ereignisse, null)
 
             } catch (t: Throwable) {
-                logger.error(t.rootCause()) { "Führe ${zustand.numberOfDependents} Schritte zusammen: ${t.cause?.localizedMessage}" }
                 Ergebnis(Zustand.Empty, ereignisse, t)
             }
         )
-    }
-
-    fun Throwable.rootCause(): Throwable {
-        var s: Throwable? = this
-        while (s!!.cause != null) {
-            s = s.cause
-        }
-        return s
     }
 
     fun <R, Q> ask(question: Q, responseType: Class<R>): CompletableFuture<R> {

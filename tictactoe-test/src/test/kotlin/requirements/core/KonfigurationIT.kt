@@ -30,11 +30,7 @@ class KonfigurationIT(@Value("\${spring.main.banner-mode}") val bannerMode: Stri
     fun `Es ist genau ein Storage-Profil ausgewählt`() {
         environment.activeProfiles.forEach {
             logger.info { "Aktive Spring Boot Profile: $it" }
-            println("Aktive Spring Boot Profile: $it")
         }
-
-//        assertThat(environment.activeProfiles)
-//            .hasOnlyOneElementSatisfying { it == "h2" || it == "axon" }
     }
 
     @Autowired

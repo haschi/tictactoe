@@ -28,7 +28,6 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
         })
 
         registry.defineParameterType(ParameterType("zeitraum", ".*", Duration::class.java) { _: String ->
-            //println(zeitdauer)
             Duration.ofMillis(500)
 //            val pattern = Pattern.compile("^((?<wert>\\d+) (?<einheit>Sekunde(n*)|Millisekunde(n*)))$")
 //            val matcher = pattern.matcher(zeitdauer)

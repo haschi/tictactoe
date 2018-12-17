@@ -11,13 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.boot.test.json.JacksonTester
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @JsonTest()
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class SetzeZeichenIT @Autowired constructor(private val json: JacksonTester<SetzeZeichen>) {
     @Test
     fun `SetzeZeichen kann serialisiert werde`() {

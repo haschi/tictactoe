@@ -14,10 +14,9 @@ import com.github.haschi.tictactoe.requirements.core.testing.Person
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
+import mu.KLogging
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.platform.commons.logging.Logger
-import org.junit.platform.commons.logging.LoggerFactory
 
 class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
@@ -63,12 +62,12 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
     @Wenn("^ich mich als Anwender \"([^\"]*)\" registriere$")
     fun ich_mich_als_Anwender_registriere(name: String) {
-        Logger.debug { "Wenn ich mich als Anwender $name registriere" }
+        logger.debug { "Wenn ich mich als Anwender $name registriere" }
 
         welt.step {
             welt.anwenderverzeichnis.send(RegistriereAnwender(anwenderverzeichnisId, name))
                 .exceptionally {
-                    println("Fehler beim Registrieren des Anwenders $name: ${it.message}");
+                    logger.error { "Fehler beim Registrieren des Anwenders $name: ${it.message}" }
                     null
                 }
                 .thenApply { this }
@@ -77,7 +76,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
     @Dann("^werde ich den Anwender \"([^\"]*)\" im Anwenderverzeichnis nicht gefunden haben$")
     fun werde_ich_den_Anwender_im_Anwenderverzeichnis_nicht_gefunden_haben(arg1: String) {
-        Logger.debug { "Dann werde ich den Anwender $arg1 im Anwenderverzeichnis nicht gefunden haben" }
+        logger.debug { "Dann werde ich den Anwender $arg1 im Anwenderverzeichnis nicht gefunden haben" }
         welt.join {
             Assertions.assertThat(ereignisse)
                 .describedAs(fehler?.message)
@@ -89,7 +88,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
     @Angenommen("^ich habe mich als Anwender \"([^\"]*)\" registriert$")
     fun ich_habe_mich_als_Anwender_registriert(arg1: String) {
-        Logger.debug { "Angenommen ich habe mich als Anwender $arg1 registriert" }
+        logger.debug { "Angenommen ich habe mich als Anwender $arg1 registriert" }
 
         welt.step {
             welt.anwenderverzeichnis.send(
@@ -109,7 +108,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
     @Wenn("^ich mich erneut als Anwender \"([^\"]*)\" registriere$")
     fun ich_mich_erneut_als_Anwender_registriere(name: String) {
-        Logger.debug { "Wenn ich mich erneut als Anwender $name registriere" }
+        logger.debug { "Wenn ich mich erneut als Anwender $name registriere" }
         welt.step {
             welt.anwenderverzeichnis.send(
                 RegistriereAnwender(anwenderverzeichnisId, name)
@@ -119,7 +118,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
     @Dann("^werde ich den Anwender \"([^\"]*)\" im Anwenderverzeichnis gefunden haben$")
     fun werde_ich_den_Anwender_im_Anwenderverzeichnis_gefunden_haben(name: String) {
-        Logger.debug { "Dann werde ich den Anwender $name im Anwenderverzeichnis gefunden haben" }
+        logger.debug { "Dann werde ich den Anwender $name im Anwenderverzeichnis gefunden haben" }
         welt.join {
             Assertions.assertThat(ereignisse)
                 .describedAs(fehler?.localizedMessage)
@@ -140,7 +139,5 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
         }
     }
 
-    companion object {
-        val Logger: Logger = LoggerFactory.getLogger(AnwenderverzeichnisSteps::class.java)!!
-    }
+    companion object : KLogging()
 }
