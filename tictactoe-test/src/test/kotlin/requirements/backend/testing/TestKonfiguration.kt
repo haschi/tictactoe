@@ -21,6 +21,7 @@ class TestKonfiguration(private val objectMapper: ObjectMapper) {
 
     @Bean
     fun restTemplate(builder: RestTemplateBuilder): RestTemplate {
-        return builder.build()
+        return builder
+            .build()
     }
 }

@@ -8,6 +8,6 @@ class Hooks(private val environment: Environment) {
     @Before
     fun reset() {
         assertThat(environment.activeProfiles)
-            .contains("backend")
+            .contains("backend", "axon")
     }
 }

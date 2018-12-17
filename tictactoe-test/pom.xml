@@ -15,6 +15,7 @@
 
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+        <spring.profiles.active>axon</spring.profiles.active>
     </properties>
 
     <dependencies>
@@ -69,6 +70,11 @@
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
@@ -171,6 +177,9 @@
             <!--<activation>-->
             <!--<activeByDefault>true</activeByDefault>-->
             <!--</activation>-->
+            <properties>
+                <spring.profiles.active>jpa</spring.profiles.active>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -203,6 +212,12 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
 
             <plugin>

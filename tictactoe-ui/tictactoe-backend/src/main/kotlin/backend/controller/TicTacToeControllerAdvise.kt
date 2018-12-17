@@ -24,6 +24,11 @@ class TicTacToeControllerAdvise : ResponseEntityExceptionHandler() {
         return error(ex.message ?: "Unbekannter Fehler", HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
+//    @ExceptionHandler(CompletionException::class)
+//    fun falls(request: HttpServletRequest, t: CompletionException): ResponseEntity<VndError> {
+//        return error(t.message ?: "Unbekannter Fehler", HttpStatus.INTERNAL_SERVER_ERROR)
+//    }
+
     private fun error(message: String, status: HttpStatus): ResponseEntity<VndError> {
         val headers = HttpHeaders()
         headers.add("Content-Type", ERROR_JSON_UTF8_VALUE)
