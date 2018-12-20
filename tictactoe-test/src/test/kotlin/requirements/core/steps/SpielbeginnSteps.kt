@@ -27,7 +27,7 @@ class SpielbeginnSteps(val welt: DieWelt) {
     @Angenommen("ich habe das Symbol \"{zeichen}\" ausgewählt")
     fun `ich habe das Symbol ausgewählt`(zeichen: Zeichen) {
         welt.step {
-            welt.anwenderverzeichnis.send(WähleZeichenAus(ich.name, zeichen))
+            welt.anwenderverzeichnis.send(WähleZeichenAus(ich.id, ich.name, zeichen))
                 .thenApply { this }
         }
     }

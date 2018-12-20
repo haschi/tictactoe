@@ -11,6 +11,7 @@ import org.axonframework.queryhandling.QueryGateway
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionStage
+import java.util.concurrent.TimeUnit
 
 @Component
 class DieWelt(
@@ -37,14 +38,16 @@ class DieWelt(
         val anwenderverzeichnisId: Aggregatkennung,
         val ich: Person,
         val spielId: Aggregatkennung,
-        val warteraumId: Aggregatkennung
+        val warteraumId: Aggregatkennung,
+        val anwender: Map<String, Person>
     ) {
         companion object {
             val Empty = Zustand(
                 Aggregatkennung.NIL,
                 Person("", Aggregatkennung.NIL),
                 Aggregatkennung.NIL,
-                Aggregatkennung.NIL
+                Aggregatkennung.NIL,
+                emptyMap()
             )
         }
     }
@@ -72,6 +75,23 @@ class DieWelt(
         )
     }
 
+    final fun versuche(block: (Zustand, List<Any>) -> Unit) {
+        var versuch = 0
+        while (versuch < 10) {
+            try {
+                block(zustand.get(100, TimeUnit.MILLISECONDS), ereignisse)
+                versuch = 10
+            } catch (t: Throwable) {
+                val wartezeit = (10 - versuch) * 100L
+                Thread.sleep(wartezeit)
+                versuch += 1
+                if (versuch == 10) {
+                    throw t
+                }
+            }
+        }
+    }
+
     fun <R, Q> ask(question: Q, responseType: Class<R>): CompletableFuture<R> {
         return queryGateway.query(question, responseType)
     }
@@ -92,6 +112,7 @@ class DieWelt(
     }
 
     val tatsachen: Fakten get() = Fakten(zustand.thenApply { ereignisse })
+
 
     companion object : KLogging()
 }

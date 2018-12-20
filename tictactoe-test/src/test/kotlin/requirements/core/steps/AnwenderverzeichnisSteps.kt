@@ -82,27 +82,32 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
                 .describedAs(fehler?.message)
                 .contains(AnwenderNichtGefunden(arg1))
 
-            fehler?.apply { println(this) }
+            //fehler?.apply { println(this) }
         }
     }
 
     @Angenommen("^ich habe mich als Anwender \"([^\"]*)\" registriert$")
-    fun ich_habe_mich_als_Anwender_registriert(arg1: String) {
-        logger.debug { "Angenommen ich habe mich als Anwender $arg1 registriert" }
+    fun ich_habe_mich_als_Anwender_registriert(name: String) {
+        logger.debug { "Angenommen ich habe mich als Anwender $name registriert" }
 
         welt.step {
             welt.anwenderverzeichnis.send(
-                RegistriereAnwender(anwenderverzeichnisId, arg1)
-            ).thenApply { copy(ich = Person(arg1, Aggregatkennung.NIL)) }
+                RegistriereAnwender(anwenderverzeichnisId, name)
+            ).thenApply { anwenderId ->
+                copy(
+                    ich = Person(name, anwenderId),
+                    anwender = anwender + (name to Person(name, anwenderId))
+                )
+            }
         }
     }
 
     @Angenommen("^\"([^\"]*)\" hat sich als Anwender registriert$")
-    fun hat_sich_als_Anwender_registriert(anwender: String) {
+    fun hat_sich_als_Anwender_registriert(name: String) {
         welt.step {
             welt.anwenderverzeichnis.send(
-                RegistriereAnwender(anwenderverzeichnisId, anwender)
-            ).thenApply { this }
+                RegistriereAnwender(anwenderverzeichnisId, name)
+            ).thenApply { anwenderId -> copy(anwender = anwender + (name to Person(name, anwenderId))) }
         }
     }
 
@@ -120,9 +125,10 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
     fun werde_ich_den_Anwender_im_Anwenderverzeichnis_gefunden_haben(name: String) {
         logger.debug { "Dann werde ich den Anwender $name im Anwenderverzeichnis gefunden haben" }
         welt.join {
+            val person: Person = zustand.anwender.getValue(name)
             Assertions.assertThat(ereignisse)
                 .describedAs(fehler?.localizedMessage)
-                .containsOnlyOnce(AnwenderRegistriert(name, zustand.warteraumId))
+                .containsOnlyOnce(AnwenderRegistriert(person.id, person.name, zustand.warteraumId))
         }
     }
 

@@ -30,7 +30,6 @@ class SpielController(
     @RequestMapping(path = ["{id}"], method = [POST])
     @ResponseStatus(HttpStatus.CREATED)
     fun post(@PathVariable("id") id: UUID): CompletableFuture<HttpHeaders> {
-        // logger.info { "POST /api/spiel/$id" }
         return tictactoe.send(BeginneSpiel(Aggregatkennung(id)))
             .thenApply {
                 val headers = HttpHeaders()

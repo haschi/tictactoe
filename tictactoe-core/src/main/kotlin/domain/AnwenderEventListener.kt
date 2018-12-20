@@ -11,5 +11,6 @@ class AnwenderEventListener(val gateway: WarteraumGateway) {
     @EventHandler
     fun falls(event: ZeichenAusgewählt) {
         gateway.send(BetreteWarteraum(event.zugewiesenerWarteraum, event.id, event.spieler))
+        // TODO: Fehlerbehandlung
     }
 }

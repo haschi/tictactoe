@@ -15,16 +15,22 @@ import org.axonframework.spring.stereotype.Aggregate
 @Aggregate
 class Anwender() {
     @AggregateIdentifier
-    private lateinit var id: String
+    private lateinit var id: Aggregatkennung
+    private lateinit var name: String
 
     private lateinit var zugewiesenerWarteraum: Aggregatkennung
     private var zeichen: Zeichen = Zeichen.Keins
 
-    constructor(name: String, zugewiesenerWarteraum: Aggregatkennung) : this() {
-        AggregateLifecycle.apply(AnwenderRegistriert(name, zugewiesenerWarteraum))
+    constructor(
+        id: Aggregatkennung,
+        name: String,
+        zugewiesenerWarteraum: Aggregatkennung
+    ) : this() {
+        AggregateLifecycle.apply(AnwenderRegistriert(id, name, zugewiesenerWarteraum))
     }
 
     @CommandHandler
+    @Throws(AuswahlNichtMöglich::class)
     fun bearbeite(command: WähleZeichenAus) {
         if (zeichen != Zeichen.Keins) {
             val meldung = "Du hast bereits das Zeichen ${zeichen.wert} ausgewählt"
@@ -33,7 +39,7 @@ class Anwender() {
 
         AggregateLifecycle.apply(
             ZeichenAusgewählt(
-                id,
+                name,
                 Spieler(command.zeichen.wert, command.anwender),
                 zugewiesenerWarteraum
             )
@@ -42,7 +48,8 @@ class Anwender() {
 
     @EventSourcingHandler
     fun falls(event: AnwenderRegistriert) {
-        id = event.name
+        id = event.id
+        name = event.name
         zugewiesenerWarteraum = event.zugewiesenerWarteraum
     }
 

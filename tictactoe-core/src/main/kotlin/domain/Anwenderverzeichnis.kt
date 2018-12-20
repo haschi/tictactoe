@@ -32,12 +32,15 @@ class Anwenderverzeichnis() {
     }
 
     @CommandHandler
-    fun bearbeite(command: RegistriereAnwender) {
-        if (!anwender.containsKey(command.name)) {
+    fun bearbeite(command: RegistriereAnwender): Aggregatkennung {
+        return if (!anwender.containsKey(command.name)) {
+            val anwenderId = Aggregatkennung()
             AggregateLifecycle.apply(AnwenderNichtGefunden(command.name))
-            AggregateLifecycle.createNew(Anwender::class.java) { Anwender(command.name, warteraumId) }
+            AggregateLifecycle.createNew(Anwender::class.java) { Anwender(anwenderId, command.name, warteraumId) }
+            anwenderId
         } else {
             AggregateLifecycle.apply(AnwenderGefunden(command.name))
+            anwender[command.name]!!
         }
     }
 

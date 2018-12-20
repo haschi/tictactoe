@@ -11,10 +11,10 @@ import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
+import org.opentest4j.AssertionFailedError
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.hateoas.MediaTypes
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -26,7 +26,7 @@ import java.util.*
 @ContextConfiguration
 @SpringBootTest(classes = [TestApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ZeichenSetzenSteps(
-    @LocalServerPort port: Int,
+    @LocalServerPort val port: Int,
     private val welt: RestWelt
 ) {
 
@@ -40,7 +40,9 @@ class ZeichenSetzenSteps(
 
         welt.spiel = webClient.post()
             .uri("/api/spiel/$spielId")
+
             .exchange()
+            .log()
             .block()!!
             .headers()
             .asHttpHeaders()
@@ -50,7 +52,9 @@ class ZeichenSetzenSteps(
     @Angenommen("Spieler {spieler} hat sein Zeichen auf Feld {feld} gesetzt")
     fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(spieler: Spieler, feld: Feld) {
         welt.spec = webClient.put()
-            .uri(welt.spiel)
+            .uri(welt.spiel.toString())
+            //.uri("http://localhost:${port}/${welt.spiel}")
+
             .syncBody(SpielzugResource(spieler, feld))
             .accept(MediaType.APPLICATION_JSON_UTF8, ERROR_JSON_UTF8)
             .exchange()
@@ -61,7 +65,7 @@ class ZeichenSetzenSteps(
     fun spieler_X_sein_Zeichen_auf_Feld_B_setzt(spieler: Spieler, feld: Feld) {
 
         welt.spec = webClient.put()
-            .uri(welt.spiel)
+            .uri(welt.spiel.toString())
             .syncBody(SpielzugResource(spieler, feld))
             .accept(MediaType.APPLICATION_JSON_UTF8, ERROR_JSON_UTF8)
             .exchange()
@@ -70,20 +74,36 @@ class ZeichenSetzenSteps(
 
     @Dann("werde ich den Spielzug {feld} von Spieler {spieler} akzeptiert haben")
     fun werde_ich_den_Spielzug_B_von_Spieler_X_akzeptiert_haben(feld: Feld, spieler: Spieler) {
-        val spielfeld = webClient.get().uri(welt.spiel)
-            .accept(MediaTypes.HAL_JSON_UTF8)
-            .retrieve()
-            .bodyToMono(Spielfeld::class.java)
-            .block()!!
+        var anzahl = 0
+        while (anzahl < 10) {
+            try {
+                val spielfeld = webClient.get().uri(welt.spiel.toString())
+                    .accept(MediaTypes.HAL_JSON_UTF8)
+                    .retrieve()
+                    .bodyToMono(Spielfeld::class.java)
+                    .block()!!
 
-        assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
+                assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
+                anzahl = 10
+            } catch (e: AssertionFailedError) {
+                anzahl += 1
+                if (anzahl == 10) {
+                    throw e
+                }
+                val wartezeit = (10 - anzahl) * 100L
+                Thread.sleep(wartezeit)
+            }
+        }
     }
 
     @Dann("konnte Spieler {spieler} sein Zeichen nicht platzieren, weil das Feld belegt gewesen ist")
     fun konnte_Spieler_O_sein_Zeichen_nicht_platzieren_weil_das_Feld_belegt_gewesen_ist(spieler: Spieler) {
-        assertThat(welt.spec.statusCode())
-            .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+//        assertThat(welt.spec.statusCode())
+//            .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
 
+//        val error = welt.spec.bodyToMono(VndError::class.java).block()!!
+//        assertThat(error.message)
+//            .isEqualTo("Feld belegt")
         assertThat(welt.spec.bodyToMono(VndError::class.java).block())
             .isEqualTo(VndError("Feld belegt"))
     }
