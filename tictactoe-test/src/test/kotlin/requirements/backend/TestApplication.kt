@@ -5,6 +5,7 @@ import org.springframework.hateoas.config.EnableEntityLinks
 
 @SpringBootApplication(
     scanBasePackages = [
+        "com.github.haschi.tictactoe.infrastructure",
         "com.github.haschi.tictactoe.requirements.backend",
         "com.github.haschi.tictactoe.application",
         "com.github.haschi.tictactoe.domain",

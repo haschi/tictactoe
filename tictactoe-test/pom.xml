@@ -173,6 +173,18 @@
 
     <profiles>
         <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.haschi.tictactoe</groupId>
+                    <artifactId>tictactoe-infrastructure-axon</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>jpa</id>
             <!--<activation>-->
             <!--<activeByDefault>true</activeByDefault>-->

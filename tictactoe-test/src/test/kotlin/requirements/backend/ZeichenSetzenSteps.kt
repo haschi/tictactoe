@@ -74,23 +74,30 @@ class ZeichenSetzenSteps(
 
     @Dann("werde ich den Spielzug {feld} von Spieler {spieler} akzeptiert haben")
     fun werde_ich_den_Spielzug_B_von_Spieler_X_akzeptiert_haben(feld: Feld, spieler: Spieler) {
-        var anzahl = 0
-        while (anzahl < 10) {
-            try {
-                val spielfeld = webClient.get().uri(welt.spiel.toString())
-                    .accept(MediaTypes.HAL_JSON_UTF8)
-                    .retrieve()
-                    .bodyToMono(Spielfeld::class.java)
-                    .block()!!
 
-                assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
-                anzahl = 10
+        versucheBisEsKlappt {
+            val spielfeld = webClient.get().uri(welt.spiel.toString())
+                .accept(MediaTypes.HAL_JSON_UTF8)
+                .retrieve()
+                .bodyToMono(Spielfeld::class.java)
+                .block()!!
+
+            assertThat(spielfeld.inhalt(feld)).isEqualTo(spieler.zeichen)
+        }
+    }
+
+    private fun versucheBisEsKlappt(block: () -> Unit) {
+        var versuch = 0
+        while (versuch < 10) {
+            try {
+                block()
+                versuch = 10
             } catch (e: AssertionFailedError) {
-                anzahl += 1
-                if (anzahl == 10) {
+                versuch++
+                if (versuch == 10) {
                     throw e
                 }
-                val wartezeit = (10 - anzahl) * 100L
+                val wartezeit = (10 - versuch) * 100L
                 Thread.sleep(wartezeit)
             }
         }

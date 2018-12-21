@@ -184,6 +184,13 @@
                 <artifactId>tictactoe-infrastructure</artifactId>
                 <version>DEV-SNAPSHOT</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.haschi.tictactoe</groupId>
+                <artifactId>tictactoe-infrastructure-axon</artifactId>
+                <version>DEV-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

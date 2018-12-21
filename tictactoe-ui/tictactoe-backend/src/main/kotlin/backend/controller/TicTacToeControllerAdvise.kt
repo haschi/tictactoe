@@ -2,7 +2,6 @@ package com.github.haschi.tictactoe.backend.controller
 
 import com.github.haschi.tictactoe.backend.controller.VndError.Companion.ERROR_JSON_UTF8_VALUE
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
-import org.axonframework.axonserver.connector.command.AxonServerRemoteCommandHandlingException
 import org.axonframework.common.AxonNonTransientException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -25,23 +24,12 @@ class TicTacToeControllerAdvise : ResponseEntityExceptionHandler() {
         return Error(ex.message ?: "Unbekannter Fehler", HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
-    // TODO: Nur für Axon Server Konfiguration. Die Axon Server Connector Dependency ist optional
-    @ExceptionHandler(AxonServerRemoteCommandHandlingException::class)
-    fun falls(request: HttpServletRequest, ex: AxonServerRemoteCommandHandlingException): ResponseEntity<VndError> {
-        val descriptions = ex.exceptionDescriptions.joinToString(separator = ", ")
-        return Error(descriptions, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-
-//    @ExceptionHandler(RemoteHandlingException::class)
-//    fun falls(request: HttpServletRequest, ex: RemoteHandlingException): ResponseEntity<VndError> {
+//    // TODO: Nur für Axon Server Konfiguration. Die Axon Server Connector Dependency ist optional
+//    @ExceptionHandler(AxonServerRemoteCommandHandlingException::class)
+//    fun falls(request: HttpServletRequest, ex: AxonServerRemoteCommandHandlingException): ResponseEntity<VndError> {
 //        val descriptions = ex.exceptionDescriptions.joinToString(separator = ", ")
 //        return Error(descriptions, HttpStatus.INTERNAL_SERVER_ERROR)
 //    }
-//    @ExceptionHandler(CompletionException::class)
-//    fun falls(request: HttpServletRequest, t: CompletionException): ResponseEntity<VndError> {
-//        return error(t.message ?: "Unbekannter Fehler", HttpStatus.INTERNAL_SERVER_ERROR)
-//    }
-
 }
 
 fun Error(message: String, status: HttpStatus): ResponseEntity<VndError> {
