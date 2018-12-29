@@ -13,7 +13,7 @@ class AnwenderSteps(private val welt: DieWelt) {
 
     @Wenn("ich {zeichen} als mein Zeichen für die nächste Partie Tic Tac Toe aussuche")
     fun `Wenn ich mein Zeichen für die nächste Partie Tic Tac Toe aussuche`(zeichen: Zeichen) {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(ich.id, ich.name, zeichen))
                 .thenApply { this }
         }

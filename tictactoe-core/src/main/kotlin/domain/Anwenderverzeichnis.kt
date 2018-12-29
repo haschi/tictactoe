@@ -28,7 +28,10 @@ class Anwenderverzeichnis() {
     constructor(command: LegeAnwenderverzeichnisAn) : this() {
         val warteraumId = Aggregatkennung()
         AggregateLifecycle.apply(AnwenderverzeichnisAngelegt(command.id, warteraumId))
-        AggregateLifecycle.createNew(Warteraum::class.java) { Warteraum(RichteWarteraumEin(warteraumId)) }
+
+        AggregateLifecycle.createNew(Warteraum::class.java) {
+            Warteraum(RichteWarteraumEin(warteraumId))
+        }
     }
 
     @CommandHandler

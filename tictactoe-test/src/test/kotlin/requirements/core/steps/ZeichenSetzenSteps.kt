@@ -19,7 +19,7 @@ import java.util.*
 class ZeichenSetzenSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
-        welt.step {
+        welt.compose {
             val spielId = Aggregatkennung(UUID.randomUUID())
             welt.tictactoe.send(BeginneSpiel(spielId))
                 .thenApply { copy(spielId = it) }
@@ -28,7 +28,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
 
     @Angenommen("Spieler {spieler} hat sein Zeichen auf Feld {feld} gesetzt")
     fun spieler_X_hat_sein_Zeichen_auf_Feld_B_gesetzt(spieler: Spieler, feld: Feld) {
-        welt.step {
+        welt.compose {
             welt.tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
                 .thenApply { this }
         }
@@ -36,7 +36,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
 
     @Wenn("Spieler {spieler} sein Zeichen auf Feld {feld} setzt")
     fun spieler_X_sein_Zeichen_auf_Feld_B_setzt(spieler: Spieler, feld: Feld) {
-        welt.step {
+        welt.compose {
             welt.tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
                 .thenApply { this }
         }
@@ -45,7 +45,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
     @Dann("werde ich den Spielzug {feld} von Spieler {spieler} akzeptiert haben")
     fun werde_ich_den_Spielzug_B_von_Spieler_X_akzeptiert_haben(feld: Feld, spieler: Spieler) {
         welt.join {
-            assertThat(ereignisse).contains(
+            assertThat(zustand.ereignisse).contains(
                 SpielzugWurdeAkzeptiert(zustand.spielId, Spielzug(spieler, feld))
             )
         }

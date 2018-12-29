@@ -15,13 +15,13 @@ import java.util.*
 class SpielendePrüfenSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe folgenden Spielverlauf:$")
     fun `ich habe folgenden Spielverlauf`(spielverlauf: List<Spielzug>) {
-        welt.step {
+        welt.compose {
             welt.tictactoe.send(BeginneSpiel(Aggregatkennung(UUID.randomUUID())))
                 .thenApply { copy(spielId = it) }
         }
 
         spielverlauf.forEach {
-            welt.step {
+            welt.compose {
                 welt.tictactoe.send(SetzeZeichen(spielId, it))
                     .thenApply { this }
             }
@@ -32,7 +32,7 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
     fun `hat Spieler gewonnen`(spieler: Spieler) {
         welt.join {
 
-            assertThat(welt.ereignisse)
+            assertThat(zustand.ereignisse)
                 .contains(SpielGewonnen(zustand.spielId, spieler))
         }
     }
@@ -40,7 +40,7 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
     @Dann("hat Spieler {spieler} nicht gewonnen")
     fun `hat Spieler nicht gewonnen`(spieler: Spieler) {
         welt.join {
-            assertThat(welt.ereignisse)
+            assertThat(zustand.ereignisse)
                 .doesNotContain(SpielGewonnen(zustand.spielId, spieler))
         }
     }

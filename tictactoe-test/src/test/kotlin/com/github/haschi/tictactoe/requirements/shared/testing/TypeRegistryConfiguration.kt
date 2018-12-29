@@ -23,6 +23,10 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
             Feld(spalte, zeile)
         })
 
+        registry.defineParameterType(ParameterType("name", ".*", String::class.java) { name: String ->
+            name
+        })
+
         registry.defineParameterType(ParameterType("spieler", "X|O", Spieler::class.java) { spieler: String ->
             Spieler(spieler[0], "")
         })

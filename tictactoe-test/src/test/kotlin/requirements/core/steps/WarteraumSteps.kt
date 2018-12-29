@@ -14,12 +14,13 @@ import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import org.assertj.core.api.Assertions.assertThat
 import java.time.Duration
+import java.util.concurrent.CompletableFuture
 
 class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("ich habe eine maximale Wartezeit von {zeitraum} für den Warteraum festgelegt")
     fun `Abgenommen ich habe eine maximale Wartezeit für den Warteraum festgelegt`(wartezeit: Duration) {
-        welt.step {
+        welt.compose {
             welt.warteraum.send(
                 LegeMaximaleWartezeitFest(warteraumId, wartezeit)
             ).thenApply { this }
@@ -28,7 +29,7 @@ class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("die Anwender Martin und Matthias haben sich als Spielpartner gefunden")
     fun die_Anwender_Martin_und_Matthias_haben_sich_als_Spielpartner_gefunden() {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(
                 WähleZeichenAus(
                     anwender.getValue("Matthias").id,
@@ -37,7 +38,7 @@ class WarteraumSteps(private val welt: DieWelt) {
                 )
             ).thenApply { this }
         }
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(anwender.getValue("Martin").id, "Martin", Zeichen.O))
                 .thenApply { this }
         }
@@ -45,7 +46,7 @@ class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("ich habe X als mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht")
     fun `Angenommen ich habe mein Zeichen für die nächste Partie Tic Tac Toe ausgesucht`() {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(ich.id, ich.name, Zeichen.X))
                 .thenApply { this }
         }
@@ -53,26 +54,28 @@ class WarteraumSteps(private val welt: DieWelt) {
 
     @Wenn("ich die maximale Wartezeit überschritten habe")
     fun `Wenn ich die maximale Wartezeit überschritten habe`() {
-        welt.join {
+        welt.compose {
             val maximaleWartezeit =
                 ereignisse.filterIsInstance(MaximaleWartezeitFestgelegt::class.java)
                     .map { it.wartezeit.toMillis() }
                     .last()
 
             Thread.sleep(maximaleWartezeit + 100)
+            CompletableFuture.supplyAsync { this }
         }
     }
 
     @Dann("werde ich den Warteraum ohne Spielpartner verlassen haben")
     fun werde_ich_den_Warteraum_ohne_Spielpartner_verlassen_haben() {
-        welt.join {
-            assertThat(ereignisse).contains(WarteraumVerlassen(zustand.ich.name))
+        welt.versuche { zustand ->
+            assertThat(zustand.ereignisse)
+                .contains(WarteraumVerlassen(zustand.ich.name))
         }
     }
 
     @Wenn("^Die Anwenderin \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
     fun die_Anwenderin_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(name: String) {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(anwender.getValue(name).id, name, Zeichen.O))
                 .thenApply { this }
         }
@@ -88,8 +91,8 @@ class WarteraumSteps(private val welt: DieWelt) {
 
     @Dann("werde ich den Warteraum als Spieler mit {spieler} betreten haben")
     fun werde_ich_den_Warteraum_als_Spieler_mit_X_betreten_haben(spieler: Spieler) {
-        welt.versuche { zustand, ereignisse ->
-            assertThat(ereignisse).contains(
+        welt.versuche { zustand ->
+            assertThat(zustand.ereignisse).contains(
                 SpielerHatWarteraumBetreten(
                     Spieler(spieler.zeichen, zustand.ich.name)
                 )
@@ -99,7 +102,7 @@ class WarteraumSteps(private val welt: DieWelt) {
 
     @Angenommen("ich habe den Warteraum als Spieler mit dem Zeichen X betreten")
     fun ich_habe_den_Warteraum_als_Spieler_mit_dem_Zeichen_X_betreten() {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(ich.id, ich.name, Zeichen.X))
                 .thenApply { this }
         }
@@ -109,7 +112,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     fun der_Anwender_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(
         name: String
     ) {
-        welt.step {
+        welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(anwender.getValue(name).id, name, Zeichen.O))
                 .thenApply { this }
         }
@@ -118,7 +121,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     @Dann("^werde ich mit \"([^\"]*)\" einen Spielpartner gefunden haben$")
     fun werde_ich_mit_einen_Spielpartner_gefunden_haben(anwender: String) {
         welt.join {
-            assertThat(ereignisse).contains(
+            assertThat(zustand.ereignisse).contains(
                 SpielpartnerGefunden(
                     Spieler('X', zustand.ich.name),
                     Spieler('O', anwender)
