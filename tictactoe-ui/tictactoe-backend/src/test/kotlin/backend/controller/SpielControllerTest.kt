@@ -46,15 +46,20 @@ open class SpielControllerTest(
     @Test
     fun `Beginne Spiel liefert Response mit Status 201 Created`() {
         val spielId = Aggregatkennung(UUID.randomUUID())
-        val beginneSpiel = BeginneSpiel(spielId)
+        val spieler = SpielerParameter(Spieler('X', "Matthias"), Spieler('O', "Martin"))
+        val beginneSpiel = BeginneSpiel(spielId, spieler.x, spieler.o)
         val future = CompletableFuture<Aggregatkennung>()
         future.complete(spielId)
 
         whenever(this.command.send(beginneSpiel))
             .thenReturn(future)
 
+        val params = mapper.writeValueAsString(spieler)
         val result = mvc.perform(
             post(URI("/api/spiel/$spielId"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .characterEncoding("UTF-8")
+                .content(params)
         ).andExpect(request().asyncStarted()).andReturn()
 
         mvc.perform(asyncDispatch(result))

@@ -3,6 +3,7 @@ package com.github.haschi.tictactoe.requirements.core.steps
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.commands.WähleZeichenAus
 import com.github.haschi.tictactoe.domain.events.SpielBegonnen
+import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.TestApplication
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
@@ -45,7 +46,13 @@ class SpielbeginnSteps(val welt: DieWelt) {
     fun beginne_ich_mit_dem_Anwender_eine_Partie_Tic_Tac_Toe(arg1: String) {
         welt.join {
             assertThat(zustand.ereignisse)
-                .containsOnlyOnce(SpielBegonnen(zustand.spielId))
+                .containsOnlyOnce(
+                    SpielBegonnen(
+                        zustand.spielId,
+                        Spieler('X', zustand.ich.name),
+                        Spieler('O', zustand.anwender[arg1]!!.name)
+                    )
+                )
         }
     }
 }

@@ -22,7 +22,7 @@ class TicTacToe() {
 
     @CommandHandler
     constructor(command: BeginneSpiel) : this() {
-        AggregateLifecycle.apply(SpielBegonnen(command.id))
+        AggregateLifecycle.apply(SpielBegonnen(command.id, command.x, command.o))
     }
 
     @CommandHandler

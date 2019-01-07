@@ -69,7 +69,7 @@ class Warteraum() {
     @EventSourcingHandler
     fun falls(event: SpielpartnerGefunden) {
         partnerLoseSpieler -= event.x.anwender
-        partnerLoseSpieler -= event.y.anwender
+        partnerLoseSpieler -= event.o.anwender
     }
 
     @DeadlineHandler(deadlineName = "wartezeitBeendet")

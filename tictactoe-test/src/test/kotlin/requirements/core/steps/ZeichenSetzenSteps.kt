@@ -21,7 +21,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
     fun ich_habe_das_Spiel_begonnen() {
         welt.compose {
             val spielId = Aggregatkennung(UUID.randomUUID())
-            welt.tictactoe.send(BeginneSpiel(spielId))
+            welt.tictactoe.send(BeginneSpiel(spielId, Spieler('X', "Matthias"), Spieler('O', "Martin")))
                 .thenApply { copy(spielId = it) }
         }
     }

@@ -16,7 +16,13 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe folgenden Spielverlauf:$")
     fun `ich habe folgenden Spielverlauf`(spielverlauf: List<Spielzug>) {
         welt.compose {
-            welt.tictactoe.send(BeginneSpiel(Aggregatkennung(UUID.randomUUID())))
+            welt.tictactoe.send(
+                BeginneSpiel(
+                    Aggregatkennung(UUID.randomUUID()),
+                    Spieler('X', "Matthias"),
+                    Spieler('O', "Martin")
+                )
+            )
                 .thenApply { copy(spielId = it) }
         }
 

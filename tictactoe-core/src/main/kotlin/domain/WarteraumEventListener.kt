@@ -13,7 +13,13 @@ class WarteraumEventListener(val tictactoe: TicTacToeGateway) {
     @EventHandler
     fun falls(event: SpielpartnerGefunden) {
         println(event)
-        tictactoe.send(BeginneSpiel(Aggregatkennung()))
+        tictactoe.send(
+            BeginneSpiel(
+                Aggregatkennung(),
+                event.x,
+                event.o
+            )
+        )
         // TODO: Fehlerbehandlung
     }
 }

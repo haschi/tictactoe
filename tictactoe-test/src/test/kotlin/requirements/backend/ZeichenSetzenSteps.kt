@@ -1,5 +1,6 @@
 package com.github.haschi.tictactoe.requirements.backend
 
+import com.github.haschi.tictactoe.backend.controller.SpielerParameter
 import com.github.haschi.tictactoe.backend.controller.SpielzugResource
 import com.github.haschi.tictactoe.backend.controller.VndError
 import com.github.haschi.tictactoe.backend.controller.VndError.Companion.ERROR_JSON_UTF8
@@ -40,7 +41,7 @@ class ZeichenSetzenSteps(
 
         welt.spiel = webClient.post()
             .uri("/api/spiel/$spielId")
-
+            .syncBody(SpielerParameter(Spieler('X', "Matthias"), Spieler('O', "Martin")))
             .exchange()
             .log()
             .block()!!

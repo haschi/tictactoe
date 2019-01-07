@@ -29,8 +29,8 @@ class SpielController(
 
     @RequestMapping(path = ["{id}"], method = [POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun post(@PathVariable("id") id: UUID): CompletableFuture<HttpHeaders> {
-        return tictactoe.send(BeginneSpiel(Aggregatkennung(id)))
+    fun post(@PathVariable("id") id: UUID, @RequestBody s: SpielerParameter): CompletableFuture<HttpHeaders> {
+        return tictactoe.send(BeginneSpiel(Aggregatkennung(id), s.x, s.o))
             .thenApply {
                 val headers = HttpHeaders()
                 headers.location = links.linkForSingleResource(Spielfeld::class.java, id).toUri()
