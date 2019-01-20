@@ -1,42 +1,38 @@
 package com.github.haschi.tictactoe.infrastructure.axon.backend
 
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback
-import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.api.extension.*
 import org.junit.platform.commons.support.AnnotationSupport.findAnnotation
-import org.slf4j.event.Level
-import java.util.*
-import kotlin.reflect.KClass
+import org.slf4j.LoggerFactory
 
-class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback {
+class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback, ParameterResolver {
+
+    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
+        return TestLogger::class.java.equals(parameterContext.parameter.type)
+    }
+
+    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
+
+        val store = extensionContext.getStore(NAMESPACE)
+        return store[ContextKey.LOGGER]
+    }
 
     enum class ContextKey {
-        LOGLEVEL, APPENDER
+        LOGLEVEL, LOGGER
     }
 
 
     override fun beforeTestExecution(context: ExtensionContext) {
-        val level = context.element
-            .map { findAnnotation(it, LogLevel::class.java).map { it.level }.orElse(Level.TRACE) }
 
-        val clazz = context.element
-            .map { findAnnotation(it, LogLevel::class.java).map { it.type } }
-
-        clazz.ifPresent { kk: Optional<KClass<*>> ->
-            kk.ifPresent {
-                println("Test mit Logging-Unterstützung für $level ($it)")
-//                val appender = ListAppender<ILoggingEvent>()
-//                // resetLoggingContext();
-//                // addAppenderToLoggingSources();
-//                val logger = LoggerFactory.getLogger(it.java) as Logger
-//                LoggerFactory.getILoggerFactory().getLogger("sdf").
-//                logger.addAppender(appender)
-//                logger.setLevel(level)
-//                appender.start();
+        context.element
+            .ifPresent {
+                findAnnotation(it, LogLevel::class.java)
+                    .ifPresent {
+                        println("Test mit Logging-Unterstützung für ${it.level} / ${it.type.simpleName}")
+                        TestLoggerFactory.konfiguration = it.level
+                        val logger = LoggerFactory.getLogger(it.type.java)
+                        context.getStore(NAMESPACE).put(ContextKey.LOGGER, logger)
+                    }
             }
-        }
-
-        context.getStore(NAMESPACE).put(level, ContextKey.LOGLEVEL)
     }
 
     override fun afterTestExecution(p0: ExtensionContext) {

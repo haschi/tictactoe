@@ -3,6 +3,7 @@ package com.github.haschi.tictactoe.infrastructure.axon.backend
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
 import io.axoniq.axonserver.grpc.ErrorMessage
+import org.assertj.core.api.Assertions.assertThat
 import org.axonframework.axonserver.connector.ErrorCode
 import org.axonframework.axonserver.connector.command.AxonServerRemoteCommandHandlingException
 import org.axonframework.commandhandling.gateway.CommandGateway
@@ -106,10 +107,14 @@ class AxonServerExceptionAdviceTest(@Autowired private val mvc: MockMvc) {
     inner class LoggingTest {
 
         @Test
-        @LogLevel(level = Level.INFO, type = AxonServerExceptionAdvice::class)
-        fun `einen Eintrag mit der Beschreibung des Domänen-Fehlers`() {
+        @LogLevel(level = Level.TRACE, type = AxonServerExceptionAdvice::class)
+        fun `einen Eintrag mit der Beschreibung des Domänen-Fehlers`(logger: TestLogger) {
             mvc.perform(MockMvcRequestBuilders.asyncDispatch(result))
                 .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity)
+
+            assertThat(logger.events).contains(
+                ProtokollEintrag(Level.WARN, "Domänen-Fehler")
+            )
         }
     }
 }

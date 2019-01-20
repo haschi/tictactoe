@@ -5,19 +5,19 @@ import org.slf4j.helpers.FormattingTuple
 import org.slf4j.helpers.MarkerIgnoringBase
 import org.slf4j.helpers.MessageFormatter
 
-object TestLogger : MarkerIgnoringBase() {
+class TestLogger(var currentLogLevel: Level = Level.INFO, name: String) : MarkerIgnoringBase() {
 
-    private var level = Level.INFO
+    var events: List<ProtokollEintrag> = emptyList()
 
-    var events: List<Event> = emptyList()
-
-    data class Event(val level: Level, val message: String)
+    init {
+        this.name = name
+    }
 
     override fun warn(message: String) {
         logMessage(Level.WARN, MessageFormatter.arrayFormat(message, emptyArray()))
     }
 
-    override fun warn(message: String, argument1: Any) {
+    override fun warn(message: String, argument1: Any?) {
         logMessage(Level.WARN, MessageFormatter.arrayFormat(message, arrayOf(argument1)))
     }
 
@@ -25,7 +25,7 @@ object TestLogger : MarkerIgnoringBase() {
         logMessage(Level.WARN, MessageFormatter.arrayFormat(message, arguments))
     }
 
-    override fun warn(message: String, argument1: Any, argument2: Any) {
+    override fun warn(message: String, argument1: Any?, argument2: Any?) {
         logMessage(Level.WARN, MessageFormatter.arrayFormat(message, arrayOf(argument1, argument2)))
     }
 
@@ -54,7 +54,7 @@ object TestLogger : MarkerIgnoringBase() {
     }
 
     override fun isErrorEnabled(): Boolean {
-        return level == Level.ERROR
+        return isLevelEnabled(Level.ERROR)
     }
 
     override fun error(message: String) {
@@ -66,8 +66,12 @@ object TestLogger : MarkerIgnoringBase() {
     }
 
     private fun logMessage(level: Level, format: FormattingTuple) {
-        events += Event(level, format.message)
+        if (isLevelEnabled(level)) {
+            events += ProtokollEintrag(level, format.message)
+        }
     }
+
+    private fun isLevelEnabled(level: Level) = level.toInt() >= this.currentLogLevel.toInt()
 
     override fun error(message: String, argument1: Any, argument2: Any) {
         logMessage(Level.ERROR, MessageFormatter.arrayFormat(message, arrayOf(argument1, argument2)))
@@ -82,60 +86,59 @@ object TestLogger : MarkerIgnoringBase() {
     }
 
     override fun isDebugEnabled(): Boolean {
-        return level == Level.DEBUG
+        return isLevelEnabled(Level.DEBUG)
     }
 
     override fun debug(message: String) {
         logMessage(Level.DEBUG, MessageFormatter.arrayFormat(message, emptyArray()))
     }
 
-    override fun debug(message: String, argument: Any) {
+    override fun debug(message: String, argument: Any?) {
         logMessage(Level.DEBUG, MessageFormatter.arrayFormat(message, arrayOf(argument)))
     }
 
-    override fun debug(message: String, argument1: Any, argument2: Any) {
+    override fun debug(message: String, argument1: Any?, argument2: Any?) {
         logMessage(Level.DEBUG, MessageFormatter.arrayFormat(message, arrayOf(argument1, argument2)))
     }
 
-    override fun debug(message: String, vararg arguments: Any) {
+    override fun debug(message: String, vararg arguments: Any?) {
         logMessage(Level.DEBUG, MessageFormatter.arrayFormat(message, arguments))
     }
 
-    override fun debug(message: String, throwable: Throwable) {
+    override fun debug(message: String, throwable: Throwable?) {
         logMessage(Level.DEBUG, MessageFormatter.arrayFormat(message, emptyArray(), throwable))
     }
 
     override fun isInfoEnabled(): Boolean {
-        return level == Level.INFO
+        return isLevelEnabled(Level.INFO)
     }
 
-    override fun trace(p0: String?) {
-        if (isTraceEnabled)
-            println(p0)
+    override fun trace(message: String) {
+        logMessage(Level.TRACE, MessageFormatter.arrayFormat(message, emptyArray()))
     }
 
-    override fun trace(message: String?, argument: Any?) {
+    override fun trace(message: String, argument: Any?) {
         logMessage(Level.TRACE, MessageFormatter.arrayFormat(message, arrayOf(argument)))
     }
 
-    override fun trace(message: String, argument1: Any, argument2: Any) {
+    override fun trace(message: String, argument1: Any?, argument2: Any?) {
         logMessage(Level.TRACE, MessageFormatter.arrayFormat(message, arrayOf(argument1, argument2)))
     }
 
-    override fun trace(message: String, vararg arguments: Any) {
+    override fun trace(message: String, vararg arguments: Any?) {
         logMessage(Level.TRACE, MessageFormatter.arrayFormat(message, arguments))
     }
 
-    override fun trace(message: String, throwable: Throwable) {
+    override fun trace(message: String, throwable: Throwable?) {
         logMessage(Level.TRACE, MessageFormatter.arrayFormat(message, emptyArray(), throwable))
     }
 
     override fun isWarnEnabled(): Boolean {
-        return level == Level.WARN
+        return isLevelEnabled(Level.WARN)
     }
 
     override fun isTraceEnabled(): Boolean {
-        return level == Level.TRACE
+        return isLevelEnabled(Level.TRACE)
     }
 
     fun clear() {
