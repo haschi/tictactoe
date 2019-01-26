@@ -7,6 +7,7 @@ import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
+import domain.events.SpielUnentschiedenBeendet
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
@@ -27,6 +28,7 @@ class TicTacToe() {
 
     @CommandHandler
     fun bearbeite(command: SetzeZeichen) {
+        println("Setze Zeichen ${command.spielzug}")
         fallsFeldBelegt(command.spielzug)
         {
             throw FeldBelegt(it.spieler)
@@ -42,6 +44,16 @@ class TicTacToe() {
         fallsSpielerGewinnt(command.spielzug)
         {
             AggregateLifecycle.apply(SpielGewonnen(id, it.spieler))
+        }
+
+        fallsUnentschieden {
+            AggregateLifecycle.apply(SpielUnentschiedenBeendet(id))
+        }
+    }
+
+    private fun fallsUnentschieden(dann: () -> Unit) {
+        if (spielverlauf.size == 8) {
+            dann()
         }
     }
 

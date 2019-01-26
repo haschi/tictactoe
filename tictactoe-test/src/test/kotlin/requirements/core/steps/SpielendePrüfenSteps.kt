@@ -28,6 +28,7 @@ class SpielendePrüfenSteps(private val welt: DieWelt) {
 
         spielverlauf.forEach {
             welt.compose {
+                println("SpielId: $spielId")
                 welt.tictactoe.send(SetzeZeichen(spielId, it))
                     .thenApply { this }
             }

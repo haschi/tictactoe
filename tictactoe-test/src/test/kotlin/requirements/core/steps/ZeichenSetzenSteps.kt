@@ -13,6 +13,7 @@ import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
+import domain.events.SpielUnentschiedenBeendet
 import org.assertj.core.api.Assertions.assertThat
 import java.util.*
 
@@ -37,6 +38,7 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
     @Wenn("Spieler {spieler} sein Zeichen auf Feld {feld} setzt")
     fun spieler_X_sein_Zeichen_auf_Feld_B_setzt(spieler: Spieler, feld: Feld) {
         welt.compose {
+            println("SpielId: $spielId")
             welt.tictactoe.send(SetzeZeichen(spielId, Spielzug(spieler, feld)))
                 .thenApply { this }
         }
@@ -64,6 +66,16 @@ class ZeichenSetzenSteps(private val welt: DieWelt) {
         welt.join {
             assertThat(fehler!!.cause)
                 .isEqualTo(SpielerNichtAndDerReiheGewesen(spieler))
+        }
+    }
+
+    @Dann("endet die Partie unentschieden")
+    fun `Dann endet die Partie unentschieden`() {
+        welt.versuche {
+            println(it.spielId)
+            println("Dann endet die Partie unentschieden: ${it.spielId}")
+            assertThat(it.ereignisse)
+                .contains(SpielUnentschiedenBeendet(it.spielId))
         }
     }
 }
