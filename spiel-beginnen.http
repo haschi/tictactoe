@@ -1,0 +1,29 @@
+POST http://localhost:8080/api/spiel/81cd7e85-83be-4e80-a44a-aa4a3c243347
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "x": {
+    "zeichen": "X",
+    "anwender": "Matthias",
+    "anwenderId": "81cd7e85-83be-4e80-a44a-aa4a3c243347"
+  },
+  "o": {
+    "zeichen": "O",
+    "anwender": "Martin",
+    "anwenderId": "81cd7e85-83be-4e80-a44a-aa4a3c243347"
+  }
+}
+
+<> 2019-02-09T105757.500.json
+<> 2019-02-09T105642.500.json
+<> 2019-02-09T105541.500.json
+<> 2019-02-09T105229.500.json
+<> 2019-02-09T104837.404.json
+<> 2019-02-09T104829.404.json
+<> 2018-10-14T024056.404.json
+<> 2018-08-04T015303.404.json
+
+###
+

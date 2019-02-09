@@ -4,4 +4,4 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 
 data class SpielerNichtAndDerReiheGewesen(
     val spieler: Spieler
-) : Exception()
+) : Exception("Spieler ist nicht an der Reihe")

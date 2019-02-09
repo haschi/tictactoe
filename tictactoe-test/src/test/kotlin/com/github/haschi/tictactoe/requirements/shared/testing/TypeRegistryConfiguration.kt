@@ -4,6 +4,7 @@ import com.github.haschi.tictactoe.domain.values.Feld
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import com.github.haschi.tictactoe.domain.values.Zeichen
+import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import cucumber.api.TypeRegistry
 import cucumber.api.TypeRegistryConfigurer
 import io.cucumber.cucumberexpressions.ParameterType
@@ -27,8 +28,17 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
             name
         })
 
-        registry.defineParameterType(ParameterType("spieler", "X|O", Spieler::class.java) { spieler: String ->
-            Spieler(spieler[0], "")
+        registry.defineParameterType(ParameterType("spieler", "X|O", Resolver::class.java) { zeichen: String ->
+            object : Resolver<Spieler> {
+                override fun resolve(zustand: IZustand): Spieler {
+                    try {
+                        return zustand.spieler.getValue(zeichen[0])
+                    } catch (exception: NoSuchElementException) {
+                        throw IllegalArgumentException(zeichen, exception)
+                    }
+
+                }
+            }
         })
 
         registry.defineParameterType(ParameterType("zeitraum", ".*", Duration::class.java) { _: String ->
@@ -51,9 +61,18 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
             Zeichen(zeichen[0])
         })
 
-        registry.defineDataTableType(DataTableType(Spielzug::class.java, object : TableEntryTransformer<Spielzug> {
-            override fun transform(entry: Map<String, String>): Spielzug {
-                return Spielzug(Spieler(entry["Spieler"]!![0], ""), feld(entry["Feld"]!!))
+        registry.defineDataTableType(
+            DataTableType(
+                SpielzugGenerator::class.java,
+                object : TableEntryTransformer<SpielzugGenerator> {
+                    override fun transform(entry: Map<String, String>): SpielzugGenerator {
+                        return object : SpielzugGenerator {
+                            override fun auflösen(zustand: DieWelt.Zustand): Spielzug {
+                                val zeichen: Char = entry["Spieler"]!![0]
+                                val spieler: Spieler = zustand.spieler[zeichen]!!
+                                return Spielzug(spieler, feld(entry["Feld"]!!))
+                            }
+                        }
             }
         }))
     }

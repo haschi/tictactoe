@@ -10,7 +10,6 @@ class TestLoggerFactory : ILoggerFactory {
         if (name == AxonServerExceptionAdvice::class.qualifiedName) {
             if (!logger.containsKey(name)) {
                 logger += name to TestLogger(konfiguration, name)
-                println("Anzahl bekannter Logger: ${logger.size}")
             }
         } else {
             if (!logger.containsKey("Anderer Logger")) {

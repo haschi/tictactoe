@@ -13,7 +13,6 @@ import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
 import java.net.URI
-import java.util.*
 
 @Aggregate
 class Anwenderverzeichnis() {
@@ -38,7 +37,7 @@ class Anwenderverzeichnis() {
     fun bearbeite(command: RegistriereAnwender): Aggregatkennung {
         return if (!anwender.containsKey(command.name)) {
             val anwenderId = Aggregatkennung()
-            AggregateLifecycle.apply(AnwenderNichtGefunden(command.name))
+            AggregateLifecycle.apply(AnwenderNichtGefunden(command.name, anwenderId))
             AggregateLifecycle.createNew(Anwender::class.java) { Anwender(anwenderId, command.name, warteraumId) }
             anwenderId
         } else {
@@ -55,7 +54,7 @@ class Anwenderverzeichnis() {
 
     @EventSourcingHandler
     fun falls(event: AnwenderNichtGefunden) {
-        anwender += event.name to Aggregatkennung(UUID.randomUUID())
+        anwender = anwender + (event.name to event.anwenderId)
     }
 
     companion object {

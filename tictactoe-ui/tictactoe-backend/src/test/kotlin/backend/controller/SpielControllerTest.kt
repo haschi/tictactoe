@@ -46,7 +46,12 @@ open class SpielControllerTest(
     @Test
     fun `Beginne Spiel liefert Response mit Status 201 Created`() {
         val spielId = Aggregatkennung(UUID.randomUUID())
-        val spieler = SpielerParameter(Spieler('X', "Matthias"), Spieler('O', "Martin"))
+
+        val spieler = SpielerParameter(
+            Spieler('X', "Matthias", Aggregatkennung()),
+            Spieler('O', "Martin", Aggregatkennung())
+        )
+
         val beginneSpiel = BeginneSpiel(spielId, spieler.x, spieler.o)
         val future = CompletableFuture<Aggregatkennung>()
         future.complete(spielId)
@@ -71,11 +76,16 @@ open class SpielControllerTest(
     fun `Feld belegt führt zu Response mit Status 422 Unprocessable Entity`() {
 
         val spielId = Aggregatkennung(UUID.randomUUID())
-        val setzeZeichen = SetzeZeichen(spielId, Spielzug(Spieler('X', ""), Feld('A', 1)))
+
+        val setzeZeichen = SetzeZeichen(
+            spielId,
+            Spielzug(Spieler('X', "", Aggregatkennung()), Feld('A', 1))
+        )
+
         val future = CompletableFuture<Void>()
         val resource = SpielzugResource(setzeZeichen.spielzug.spieler, setzeZeichen.spielzug.feld)
 
-        future.completeExceptionally(FeldBelegt(Spieler('X', "")))
+        future.completeExceptionally(FeldBelegt(Spieler('X', "", setzeZeichen.spielzug.spieler.anwenderId)))
 
         whenever(this.command.send(setzeZeichen))
             .thenReturn(future)

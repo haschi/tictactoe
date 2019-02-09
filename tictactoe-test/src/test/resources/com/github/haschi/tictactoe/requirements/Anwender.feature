@@ -4,6 +4,7 @@ Funktionalität: Anwender
   Grundlage:
     Angenommen ich habe das Anwenderverzeichnis angelegt
     Angenommen ich habe mich als Anwender "Matthias" registriert
+    Und "Martin" hat sich als Anwender registriert
 
 
   @core
@@ -24,4 +25,11 @@ Funktionalität: Anwender
     """
     Du hast bereits das Zeichen X ausgewählt
     """
+
+  @core
+  Szenario: Anwender kann Spielende ein neues Zeichen aussuchen
+    Angenommen ich habe den Warteraum als Spieler mit X betreten
+    Und "Martin" hat das Zeichen "O" ausgewählt
+    Wenn ich die Partie gewinne
+    Dann werde ich kein Zeichen ausgesucht haben
 

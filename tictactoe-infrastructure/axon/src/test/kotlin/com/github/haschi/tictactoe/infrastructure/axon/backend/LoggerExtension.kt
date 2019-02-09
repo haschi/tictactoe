@@ -20,14 +20,11 @@ class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback,
         LOGLEVEL, LOGGER
     }
 
-
     override fun beforeTestExecution(context: ExtensionContext) {
-
         context.element
             .ifPresent {
                 findAnnotation(it, LogLevel::class.java)
                     .ifPresent {
-                        println("Test mit Logging-Unterstützung für ${it.level} / ${it.type.simpleName}")
                         TestLoggerFactory.konfiguration = it.level
                         val logger = LoggerFactory.getLogger(it.type.java)
                         context.getStore(NAMESPACE).put(ContextKey.LOGGER, logger)

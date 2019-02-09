@@ -1,3 +1,5 @@
 package com.github.haschi.tictactoe.domain.events
 
-data class AnwenderNichtGefunden(val name: String)
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
+
+data class AnwenderNichtGefunden(val name: String, val anwenderId: Aggregatkennung)

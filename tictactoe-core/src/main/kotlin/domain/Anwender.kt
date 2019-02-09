@@ -6,6 +6,8 @@ import com.github.haschi.tictactoe.domain.events.ZeichenAusgewählt
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Zeichen
+import domain.commands.KehreVomSpielZurück
+import domain.events.VomSpielZurückgekehrt
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
@@ -40,10 +42,15 @@ class Anwender() {
         AggregateLifecycle.apply(
             ZeichenAusgewählt(
                 name,
-                Spieler(command.zeichen.wert, command.anwender),
+                Spieler(command.zeichen.wert, command.anwender, command.id),
                 zugewiesenerWarteraum
             )
         )
+    }
+
+    @CommandHandler
+    fun bearbeite(command: KehreVomSpielZurück) {
+        AggregateLifecycle.apply(VomSpielZurückgekehrt(command.spieler))
     }
 
     @EventSourcingHandler

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 class WarteraumEventListener(val tictactoe: TicTacToeGateway) {
     @EventHandler
     fun falls(event: SpielpartnerGefunden) {
-        println(event)
         tictactoe.send(
             BeginneSpiel(
                 Aggregatkennung(),
@@ -20,6 +19,5 @@ class WarteraumEventListener(val tictactoe: TicTacToeGateway) {
                 event.o
             )
         )
-        // TODO: Fehlerbehandlung
     }
 }
