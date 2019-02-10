@@ -32,8 +32,7 @@ class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback,
             }
     }
 
-    override fun afterTestExecution(p0: ExtensionContext) {
-        println("After")
+    override fun afterTestExecution(context: ExtensionContext) {
     }
 
     companion object {

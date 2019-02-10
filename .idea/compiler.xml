@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Application Core" />
         <module name="Backend" />
+        <module name="Frontend" />
         <module name="Infrastructure.Axon" />
         <module name="Infrastructure.JPA" />
         <module name="Requirements" />

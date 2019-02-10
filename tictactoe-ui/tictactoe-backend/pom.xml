@@ -20,6 +20,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.haschi.tictactoe</groupId>
+            <artifactId>tictactoe-frontend</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>

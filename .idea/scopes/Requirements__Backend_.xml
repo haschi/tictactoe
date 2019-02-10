@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Requirements (Backend)" pattern="file[Requirements]:src/test/kotlin/com/github/haschi/tictactoe/requirements/core//*||file[Requirements]:src/test/resources/com/github/haschi/tictactoe/requirements//*||file[Application Core]:src/main/kotlin//*||test[Requirements]:com.github.haschi.tictactoe.requirements.core..*||test[Requirements]:requirements.core..*" />
+</component>

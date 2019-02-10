@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.haschi.tictactoe</groupId>
+    <artifactId>tictactoe-frontend</artifactId>
+    <version>DEV-SNAPSHOT</version>
+
+    <name>Frontend</name>
+    <description>Frontend für Tic Tac Toe</description>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <skipFrontend>false</skipFrontend>
+        <frontend.maven.version>1.6</frontend.maven.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend.maven.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <configuration>
+                    <skip>${skipFrontend}</skip>
+                    <nodeVersion>v11.9.0</nodeVersion>
+                    <npmVersion>6.5.0</npmVersion>
+                    <workingDirectory>src/main</workingDirectory>
+                    <installDirectory>${java.io.tmpdir}/tictactoe/build</installDirectory>
+                </configuration>
+                <executions>
+
+                    <!--<execution>-->
+                    <!--&lt;!&ndash; optional: you don't really need execution ids, but it looks nice in your build log. &ndash;&gt;-->
+                    <!--<id>install node and npm</id>-->
+                    <!--<goals>-->
+                    <!--<goal>install-node-and-npm</goal>-->
+                    <!--</goals>-->
+                    <!--&lt;!&ndash; optional: default phase is "generate-resources" &ndash;&gt;-->
+                    <!--<phase>post-clean</phase>-->
+                    <!--</execution>-->
+
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                    </execution>
+
+                    <!--<execution><id>npm install</id>-->
+                    <!--<goals>-->
+                    <!--<goal>install-node-and-npm</goal>-->
+                    <!--<goal>npm</goal>-->
+                    <!--</goals>-->
+                    <!--<phase>initialize</phase>-->
+                    <!--<configuration>-->
+                    <!--<arguments>install</arguments>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run-script build -- --output-path ${project.build.directory}/frontend</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm run test</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <!--<phase>none</phase>-->
+                        <configuration>
+                            <arguments>run-script test -- --watch=false --browsers=ChromeHeadless</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm run e2e</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <arguments>run-script e2e</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/frontend</directory>
+                <targetPath>public</targetPath>
+            </resource>
+        </resources>
+    </build>
+</project>

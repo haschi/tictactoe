@@ -9,6 +9,10 @@ und eine Vorlage für weitere Projekte darzustellen
 * [Axon Framework](http://www.axonframework.org/) [[User Guide](https://docs.axonframework.org/)]
 * [Spring Framework](https://spring.io/)
   * [Spring Boot](https://spring.io/projects/spring-boot)
+* [Angular](https://angular.io/)
+    * [PhantomJS]
+
+**Hinweis für CI mit Travis und PhantomJS: [phantomjs-prebuilt#continuous-integration](https://www.npmjs.com/package/phantomjs-prebuilt#continuous-integration)**
 
 Test
 
