@@ -28,7 +28,7 @@ class TicTacToe() {
 
     @CommandHandler
     fun bearbeite(command: SetzeZeichen) {
-        fallsFeldBelegt(command.spielzug)
+        `ist Feld bereits belegt?`(command.spielzug)
         {
             throw FeldBelegt(it.spieler)
         }
@@ -40,7 +40,7 @@ class TicTacToe() {
 
         AggregateLifecycle.apply(SpielzugWurdeAkzeptiert(id, command.spielzug))
 
-        fallsSpielerGewinnt(command.spielzug)
+        `hat Spieler gewonnen?`(command.spielzug)
         {
             AggregateLifecycle.apply(SpielGewonnen(id, it.spieler))
         }
@@ -56,7 +56,7 @@ class TicTacToe() {
         }
     }
 
-    private fun fallsSpielerGewinnt(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
+    private fun `hat Spieler gewonnen?`(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
         val gewinn = listOf(Feld('A', 1), Feld('B', 2), Feld('C', 3))
         val gewinn2 = listOf(Feld('B', 1), Feld('B', 2), Feld('B', 3))
         val gewinne = listOf(gewinn, gewinn2)
@@ -76,7 +76,7 @@ class TicTacToe() {
         }
     }
 
-    private fun fallsFeldBelegt(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
+    private fun `ist Feld bereits belegt?`(spielzug: Spielzug, dann: (Spielzug) -> Unit) {
         if (spielverlauf.map { it.feld }.contains(spielzug.feld)) {
             dann(spielzug)
         }

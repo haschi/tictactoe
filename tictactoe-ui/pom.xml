@@ -13,7 +13,7 @@
     <artifactId>tictactoe-ui</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>tictactoe-frontend</module>
+        <!--<module>tictactoe-frontend</module>-->
         <module>tictactoe-backend</module>
     </modules>
 
