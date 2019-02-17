@@ -14,16 +14,31 @@ pipeline {
       }
     }
     stage('Report & Publish') {
-      agent {
-        node {
-          label 'docker'
-        }
+      parallel {
+        stage('Report & Publish') {
+          agent {
+            node {
+              label 'docker'
+            }
 
-      }
-      steps {
-        unstash 'build-test-artifacts'
-        junit '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
-        archiveArtifacts(artifacts: '**/target/*.jar', onlyIfSuccessful: true)
+          }
+          steps {
+            unstash 'build-test-artifacts'
+            junit '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
+            archiveArtifacts(artifacts: '**/target/*.jar', onlyIfSuccessful: true)
+          }
+        }
+        stage('') {
+          agent {
+            node {
+              label 'docker'
+            }
+
+          }
+          steps {
+            nexusPublisher(nexusInstanceId: 'nexus', nexusRepositoryId: 'haschi-devel')
+          }
+        }
       }
     }
   }
