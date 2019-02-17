@@ -13,7 +13,7 @@ pipeline {
         sh 'printenv $VERSION'
         sh 'mvn --version'        
         configFileProvider([configFile(fileId: '988b0ff2-69fe-4a07-b087-5ff6c8063dc9', variable: 'MAVEN_SETTINGS_XML')]) {
-          sh 'mvn --batch-mode -s $MAVEN_SETTINGS_XML -Dmaven.test.failure.ignore clean package'
+          sh "mvn --batch-mode --settings $MAVEN_SETTINGS_XML -Dmaven.test.failure.ignore clean package"
         }
 
         stash(name: 'build-test-artifacts', includes: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml,**/target/*.jar')
@@ -52,6 +52,6 @@ pipeline {
     maven 'Maven 3.6.0'
   }
   environment {
-    VERSION = "${env.BRANCH_NAME}.${env.BUILD_NUMBER}.${env.BUILD_TIMESTAMP}"
+    VERSION = "${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
   }
 }
