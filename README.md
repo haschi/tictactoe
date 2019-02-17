@@ -11,8 +11,9 @@ und eine Vorlage für weitere Projekte darzustellen
   * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Angular](https://angular.io/)
     * [PhantomJS]
-
-**Hinweis für CI mit Travis und PhantomJS: [phantomjs-prebuilt#continuous-integration](https://www.npmjs.com/package/phantomjs-prebuilt#continuous-integration)**
+* Jenkins
+* Nexus
+* Docker
 
 Test
 
