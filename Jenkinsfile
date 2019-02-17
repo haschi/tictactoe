@@ -10,7 +10,7 @@ pipeline {
       }
       steps {
         echo "Baue Version ${env.VERSION}"
-        sh 'printenv $VERSION'
+        sh 'printenv VERSION'
         sh 'mvn --version'        
         configFileProvider([configFile(fileId: '988b0ff2-69fe-4a07-b087-5ff6c8063dc9', variable: 'MAVEN_SETTINGS_XML')]) {
           sh "mvn --batch-mode --settings $MAVEN_SETTINGS_XML -Dmaven.test.failure.ignore clean package"
