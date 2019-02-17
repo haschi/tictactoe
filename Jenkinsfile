@@ -49,6 +49,6 @@ mvn --version'''
     maven 'Maven 3.6.0'
   }
   environment {
-    VERSION = '${BRANCH_NAME}.${BUILD_NUMBER}'
+    VERSION = '$("${BRANCH_NAME}.${BUILD_NUMBER}")'
   }
 }
