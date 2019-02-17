@@ -28,7 +28,7 @@ pipeline {
             archiveArtifacts(artifacts: '**/target/*.jar', onlyIfSuccessful: true)
           }
         }
-        stage('') {
+        stage('error') {
           agent {
             node {
               label 'docker'
@@ -44,5 +44,8 @@ pipeline {
   }
   tools {
     maven 'Maven 3.6.0'
+  }
+  environment {
+    VERSION = 'BRANCH_NAME + "." + BUILD_NUMBER'
   }
 }
