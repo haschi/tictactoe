@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  tools {
-    maven 'Maven 3.6.0'
-  }
   stages {
     stage('Build & Test') {
       agent {
@@ -12,7 +9,7 @@ pipeline {
 
       }
       steps {
-        sh 'mvn -Dmaven.test.failure.ignore clean package'
+        sh 'mvn -B -Dmaven.test.failure.ignore clean package'
         stash(name: 'build-test-artifacts', includes: '**/target/surefire-reports/TEST-*.xml,**/target/*.jar')
       }
     }
@@ -29,5 +26,8 @@ pipeline {
         archiveArtifacts(artifacts: '**/target/*.jar', onlyIfSuccessful: true)
       }
     }
+  }
+  tools {
+    maven 'Maven 3.6.0'
   }
 }
