@@ -9,7 +9,7 @@ pipeline {
 
       }
       steps {
-        echo 'Baue Version ${VERSION}'
+        echo 'Baue Version ${env.VERSION}'
         sh '''printenv VERSION
 mvn --version'''
         sh 'mvn -B -Dmaven.test.failure.ignore clean package'
@@ -49,6 +49,6 @@ mvn --version'''
     maven 'Maven 3.6.0'
   }
   environment {
-    VERSION = "${env.BUILD_NUMBER}.${env.BUILD_TIMESTAMP}"
+    VERSION = "${env.BRANCH_NAME}.${env.BUILD_NUMBER}.${env.BUILD_TIMESTAMP}"
   }
 }
