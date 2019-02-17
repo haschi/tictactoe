@@ -10,6 +10,8 @@ pipeline {
       }
       steps {
         echo 'Baue Version ${VERSION}'
+        sh '''sh \'printenv\'
+sh \'mvn --version\''''
         sh 'mvn -B -Dmaven.test.failure.ignore clean package'
         stash(name: 'build-test-artifacts', includes: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml,**/target/*.jar')
       }
