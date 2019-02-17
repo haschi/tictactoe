@@ -9,10 +9,13 @@ pipeline {
 
       }
       steps {
-        echo 'Baue Version ${env.VERSION}'
-        sh '''printenv VERSION
-mvn --version'''
-        sh 'mvn -B -Dmaven.test.failure.ignore clean package'
+        echo "Baue Version ${env.VERSION}"
+        sh 'printenv $VERSION'
+        sh 'mvn --version'        
+        configFileProvider([configFile(fileId: 'my-maven-settings-dot-xml', variable: 'MAVEN_SETTINGS_XML')]) {
+          sh 'mvn --batch-mode -s $MAVEN_SETTINGS_XML -Dmaven.test.failure.ignore clean package'
+        }
+
         stash(name: 'build-test-artifacts', includes: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml,**/target/*.jar')
       }
     }
