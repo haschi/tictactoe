@@ -10,7 +10,6 @@ und eine Vorlage für weitere Projekte darzustellen
 * [Spring Framework](https://spring.io/)
   * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Angular](https://angular.io/)
-    * [PhantomJS]
 * Jenkins
 * Nexus
 * Docker
