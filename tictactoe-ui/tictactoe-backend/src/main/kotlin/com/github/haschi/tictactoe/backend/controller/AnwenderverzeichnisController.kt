@@ -24,5 +24,15 @@ class AnwenderverzeichnisController(
         return anwenderverzeichnis.send(body)
             .locationHeader(links, Anwenderverzeichnis::class)
     }
+
+    @RequestMapping(method = [RequestMethod.GET])
+    @ResponseStatus(HttpStatus.OK)
+    fun `get`(): CompletableFuture<AnwnderverzeichnisseResource> {
+        return CompletableFuture.supplyAsync { AnwnderverzeichnisseResource() }
+            .thenApply {
+                it.add(links.linkToCollectionResource(Anwenderverzeichnis::class.java).withSelfRel())
+                it
+            }
+    }
 }
 
