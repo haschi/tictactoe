@@ -1,6 +1,6 @@
 package com.github.haschi.tictactoe.backend.controller
 
-import com.github.haschi.tictactoe.application.TicTacToeGateway
+import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.domain.Anwender
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
@@ -17,14 +17,14 @@ import java.util.concurrent.CompletableFuture
 @RestController
 @RequestMapping("/api/registrierung")
 @ExposesResourceFor(Anwender::class)
-class RegistrierungController(private val tictactoe: TicTacToeGateway, private val links: EntityLinks) {
+class RegistrierungController(
+    private val anwenderverzeichnis: AnwenderverzeichnisGateway,
+    private val links: EntityLinks
+) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun post(): CompletableFuture<HttpHeaders> {
-        return tictactoe.send(RegistriereAnwender(Aggregatkennung(), "Matthias")).thenApply { anwenderId ->
-            val headers = HttpHeaders()
-            headers.location = links.linkForSingleResource(Anwender::class.java, anwenderId).toUri()
-            headers
-        }
+        return anwenderverzeichnis.send(RegistriereAnwender(Aggregatkennung(), "Matthias"))
+            .locationHeader(links, Anwender::class)
     }
 }

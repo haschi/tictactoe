@@ -20,7 +20,7 @@ class SpielbeginnSteps(val welt: DieWelt) {
     @Angenommen("^ich bin der Anwender \"([^\"]*)\"$")
     fun ich_bin_der_Anwender(name: String) {
         welt.compose {
-            welt.tictactoe.send(RegistriereAnwender(anwenderverzeichnisId, name))
+            welt.anwenderverzeichnis.send(RegistriereAnwender(anwenderverzeichnisId, name))
                 .thenApply { this }
         }
     }
