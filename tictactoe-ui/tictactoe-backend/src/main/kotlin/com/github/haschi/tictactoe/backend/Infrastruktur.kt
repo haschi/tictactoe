@@ -1,17 +1,25 @@
 package com.github.haschi.tictactoe.backend
 
+import application.AnwenderGateway
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.application.WarteraumGateway
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.gateway.CommandGatewayFactory
+import org.axonframework.common.transaction.TransactionManager
+import org.axonframework.config.ConfigurationScopeAwareProvider
+import org.axonframework.deadline.DeadlineManager
+import org.axonframework.deadline.SimpleDeadlineManager
 import org.axonframework.serialization.Serializer
 import org.axonframework.serialization.json.JacksonSerializer
+import org.axonframework.spring.config.AxonConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 @Component
 class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
@@ -34,6 +42,12 @@ class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
     }
 
     @Bean
+    fun anwenderGateway(commandGatewayFactory: CommandGatewayFactory): AnwenderGateway {
+        return commandGatewayFactory
+            .createGateway(AnwenderGateway::class.java)
+    }
+
+    @Bean
     fun warteraumGateway(commandGatewayFactory: CommandGatewayFactory): WarteraumGateway {
         return commandGatewayFactory.createGateway(WarteraumGateway::class.java)
     }
@@ -52,5 +66,23 @@ class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
         return JacksonSerializer.builder()
             .objectMapper(mapper)
             .build()
+    }
+
+    @Bean
+    fun deadlineManager(configuration: AxonConfiguration, tm: TransactionManager): DeadlineManager {
+        return SimpleDeadlineManager.builder()
+            .scopeAwareProvider(ConfigurationScopeAwareProvider(configuration))
+            .transactionManager(tm)
+            .build()
+    }
+}
+
+@Service
+class Initialisierung(private val anwenderverzeichnisGateway: AnwenderverzeichnisGateway) {
+    @PostConstruct
+    fun anwenderverzeichnisInitialisieren() {
+//        anwenderverzeichnisGateway.send(
+//            LegeAnwenderverzeichnisAn(Aggregatkennung("8d51480f-6309-42d9-986b-3685a362795a")))
+//            .get()
     }
 }

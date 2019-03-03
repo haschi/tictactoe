@@ -19,10 +19,10 @@
             <version>DEV-SNAPSHOT</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>com.github.haschi.tictactoe</groupId>-->
-        <!--<artifactId>tictactoe-frontend</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.github.haschi.tictactoe</groupId>
+            <artifactId>tictactoe-frontend</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -76,10 +76,10 @@
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-spring-boot-starter</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.axonframework</groupId>-->
+        <!--<artifactId>axon-spring-boot-starter</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -128,8 +128,54 @@
             <artifactId>mockito-kotlin</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.haschi.tictactoe</groupId>
+                    <artifactId>tictactoe-infrastructure-axon</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jpa</id>
+            <!--<activation>-->
+            <!--<activeByDefault>true</activeByDefault>-->
+            <!--</activation>-->
+            <properties>
+                <spring.profiles.active>jpa</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jpa</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.axonframework</groupId>
+                    <artifactId>axon-spring-boot-starter</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <artifactId>axon-server-connector</artifactId>
+                            <groupId>org.axonframework</groupId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>

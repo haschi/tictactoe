@@ -1,0 +1,11 @@
+<h2>Registrierung</h2>
+
+<form [formGroup]="registrierungForm" (ngSubmit)="onSubmit()">
+  <label>
+    Name:
+    <input type="text" formControlName="name" required="required">
+  </label>
+
+  <p>Name: {{registrierungForm.value}}</p>
+  <button type="submit" [disabled]="!registrierungForm.valid">Submit</button>
+</form>

@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  jenkins:
+    image: jenkinsci/blueocean
+    #    build:
+    #      context: ./jenkins
+    #      dockerfile: Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_data:/var/jenkins_home
+    ports:
+      - "0.0.0.0:50000:50000"
+      - "0.0.0.0:8181:8080"
+
+#  nexus:
+#    image: sonatype/nexus3
+volumes:
+  jenkins_data:
