@@ -22,11 +22,7 @@ class AnwenderverzeichnisController(
     @ResponseStatus(HttpStatus.CREATED)
     fun post(@RequestBody body: LegeAnwenderverzeichnisAn): CompletableFuture<HttpHeaders> {
         return anwenderverzeichnis.send(body)
-            .thenApply { id ->
-                val headers = HttpHeaders()
-                headers.location = links.linkForSingleResource(Anwenderverzeichnis::class.java, id).toUri()
-                headers
-            }
+            .locationHeader(links, Anwenderverzeichnis::class)
     }
 }
 
