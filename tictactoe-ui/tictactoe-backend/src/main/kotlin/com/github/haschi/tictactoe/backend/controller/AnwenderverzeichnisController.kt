@@ -1,25 +1,32 @@
 package com.github.haschi.tictactoe.backend.controller
 
+import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.domain.Anwenderverzeichnis
+import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
+import org.springframework.hateoas.EntityLinks
 import org.springframework.hateoas.ExposesResourceFor
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
 @RestController
 @RequestMapping("/api/anwenderverzeichnis")
 @ExposesResourceFor(Anwenderverzeichnis::class)
-class AnwenderverzeichnisController {
+class AnwenderverzeichnisController(
+    private val links: EntityLinks,
+    private val anwenderverzeichnis: AnwenderverzeichnisGateway
+) {
 
     @RequestMapping(method = [RequestMethod.POST])
     @ResponseStatus(HttpStatus.CREATED)
-    fun post(): CompletableFuture<HttpHeaders> {
-        return CompletableFuture.supplyAsync {
-            HttpHeaders()
-        }
+    fun post(@RequestBody body: LegeAnwenderverzeichnisAn): CompletableFuture<HttpHeaders> {
+        return anwenderverzeichnis.send(body)
+            .thenApply { id ->
+                val headers = HttpHeaders()
+                headers.location = links.linkForSingleResource(Anwenderverzeichnis::class.java, id).toUri()
+                headers
+            }
     }
 }
+
