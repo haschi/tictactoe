@@ -45,7 +45,7 @@ open class SpielControllerTest(
 
     @Test
     fun `Beginne Spiel liefert Response mit Status 201 Created`() {
-        val spielId = Aggregatkennung(UUID.randomUUID())
+        val spielId = Aggregatkennung()
 
         val spieler = SpielerParameter(
             Spieler('X', "Matthias", Aggregatkennung()),
