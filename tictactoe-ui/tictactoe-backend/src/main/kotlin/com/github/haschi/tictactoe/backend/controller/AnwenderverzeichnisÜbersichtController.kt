@@ -1,7 +1,8 @@
 package com.github.haschi.tictactoe.backend.controller
 
-import com.github.haschi.tictactoe.domain.values.Aggregatkennung
+import domain.WelcheAnwenderverzeichnisseGibtEs
 import domain.values.AnwenderverzeichnisÜbersicht
+import org.axonframework.queryhandling.QueryGateway
 import org.springframework.hateoas.EntityLinks
 import org.springframework.hateoas.ExposesResourceFor
 import org.springframework.hateoas.Resource
@@ -17,13 +18,14 @@ import java.util.concurrent.CompletableFuture
 @RequestMapping("/api/anwenderverzeichnisse")
 @ExposesResourceFor(AnwenderverzeichnisÜbersicht::class)
 class AnwenderverzeichnisÜbersichtController(
+    private val queryGateway: QueryGateway,
     private val links: EntityLinks
 ) {
 
     @RequestMapping(method = [RequestMethod.GET])
     @ResponseStatus(HttpStatus.OK)
     fun `get`(): CompletableFuture<Resources<Resource<AnwenderverzeichnisResource>>> {
-        return CompletableFuture.supplyAsync { AnwenderverzeichnisÜbersicht(Aggregatkennung("hallo")) }
+        return queryGateway.query(WelcheAnwenderverzeichnisseGibtEs, AnwenderverzeichnisÜbersicht::class.java)
             .thenApply {
                 it.map { verzeichnis ->
                     val resource = AnwenderverzeichnisResource(verzeichnis)

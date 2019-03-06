@@ -5,6 +5,9 @@ import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.nhaarman.mockito_kotlin.whenever
+import domain.WelcheAnwenderverzeichnisseGibtEs
+import domain.values.AnwenderverzeichnisÜbersicht
+import org.axonframework.queryhandling.QueryGateway
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -39,6 +42,9 @@ open class AnwenderverzeichnisControllerTest(
 
     @MockBean
     private lateinit var anwenderverzeichnis: AnwenderverzeichnisGateway
+
+    @MockBean
+    private lateinit var queryBus: QueryGateway
 
     @Test
     fun `Anwenderverzeichnis anlegen liefert Response mit Status 201 Created`() {
@@ -76,8 +82,16 @@ open class AnwenderverzeichnisControllerTest(
 
         private lateinit var result: ResultActions
 
+        private val anwenderverzeichnisId = Aggregatkennung()
+
         @BeforeEach
         fun perform() {
+
+            val future = CompletableFuture<AnwenderverzeichnisÜbersicht>()
+            future.complete(AnwenderverzeichnisÜbersicht(anwenderverzeichnisId))
+
+            whenever(queryBus.query(WelcheAnwenderverzeichnisseGibtEs, AnwenderverzeichnisÜbersicht::class.java))
+                .thenReturn(future)
 
             val request = mvc.perform(
                 `get`("/api/anwenderverzeichnisse")
@@ -101,17 +115,26 @@ open class AnwenderverzeichnisControllerTest(
         }
 
         @Test
-        fun `liefert self link`() {
+        fun `liefert self link der Collection`() {
             result
-                .andExpect(jsonPath("$._links.self.href").value("/api/anwenderverzeichnisse"))
+                .andExpect(jsonPath("$._links.self.href").value("http://localhost/api/anwenderverzeichnisse"))
         }
 
         @Test
-        fun `liefert Links auf Anwenderverzeichnisse`() {
+        fun `liefert self links für jedes Element der Collection`() {
             result
                 .andDo { println(it.response.contentAsString) }
-                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0].id").value("hallo"))
-                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0]._links.self.href").value("/api/anwenderverzeichnisse/hallo"))
+                .andExpect(
+                    jsonPath("$._embedded.anwenderverzeichnisse[0]._links.self.href")
+                        .value("http://localhost/api/anwenderverzeichnisse/$anwenderverzeichnisId")
+                )
+        }
+
+        @Test
+        fun `liefert Collection der Anwendungsverzeichnisse`() {
+            result
+                .andDo { println(it.response.contentAsString) }
+                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0].id").value(anwenderverzeichnisId.id))
         }
     }
 }
