@@ -25,3 +25,8 @@ Funktionalität: Anwenderverzeichnis
     Und ich habe mich als Anwender "Matthias" registriert
     Wenn ich mich erneut als Anwender "Matthias" registriere
     Dann werde ich den Anwender "Matthias" im Anwenderverzeichnis gefunden haben
+
+  @core
+  Szenario: Anwenderverzeichnisübersicht
+    Wenn ich das Anwenderverzeichnis anlege
+    Dann werde ich das Anwenderverzeichnis in der Übersicht sehen

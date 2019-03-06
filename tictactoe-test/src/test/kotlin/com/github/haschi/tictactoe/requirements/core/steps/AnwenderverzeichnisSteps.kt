@@ -13,6 +13,8 @@ import com.github.haschi.tictactoe.requirements.core.testing.Person
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
+import domain.WelcheAnwenderverzeichnisseGibtEs
+import domain.values.AnwenderverzeichnisÜbersicht
 import mu.KLogging
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -134,6 +136,21 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
             assertThat(zustand.ereignisse)
                 .containsOnlyOnce(WarteraumEingerichtet(zustand.warteraumId))
+        }
+    }
+
+    @Dann("werde ich das Anwenderverzeichnis in der Übersicht sehen")
+    fun `Dann werde ich das Anwenderverzeichnis in der Übersicht sehen`() {
+        welt.versuche { zustand ->
+
+            val antwort = welt.ask(
+                WelcheAnwenderverzeichnisseGibtEs,
+                AnwenderverzeichnisÜbersicht::class.java
+            )
+                .join()
+
+            assertThat(antwort)
+                .isEqualTo(AnwenderverzeichnisÜbersicht(zustand.anwenderverzeichnisId))
         }
     }
 
