@@ -1,7 +1,6 @@
 package com.github.haschi.tictactoe.backend.controller
 
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
-import com.github.haschi.tictactoe.domain.Anwenderverzeichnis
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import org.springframework.hateoas.EntityLinks
 import org.springframework.hateoas.ExposesResourceFor
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
 @RestController
-@RequestMapping("/api/anwenderverzeichnis")
-@ExposesResourceFor(Anwenderverzeichnis::class)
+@RequestMapping("/api/anwenderverzeichnisse")
+@ExposesResourceFor(AnwenderverzeichnisResource::class)
 class AnwenderverzeichnisController(
     private val links: EntityLinks,
     private val anwenderverzeichnis: AnwenderverzeichnisGateway
@@ -22,17 +21,7 @@ class AnwenderverzeichnisController(
     @ResponseStatus(HttpStatus.CREATED)
     fun post(@RequestBody body: LegeAnwenderverzeichnisAn): CompletableFuture<HttpHeaders> {
         return anwenderverzeichnis.send(body)
-            .locationHeader(links, Anwenderverzeichnis::class)
-    }
-
-    @RequestMapping(method = [RequestMethod.GET])
-    @ResponseStatus(HttpStatus.OK)
-    fun `get`(): CompletableFuture<AnwnderverzeichnisseResource> {
-        return CompletableFuture.supplyAsync { AnwnderverzeichnisseResource() }
-            .thenApply {
-                it.add(links.linkToCollectionResource(Anwenderverzeichnis::class.java).withSelfRel())
-                it
-            }
+            .locationHeader(links, AnwenderverzeichnisResource::class)
     }
 }
 

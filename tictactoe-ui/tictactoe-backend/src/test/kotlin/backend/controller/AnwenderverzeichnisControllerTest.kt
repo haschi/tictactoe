@@ -13,9 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -26,8 +28,10 @@ import java.net.URI
 import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(AnwenderverzeichnisController::class)
+@WebMvcTest(AnwenderverzeichnisÜbersichtController::class)
 @ActiveProfiles("test")
+@Import(AnwenderverzeichnisController::class)
+@DirtiesContext
 open class AnwenderverzeichnisControllerTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val mapper: ObjectMapper
@@ -49,7 +53,7 @@ open class AnwenderverzeichnisControllerTest(
 
         val params = mapper.writeValueAsString(legeAnwenderverzeichnisAn)
         val result = mvc.perform(
-            post(URI("/api/anwenderverzeichnis"))
+            post(URI("/api/anwenderverzeichnisse"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .characterEncoding("UTF-8")
                 .content(params)
@@ -61,7 +65,7 @@ open class AnwenderverzeichnisControllerTest(
             .andExpect(
                 header().string(
                     HttpHeaders.LOCATION,
-                    "http://localhost/api/anwenderverzeichnis/$anwenderverzeichnisId"
+                    "http://localhost/api/anwenderverzeichnisse/$anwenderverzeichnisId"
                 )
             )
     }
@@ -74,14 +78,15 @@ open class AnwenderverzeichnisControllerTest(
 
         @BeforeEach
         fun perform() {
-            val x = mvc.perform(
-                `get`(URI("/api/anwenderverzeichnis"))
+
+            val request = mvc.perform(
+                `get`("/api/anwenderverzeichnisse")
                     .accept(HAL_JSON_UTF8)
             )
                 .andExpect(request().asyncStarted())
                 .andReturn()
 
-            result = mvc.perform(asyncDispatch(x))
+            result = mvc.perform(asyncDispatch(request))
         }
 
         @Test
@@ -90,15 +95,23 @@ open class AnwenderverzeichnisControllerTest(
         }
 
         @Test
+        @DisplayName("liefert Content-Type application/hal+json;charset=UTF-8")
         fun `liefert Content-Type application|hal+json|charset=UTF-8`() {
-
             result.andExpect(content().contentType(HAL_JSON_UTF8))
         }
 
         @Test
         fun `liefert self link`() {
             result
-                .andExpect(jsonPath("$._links.self.href").value("http://localhost/api/anwenderverzeichnis"))
+                .andExpect(jsonPath("$._links.self.href").value("/api/anwenderverzeichnisse"))
+        }
+
+        @Test
+        fun `liefert Links auf Anwenderverzeichnisse`() {
+            result
+                .andDo { println(it.response.contentAsString) }
+                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0].id").value("hallo"))
+                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0]._links.self.href").value("/api/anwenderverzeichnisse/hallo"))
         }
     }
 }
