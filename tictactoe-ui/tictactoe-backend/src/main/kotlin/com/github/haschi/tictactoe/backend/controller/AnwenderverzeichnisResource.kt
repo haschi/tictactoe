@@ -5,7 +5,7 @@ import org.springframework.hateoas.Identifiable
 import org.springframework.hateoas.core.Relation
 
 @Relation(collectionRelation = "anwenderverzeichnisse")
-class AnwenderverzeichnisResource(private val id: Aggregatkennung) :
+data class AnwenderverzeichnisResource(private val id: Aggregatkennung) :
     Identifiable<String> {
     override fun getId(): String {
         return id.id

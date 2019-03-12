@@ -27,13 +27,12 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.net.URI
 import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(AnwenderverzeichnisÜbersichtController::class)
-@ActiveProfiles("test")
+@WebMvcTest(AnwenderverzeichnisCollectionController::class)
 @Import(AnwenderverzeichnisController::class)
+@ActiveProfiles("test")
 @DirtiesContext
 open class AnwenderverzeichnisControllerTest(
     @Autowired private val mvc: MockMvc,
@@ -46,34 +45,48 @@ open class AnwenderverzeichnisControllerTest(
     @MockBean
     private lateinit var queryBus: QueryGateway
 
-    @Test
-    fun `Anwenderverzeichnis anlegen liefert Response mit Status 201 Created`() {
+    @Nested
+    @DisplayName("POST /api/anwenderverzeichnisse")
+    inner class PostApiAnwenderverzeichnis {
+
         val anwenderverzeichnisId = Aggregatkennung()
+        private lateinit var result: ResultActions
+        @BeforeEach
+        fun perform() {
 
-        val legeAnwenderverzeichnisAn = LegeAnwenderverzeichnisAn(anwenderverzeichnisId)
-        val future = CompletableFuture<Aggregatkennung>()
-        future.complete(anwenderverzeichnisId)
+            val legeAnwenderverzeichnisAn = LegeAnwenderverzeichnisAn(anwenderverzeichnisId)
+            val future = CompletableFuture<Aggregatkennung>()
+            future.complete(anwenderverzeichnisId)
 
-        whenever(this.anwenderverzeichnis.send(legeAnwenderverzeichnisAn))
-            .thenReturn(future)
+            whenever(anwenderverzeichnis.send(legeAnwenderverzeichnisAn))
+                .thenReturn(future)
 
-        val params = mapper.writeValueAsString(legeAnwenderverzeichnisAn)
-        val result = mvc.perform(
-            post(URI("/api/anwenderverzeichnisse"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8")
-                .content(params)
-        )
-            .andExpect(request().asyncStarted()).andReturn()
+            val params = mapper.writeValueAsString(legeAnwenderverzeichnisAn)
+            val r = mvc.perform(
+                post("/api/anwenderverzeichnisse")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .characterEncoding("UTF-8")
+                    .content(params)
+            )
+                .andExpect(request().asyncStarted()).andReturn()
 
-        mvc.perform(asyncDispatch(result))
-            .andExpect(status().isCreated)
-            .andExpect(
+            result = mvc.perform(asyncDispatch(r))
+        }
+
+        @Test
+        fun `liefert Status 201 Created`() {
+            result.andExpect(status().isCreated)
+        }
+
+        @Test
+        fun `liefert Location des neuen Anwenderverzeichnisses`() {
+            result.andExpect(
                 header().string(
                     HttpHeaders.LOCATION,
                     "http://localhost/api/anwenderverzeichnisse/$anwenderverzeichnisId"
                 )
             )
+        }
     }
 
     @Nested
