@@ -61,7 +61,6 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
 
         return CommandGatewayFactory.builder()
             .commandBus(commandBus)
-
             .build()
     }
 
@@ -73,7 +72,8 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
 
     @Bean
     fun anwenderverzeichnisGateway(commandGatewayFactory: CommandGatewayFactory): AnwenderverzeichnisGateway {
-        return commandGatewayFactory.createGateway(AnwenderverzeichnisGateway::class.java)
+        return commandGatewayFactory
+            .createGateway(AnwenderverzeichnisGateway::class.java)
     }
 
     @Bean
@@ -84,7 +84,8 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
 
     @Bean
     fun warteraumGateway(commandGatewayFactory: CommandGatewayFactory): WarteraumGateway {
-        return commandGatewayFactory.createGateway(WarteraumGateway::class.java)
+        return commandGatewayFactory
+            .createGateway(WarteraumGateway::class.java)
     }
 
     @Bean
@@ -110,5 +111,4 @@ class Infrastructure(@Autowired private val mapper: ObjectMapper) {
             .transactionManager(tm)
             .build()
     }
-
 }

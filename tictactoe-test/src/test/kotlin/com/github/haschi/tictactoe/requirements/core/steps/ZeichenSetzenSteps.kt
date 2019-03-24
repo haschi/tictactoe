@@ -16,13 +16,12 @@ import cucumber.api.java.de.Dann
 import cucumber.api.java.de.Wenn
 import domain.events.SpielUnentschiedenBeendet
 import org.assertj.core.api.Assertions.assertThat
-import java.util.*
 
 class ZeichenSetzenSteps(private val welt: DieWelt) {
     @Angenommen("^ich habe das Spiel begonnen$")
     fun ich_habe_das_Spiel_begonnen() {
         welt.compose {
-            val spielId = Aggregatkennung(UUID.randomUUID())
+            val spielId = Aggregatkennung()
             welt.tictactoe.send(
                 BeginneSpiel(
                     spielId,

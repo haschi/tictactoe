@@ -12,13 +12,11 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.requirements.shared.testing.IZustand
 import com.github.haschi.tictactoe.requirements.shared.testing.Resolver
 import mu.KLogging
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletionStage
 import java.util.concurrent.TimeUnit
 
 @Component
@@ -32,7 +30,6 @@ class DieWelt(
         zustand = CompletableFuture.supplyAsync {
             Zustand.Empty
         }
-
     }
 
     var zustand: CompletableFuture<Zustand> = CompletableFuture.supplyAsync {
@@ -71,28 +68,21 @@ class DieWelt(
     // Führt einen Schritt asynchron aus. Der Schritt transformiert dabei den
     // Zustand.
     inline final fun compose(crossinline block: DieWelt.Zustand.() -> CompletableFuture<Zustand>) {
-        if (stepping == true) {
+        if (stepping) {
             throw UngültigeSchrittausführung()
         }
 
         stepping = true
         zustand = zustand.thenCompose {
             block(it).handle { zustand, throwable ->
-                if (zustand != null) {
-                    zustand
-                } else {
-                    throw AusführungGescheitert(
-                        it,
-                        throwable.cause!!
-                    )
-                }
+                zustand ?: throw AusführungGescheitert(it, throwable.cause!!)
             }
         }
 
         while (pending.count() > 0) {
             val b = pending.first()
             zustand = b(zustand)
-            pending -= b
+            pending = pending - b
         }
         stepping = false
     }
@@ -102,7 +92,7 @@ class DieWelt(
     var pending: List<(CompletableFuture<Zustand>) -> CompletableFuture<Zustand>> = emptyList()
 
     inline final fun apply(crossinline block: (Zustand) -> Zustand) {
-        pending += { zustand: CompletableFuture<Zustand> -> zustand.thenApply { block(it) } }
+        pending = pending + { zustand: CompletableFuture<Zustand> -> zustand.thenApply { block(it) } }
     }
 
     inline final fun join(crossinline block: DieWelt.Ergebnis.() -> Unit) {
@@ -192,19 +182,6 @@ class DieWelt(
             )
         }
     }
-
-    class Fakten(fakten: CompletionStage<List<Any>>) : CompletionStage<List<Any>> by fakten {
-        infix fun bestätigen(event: Any) {
-            assertThat(this)
-                .isCompletedWithValueMatching(
-                    { it.contains(event) },
-                    "Enthält Ereignis $event"
-                )
-        }
-    }
-
-    val tatsachen: Fakten get() = Fakten(zustand.thenApply { it.ereignisse })
-
 
     companion object : KLogging()
 }

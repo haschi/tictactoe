@@ -5,7 +5,7 @@ import org.slf4j.helpers.FormattingTuple
 import org.slf4j.helpers.MarkerIgnoringBase
 import org.slf4j.helpers.MessageFormatter
 
-class TestLogger(var currentLogLevel: Level = Level.INFO, name: String) : MarkerIgnoringBase() {
+class TestLogger(private var currentLogLevel: Level = Level.INFO, name: String) : MarkerIgnoringBase() {
 
     var events: List<ProtokollEintrag> = emptyList()
 
@@ -67,7 +67,7 @@ class TestLogger(var currentLogLevel: Level = Level.INFO, name: String) : Marker
 
     private fun logMessage(level: Level, format: FormattingTuple) {
         if (isLevelEnabled(level)) {
-            events += ProtokollEintrag(level, format.message)
+            events = events + ProtokollEintrag(level, format.message)
         }
     }
 

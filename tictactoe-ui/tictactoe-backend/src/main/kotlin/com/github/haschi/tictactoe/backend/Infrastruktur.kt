@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
 import com.github.haschi.tictactoe.application.TicTacToeGateway
 import com.github.haschi.tictactoe.application.WarteraumGateway
+import com.github.haschi.tictactoe.backend.controller.Identitätsgenerator
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import org.axonframework.commandhandling.CommandBus
 import org.axonframework.commandhandling.gateway.CommandGatewayFactory
 import org.axonframework.common.transaction.TransactionManager
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 
 @Component
-class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
+open class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
 
     @Bean
     fun commandGatewayFactory(commandBus: CommandBus): CommandGatewayFactory {
@@ -75,6 +77,16 @@ class Infrastruktur(@Autowired private val mapper: ObjectMapper) {
             .transactionManager(tm)
             .build()
     }
+
+    @Bean
+    fun identitätsgenerator(): Identitätsgenerator {
+        return object : Identitätsgenerator {
+            override fun herstellen(): Aggregatkennung {
+                return Aggregatkennung()
+            }
+        }
+    }
+
 }
 
 @Service

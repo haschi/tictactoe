@@ -33,8 +33,8 @@ class AnwenderSteps(private val welt: DieWelt) {
     @Wenn("ich die Partie gewinne")
     fun `Wenn ich die Partie gewinne`() {
         welt.compose {
-            val matthias = spieler['X']!!
-            val martin = spieler['O']!!
+            val matthias = spieler.getValue('X')
+            val martin = spieler.getValue('O')
             listOf(
                 SetzeZeichen(spielId, Spielzug(matthias, Feld('B', 2))),
                 SetzeZeichen(spielId, Spielzug(martin, Feld('B', 1))),

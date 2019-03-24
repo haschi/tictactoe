@@ -1,0 +1,12 @@
+debug: false
+#spring:
+#  main:
+#    banner-mode: off
+logging:
+  level:
+    io:
+      netty: debug
+      reactor: debug
+spring:
+  main:
+    allow-bean-definition-overriding: true

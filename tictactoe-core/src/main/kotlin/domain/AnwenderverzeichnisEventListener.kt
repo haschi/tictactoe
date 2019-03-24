@@ -6,10 +6,11 @@ import domain.WelcheAnwenderverzeichnisseGibtEs
 import domain.values.AnwenderverzeichnisÜbersicht
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
+import org.axonframework.queryhandling.QueryUpdateEmitter
 import org.springframework.stereotype.Service
 
 @Service
-class AnwenderverzeichnisEventListener {
+class AnwenderverzeichnisEventListener(val emitter: QueryUpdateEmitter) {
 
     private var übersicht = AnwenderverzeichnisÜbersicht()
 
@@ -25,6 +26,7 @@ class AnwenderverzeichnisEventListener {
 
     @EventHandler
     fun falls(ereignis: AnwenderverzeichnisAngelegt) {
-        übersicht = AnwenderverzeichnisÜbersicht(übersicht + ereignis.id)
+        übersicht = AnwenderverzeichnisÜbersicht(übersicht.verzeichnisse + ereignis.id)
+        emitter.emit(WelcheAnwenderverzeichnisseGibtEs::class.java, { true }, übersicht)
     }
 }

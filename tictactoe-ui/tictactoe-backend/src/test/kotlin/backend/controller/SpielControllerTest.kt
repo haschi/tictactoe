@@ -1,47 +1,55 @@
 package com.github.haschi.tictactoe.backend.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+
+import backend.controller.withDecoder
+import backend.controller.withEncoder
 import com.github.haschi.tictactoe.application.TicTacToeGateway
+import com.github.haschi.tictactoe.backend.WebFluxConfiguration
+import com.github.haschi.tictactoe.backend.marshalling.CodecsConfiguration
 import com.github.haschi.tictactoe.domain.SpielfeldQuery
 import com.github.haschi.tictactoe.domain.commands.BeginneSpiel
 import com.github.haschi.tictactoe.domain.commands.SetzeZeichen
 import com.github.haschi.tictactoe.domain.events.FeldBelegt
 import com.github.haschi.tictactoe.domain.values.*
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.axonframework.queryhandling.QueryGateway
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8
-import org.springframework.hateoas.UriTemplate
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.http.codec.json.Jackson2JsonDecoder
+import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.net.URI
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.BodyInserters
+import reactor.core.publisher.Mono
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(SpielController::class)
+@WebFluxTest(controllers = [SpielController::class])
+@Import(
+    WebFluxConfiguration::class,
+    CodecsConfiguration::class
+)
 @ActiveProfiles("test")
-open class SpielControllerTest(
-    @Autowired private val mvc: MockMvc,
-    @Autowired private val mapper: ObjectMapper
+class SpielControllerTest(
+    @Autowired private val decoder: Jackson2JsonDecoder,
+    @Autowired private val encoder: Jackson2JsonEncoder
 ) {
-    @MockBean
-    private
-    lateinit var command: TicTacToeGateway
+    @Autowired
+    lateinit var client: WebTestClient
 
     @MockBean
-    private
-    lateinit var query: QueryGateway
+    private lateinit var command: TicTacToeGateway
+
+    @MockBean
+    private lateinit var query: QueryGateway
 
     @Test
     fun `Beginne Spiel liefert Response mit Status 201 Created`() {
@@ -59,17 +67,15 @@ open class SpielControllerTest(
         whenever(this.command.send(beginneSpiel))
             .thenReturn(future)
 
-        val params = mapper.writeValueAsString(spieler)
-        val result = mvc.perform(
-            post(URI("/api/spiel/$spielId"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .characterEncoding("UTF-8")
-                .content(params)
-        ).andExpect(request().asyncStarted()).andReturn()
-
-        mvc.perform(asyncDispatch(result))
-            .andExpect(status().isCreated)
-            .andExpect(header().string(HttpHeaders.LOCATION, "http://localhost/api/spiel/$spielId"))
+        client
+            .withEncoder(encoder)
+            .post()
+            .uri("/api/spiel/$spielId")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .body(BodyInserters.fromPublisher(Mono.just(spieler), SpielerParameter::class.java))
+            .exchange()
+            .expectStatus().isCreated
+            .expectHeader().valueEquals(HttpHeaders.LOCATION, "/api/spiel/$spielId")
     }
 
     @Test
@@ -90,30 +96,23 @@ open class SpielControllerTest(
         whenever(this.command.send(setzeZeichen))
             .thenReturn(future)
 
-        val result = mvc.perform(
-            put(URI("/api/spiel/$spielId"))
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(VndError.ERROR_JSON_UTF8, HAL_JSON_UTF8)
-                .content(mapper.writeValueAsString(resource))
-        )
-            .andExpect(request().asyncStarted())
-            .andReturn()
-
-        mvc.perform(asyncDispatch(result))
-            .andExpect(status().isUnprocessableEntity)
-            .andExpect(content().contentType(VndError.ERROR_JSON_UTF8))
-            .andExpect(
-                content().json(
-                    """
+        client.withEncoder(encoder)
+            .put()
+            .uri("/api/spiel/$spielId")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON, VndError.ERROR_JSON_UTF8)
+            .body(BodyInserters.fromPublisher(Mono.just(resource), SpielzugResource::class.java))
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody().json(
+                """
                     {
                         "message": "Feld belegt"
                     }
                 """.trimIndent()
-                )
             )
-    }
 
-    private val server = UriTemplate("http://localhost/{path}")
+    }
 
     @Test
     fun `GET Spielfeld liefert Status 200 OK`() {
@@ -125,21 +124,10 @@ open class SpielControllerTest(
         whenever(query.query(SpielfeldQuery(spielId), Spielfeld::class.java))
             .thenReturn(future)
 
-        val result = mvc.perform(
-            `get`(URI("/api/spiel/$spielId"))
-                .accept(HAL_JSON_UTF8)
-        )
-            .andExpect(request().asyncStarted())
-            .andReturn()
-
-        val uri = server.expand(UriTemplate("/api/spiel/{id}").expand(spielId)).toString()
-
-        mvc.perform(asyncDispatch(result))
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(HAL_JSON_UTF8))
-            .andExpect(
-                MockMvcResultMatchers.jsonPath("$._links.self.href")
-                    .value(uri)
-            )
+        client.withDecoder(decoder)
+            .get()
+            .uri("/api/spiel/$spielId")
+            .exchange()
+            .expectStatus().isOk
     }
 }

@@ -1,43 +1,53 @@
 package com.github.haschi.tictactoe.backend.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import backend.controller.withDecoder
 import com.github.haschi.tictactoe.application.AnwenderverzeichnisGateway
+import com.github.haschi.tictactoe.backend.WebFluxConfiguration
+import com.github.haschi.tictactoe.backend.marshalling.CodecsConfiguration
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.values.Aggregatkennung
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import domain.WelcheAnwenderverzeichnisseGibtEs
 import domain.values.AnwenderverzeichnisÜbersicht
+import org.assertj.core.api.Assertions.assertThat
 import org.axonframework.queryhandling.QueryGateway
+import org.axonframework.queryhandling.SubscriptionQueryResult
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
-import org.springframework.hateoas.MediaTypes.HAL_JSON_UTF8
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.ResultActions
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.reactive.server.FluxExchangeResult
+import org.springframework.test.web.reactive.server.WebTestClient
+import reactor.test.publisher.TestPublisher
+import reactor.test.test
 import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(AnwenderverzeichnisCollectionController::class)
-@Import(AnwenderverzeichnisController::class)
+@WebFluxTest(controllers = [AnwenderverzeichnisCollectionController::class])
+@Import(value = [WebFluxConfiguration::class, CodecsConfiguration::class])
 @ActiveProfiles("test")
 @DirtiesContext
-open class AnwenderverzeichnisControllerTest(
-    @Autowired private val mvc: MockMvc,
-    @Autowired private val mapper: ObjectMapper
+@AutoConfigureJson
+class AnwenderverzeichnisControllerTest(
+    @Autowired private val decoder: Jackson2JsonDecoder
 ) {
+    @Autowired
+    lateinit var client: WebTestClient
 
     @MockBean
     private lateinit var anwenderverzeichnis: AnwenderverzeichnisGateway
@@ -45,109 +55,178 @@ open class AnwenderverzeichnisControllerTest(
     @MockBean
     private lateinit var queryBus: QueryGateway
 
+    @MockBean
+    private lateinit var identität: Identitätsgenerator
+
+
+
     @Nested
-    @DisplayName("POST /api/anwenderverzeichnisse")
+    @DisplayName("> POST /api/anwenderverzeichnisse")
     inner class PostApiAnwenderverzeichnis {
 
-        val anwenderverzeichnisId = Aggregatkennung()
-        private lateinit var result: ResultActions
+        private val anwenderverzeichnisId = Aggregatkennung()
+
+        private lateinit var result: WebTestClient.ResponseSpec
+
         @BeforeEach
         fun perform() {
 
+            whenever(identität.herstellen())
+                .thenReturn(anwenderverzeichnisId)
+
             val legeAnwenderverzeichnisAn = LegeAnwenderverzeichnisAn(anwenderverzeichnisId)
-            val future = CompletableFuture<Aggregatkennung>()
-            future.complete(anwenderverzeichnisId)
 
             whenever(anwenderverzeichnis.send(legeAnwenderverzeichnisAn))
-                .thenReturn(future)
+                .thenReturn(CompletableFuture.supplyAsync { anwenderverzeichnisId })
 
-            val params = mapper.writeValueAsString(legeAnwenderverzeichnisAn)
-            val r = mvc.perform(
-                post("/api/anwenderverzeichnisse")
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .characterEncoding("UTF-8")
-                    .content(params)
-            )
-                .andExpect(request().asyncStarted()).andReturn()
-
-            result = mvc.perform(asyncDispatch(r))
+            result = client
+                .withDecoder(decoder)
+                .post()
+                .uri("/api/anwenderverzeichnisse")
+                .accept(MediaType.ALL)
+                .exchange()
         }
 
         @Test
+        @DisplayName("< 201 Created")
         fun `liefert Status 201 Created`() {
-            result.andExpect(status().isCreated)
+            result.expectStatus().isCreated
         }
 
         @Test
+        @DisplayName("< Location: /api/anwenderverzeichnisse/{id}")
         fun `liefert Location des neuen Anwenderverzeichnisses`() {
-            result.andExpect(
-                header().string(
-                    HttpHeaders.LOCATION,
-                    "http://localhost/api/anwenderverzeichnisse/$anwenderverzeichnisId"
-                )
-            )
+            result.expectHeader()
+                .valueEquals(HttpHeaders.LOCATION, "/api/anwenderverzeichnisse/$anwenderverzeichnisId")
+        }
+
+        @Test
+        @DisplayName("[Empty Body]")
+        fun `liefert keinen Body`() {
+            result.expectBody().isEmpty
         }
     }
 
     @Nested
-    @DisplayName("GET /api/anwenderverzeichnis")
+    @DisplayName("> GET /api/anwenderverzeichnis")
     inner class GetApiAnwenderverzeichnis {
 
-        private lateinit var result: ResultActions
-
         private val anwenderverzeichnisId = Aggregatkennung()
+        private val anwenderverzeichnis2Id = Aggregatkennung()
 
-        @BeforeEach
-        fun perform() {
+        @Nested
+        @DisplayName("> Accept: application/stream+json")
+        inner class AcceptApplicationJsonStream {
+            private lateinit var result: FluxExchangeResult<AnwenderverzeichnisCollection>
 
-            val future = CompletableFuture<AnwenderverzeichnisÜbersicht>()
-            future.complete(AnwenderverzeichnisÜbersicht(anwenderverzeichnisId))
+            private val initialResult = AnwenderverzeichnisÜbersicht(anwenderverzeichnisId)
+            private val updates = listOf(AnwenderverzeichnisÜbersicht(anwenderverzeichnisId, anwenderverzeichnis2Id))
 
-            whenever(queryBus.query(WelcheAnwenderverzeichnisseGibtEs, AnwenderverzeichnisÜbersicht::class.java))
-                .thenReturn(future)
+            private val initialResultPublisher = TestPublisher.createCold<AnwenderverzeichnisÜbersicht>()
+                .next(initialResult)
+                .complete()
 
-            val request = mvc.perform(
-                `get`("/api/anwenderverzeichnisse")
-                    .accept(HAL_JSON_UTF8)
-            )
-                .andExpect(request().asyncStarted())
-                .andReturn()
+            private val updatesPublisher = TestPublisher.createCold<AnwenderverzeichnisÜbersicht>()
+                .next(updates.first())
+                .complete()
 
-            result = mvc.perform(asyncDispatch(request))
-        }
+            @BeforeEach
+            fun perform() {
+                val queryResult: SubscriptionQueryResult<AnwenderverzeichnisÜbersicht, AnwenderverzeichnisÜbersicht> =
+                    mock {
+                        on { initialResult() } doReturn initialResultPublisher.mono()
+                        on { updates() } doReturn updatesPublisher.flux()
+                    }
 
-        @Test
-        fun `liefert Response mit Status 200 OK`() {
-            result.andExpect(status().isOk)
-        }
-
-        @Test
-        @DisplayName("liefert Content-Type application/hal+json;charset=UTF-8")
-        fun `liefert Content-Type application|hal+json|charset=UTF-8`() {
-            result.andExpect(content().contentType(HAL_JSON_UTF8))
-        }
-
-        @Test
-        fun `liefert self link der Collection`() {
-            result
-                .andExpect(jsonPath("$._links.self.href").value("http://localhost/api/anwenderverzeichnisse"))
-        }
-
-        @Test
-        fun `liefert self links für jedes Element der Collection`() {
-            result
-                .andDo { println(it.response.contentAsString) }
-                .andExpect(
-                    jsonPath("$._embedded.anwenderverzeichnisse[0]._links.self.href")
-                        .value("http://localhost/api/anwenderverzeichnisse/$anwenderverzeichnisId")
+                whenever(
+                    queryBus.subscriptionQuery(
+                        WelcheAnwenderverzeichnisseGibtEs,
+                        AnwenderverzeichnisÜbersicht::class.java,
+                        AnwenderverzeichnisÜbersicht::class.java
+                    )
                 )
+                    .thenReturn(queryResult)
+
+                result = client.withDecoder(decoder)
+                    .get()
+                    .uri("/api/anwenderverzeichnisse")
+                    .accept(MediaType.APPLICATION_STREAM_JSON)
+                    .exchange()
+                    .returnResult(AnwenderverzeichnisCollection::class.java)
+            }
+
+            @Test
+            @DisplayName("< 200 OK")
+            fun `liefert Response mit Status 200 OK`() {
+                assertThat(result.status).isEqualTo(HttpStatus.OK)
+            }
+
+            @Test
+            @DisplayName("< [Body: AnwenderverzeichnisCollection Stream]")
+            fun `liefert einen Stream von AnwendungsverzeichnisCollections`() {
+
+                val übersichten = result.responseBody
+
+                val initialCollection = AnwenderverzeichnisCollection(
+                    initialResult.verzeichnisse.map { AnwenderverzeichnisResource(it) })
+
+                // TODO
+//                val updateCollection =
+//                    AnwenderverzeichnisCollection(updates[0].verzeichnisse.map { AnwenderverzeichnisResource(it) })
+
+                übersichten.test()
+                    .expectNext(initialCollection)
+                    .thenCancel()
+                    .verify()
+            }
+
+            @Test
+            fun `Schließt die Query Subscription durch Backpressure`() {
+                result.responseBody.test(1)
+                    // .expectNext(AnwenderverzeichnisCollection(initialResult.verzeichnisse.map { AnwenderverzeichnisResource(it) }))
+                    .expectNextCount(1)
+                    .thenCancel()
+                    .verifyThenAssertThat()
+                    .hasNotDroppedElements()
+
+                initialResultPublisher.assertCancelled()
+                updatesPublisher.assertCancelled()
+            }
         }
 
-        @Test
-        fun `liefert Collection der Anwendungsverzeichnisse`() {
-            result
-                .andDo { println(it.response.contentAsString) }
-                .andExpect(jsonPath("$._embedded.anwenderverzeichnisse[0].id").value(anwenderverzeichnisId.id))
+        @Nested
+        @DisplayName("> Accept: application/json")
+        inner class AcceptApplicationJson {
+            private lateinit var result: FluxExchangeResult<AnwenderverzeichnisCollection>
+
+            @BeforeEach
+            fun perform() {
+                val future = CompletableFuture.supplyAsync { AnwenderverzeichnisÜbersicht(anwenderverzeichnisId) }
+
+                whenever(queryBus.query(WelcheAnwenderverzeichnisseGibtEs, AnwenderverzeichnisÜbersicht::class.java))
+                    .thenReturn(future)
+
+                result = client.withDecoder(decoder)
+                    .get()
+                    .uri("/api/anwenderverzeichnisse")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .exchange()
+                    .returnResult(AnwenderverzeichnisCollection::class.java)
+            }
+
+            @Test
+            @DisplayName("< 200 OK")
+            fun `liefert Response mit Status 200 OK`() {
+                assertThat(result.status).isEqualTo(HttpStatus.OK)
+            }
+
+            @Test
+            fun `liefert Collection der Anwenderverzeichnisse`() {
+                result.responseBody.test()
+                    .expectNext(AnwenderverzeichnisCollection(listOf(AnwenderverzeichnisResource(anwenderverzeichnisId))))
+                    .thenCancel()
+                    .verify()
+            }
         }
     }
 }

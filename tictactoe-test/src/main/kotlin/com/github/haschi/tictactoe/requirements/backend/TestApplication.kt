@@ -1,7 +1,6 @@
 package com.github.haschi.tictactoe.requirements.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.hateoas.config.EnableEntityLinks
 
 @SpringBootApplication(
     scanBasePackages = [
@@ -11,5 +10,4 @@ import org.springframework.hateoas.config.EnableEntityLinks
         "com.github.haschi.tictactoe.backend.controller",
         "com.github.haschi.tictactoe.backend.marshalling"]
 )
-@EnableEntityLinks
 class TestApplication

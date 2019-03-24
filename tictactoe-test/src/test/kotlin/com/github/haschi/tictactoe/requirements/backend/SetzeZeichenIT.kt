@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-@JsonTest()
+@JsonTest
 class SetzeZeichenIT @Autowired constructor(private val json: JacksonTester<SetzeZeichen>) {
     @Test
     fun `SetzeZeichen kann serialisiert werde`() {

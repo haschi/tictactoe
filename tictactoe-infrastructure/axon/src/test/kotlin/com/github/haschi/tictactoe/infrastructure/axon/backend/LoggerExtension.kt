@@ -22,11 +22,11 @@ class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback,
 
     override fun beforeTestExecution(context: ExtensionContext) {
         context.element
-            .ifPresent {
-                findAnnotation(it, LogLevel::class.java)
-                    .ifPresent {
-                        TestLoggerFactory.konfiguration = it.level
-                        val logger = LoggerFactory.getLogger(it.type.java)
+            .ifPresent { element ->
+                findAnnotation(element, LogLevel::class.java)
+                    .ifPresent { logLevel ->
+                        TestLoggerFactory.Konfiguration = logLevel.level
+                        val logger = LoggerFactory.getLogger(logLevel.type.java)
                         context.getStore(NAMESPACE).put(ContextKey.LOGGER, logger)
                     }
             }
@@ -36,6 +36,8 @@ class LoggerExtension : BeforeTestExecutionCallback, AfterTestExecutionCallback,
     }
 
     companion object {
-        val NAMESPACE = ExtensionContext.Namespace.create("com", "github", "haschi", "tictactoe", "LoggingExtension")
+        val NAMESPACE: ExtensionContext.Namespace = ExtensionContext.Namespace.create(
+            "com", "github", "haschi", "tictactoe", "LoggingExtension"
+        )
     }
 }

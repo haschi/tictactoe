@@ -19,7 +19,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.opentest4j.AssertionFailedError
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.hateoas.MediaTypes
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
@@ -29,7 +28,6 @@ import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 import java.util.*
-
 
 @ActiveProfiles(value = ["backend"])
 @ContextConfiguration
@@ -42,21 +40,19 @@ class ZeichenSetzenSteps(
 
     var strategies = ExchangeStrategies
         .builder()
-
         .codecs { clientDefaultCodecsConfigurer ->
             clientDefaultCodecsConfigurer.defaultCodecs()
                 .jackson2JsonEncoder(
                     Jackson2JsonEncoder(
                         mapper,
                         MediaType.APPLICATION_JSON,
-                        MediaTypes.HAL_JSON_UTF8,
                         ERROR_JSON_UTF8
                     )
                 )
             clientDefaultCodecsConfigurer.defaultCodecs()
                 .jackson2JsonDecoder(
                     Jackson2JsonDecoder(
-                        mapper, MediaType.APPLICATION_JSON, MediaTypes.HAL_JSON_UTF8, ERROR_JSON_UTF8
+                        mapper, MediaType.APPLICATION_JSON, ERROR_JSON_UTF8
                     )
                 )
 
@@ -131,7 +127,7 @@ class ZeichenSetzenSteps(
 
         versucheBisEsKlappt {
             val spielfeld = webClient.get().uri(welt.spiel.toString())
-                .accept(MediaTypes.HAL_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Spielfeld::class.java)
                 .block()!!

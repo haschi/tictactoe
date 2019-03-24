@@ -36,14 +36,14 @@ class SpielbeginnSteps(val welt: DieWelt) {
     @Angenommen("\"{name}\" hat das Zeichen \"{zeichen}\" ausgewählt")
     fun `Angenommen Name hat das Zeichen zeichen ausgewählt`(name: String, zeichen: Zeichen) {
         welt.compose {
-            welt.anwenderverzeichnis.send(WähleZeichenAus(this.anwender[name]!!.id, name, zeichen))
+            welt.anwenderverzeichnis.send(WähleZeichenAus(this.anwender.getValue(name).id, name, zeichen))
                 .thenApply { this }
         }
     }
     @Wenn("wenn der Anwender \"{name}\" das Symbol \"{zeichen}\" auswählt")
     fun `Wenn der Anwender das Symbol auswählt`(name: String, zeichen: Zeichen) {
         welt.compose {
-            welt.anwenderverzeichnis.send(WähleZeichenAus(this.anwender[name]!!.id, name, zeichen))
+            welt.anwenderverzeichnis.send(WähleZeichenAus(this.anwender.getValue(name).id, name, zeichen))
                 .thenApply { this }
         }
     }
@@ -55,8 +55,8 @@ class SpielbeginnSteps(val welt: DieWelt) {
                 .containsOnlyOnce(
                     SpielBegonnen(
                         zustand.spielId,
-                        zustand.spieler['X']!!,
-                        zustand.spieler['O']!!
+                        zustand.spieler.getValue('X'),
+                        zustand.spieler.getValue('O')
                     )
                 )
         }

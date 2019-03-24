@@ -75,7 +75,7 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
         welt.join {
             Assertions.assertThat(zustand.ereignisse)
                 .describedAs(fehler?.message)
-                .contains(AnwenderNichtGefunden(arg1, this.zustand.anwender[arg1]!!.id))
+                .contains(AnwenderNichtGefunden(arg1, this.zustand.anwender.getValue(arg1).id))
         }
     }
 

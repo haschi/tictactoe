@@ -86,7 +86,7 @@ class WarteraumSteps(private val welt: DieWelt) {
 
         welt.join {
             assertThat(zustand.ereignisse)
-                .contains(SpielerHatWarteraumBetreten(Spieler('O', anwender, zustand.anwender[anwender]!!.id)))
+                .contains(SpielerHatWarteraumBetreten(Spieler('O', anwender, zustand.anwender.getValue(anwender).id)))
         }
     }
 
@@ -95,7 +95,7 @@ class WarteraumSteps(private val welt: DieWelt) {
         welt.versuche { zustand ->
             assertThat(zustand.ereignisse).contains(
                 SpielerHatWarteraumBetreten(
-                    Spieler(zeichen.wert, zustand.ich.name, zustand.anwender[zustand.ich.name]!!.id)
+                    Spieler(zeichen.wert, zustand.ich.name, zustand.anwender.getValue(zustand.ich.name).id)
                 )
             )
         }
@@ -110,9 +110,7 @@ class WarteraumSteps(private val welt: DieWelt) {
     }
 
     @Wenn("^Der Anwender \"([^\"]*)\" den Warteraum als Spieler mit dem Zeichen O betritt$")
-    fun der_Anwender_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(
-        name: String
-    ) {
+    fun der_Anwender_den_Warteraum_als_Spieler_mit_dem_Zeichen_O_betritt(name: String) {
         welt.compose {
             welt.anwenderverzeichnis.send(WähleZeichenAus(anwender.getValue(name).id, name, Zeichen.O))
                 .thenApply { this }
@@ -124,8 +122,8 @@ class WarteraumSteps(private val welt: DieWelt) {
         welt.join {
             assertThat(zustand.ereignisse).contains(
                 SpielpartnerGefunden(
-                    Spieler('X', zustand.ich.name, zustand.anwender[zustand.ich.name]!!.id),
-                    Spieler('O', anwender, zustand.anwender[anwender]!!.id)
+                    Spieler('X', zustand.ich.name, zustand.anwender.getValue(zustand.ich.name).id),
+                    Spieler('O', anwender, zustand.anwender.getValue(anwender).id)
                 )
             )
         }

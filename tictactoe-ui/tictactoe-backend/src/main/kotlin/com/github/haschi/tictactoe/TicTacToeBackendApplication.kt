@@ -1,8 +1,8 @@
-package com.github.haschi.tictactoe.backend
+package com.github.haschi.tictactoe
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.hateoas.config.EnableEntityLinks
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebFlux
 
 @SpringBootApplication(
     scanBasePackages = [
@@ -11,7 +11,7 @@ import org.springframework.hateoas.config.EnableEntityLinks
         "com.github.haschi.tictactoe.application",
         "com.github.haschi.tictactoe.domain"]
 )
-@EnableEntityLinks
+@AutoConfigureWebFlux
 class TicTacToeBackendApplication
 
 fun main(args: Array<String>) {
