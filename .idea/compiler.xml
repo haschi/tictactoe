@@ -6,10 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Application Core" />
+        <module name="Infrastructure.Axon" />
         <module name="Backend" />
         <module name="Frontend" />
-        <module name="Infrastructure.Axon" />
+        <module name="Application Core" />
         <module name="Infrastructure.JPA" />
         <module name="Requirements" />
       </profile>

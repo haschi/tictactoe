@@ -6,11 +6,13 @@ import {AppComponent} from './app.component';
 import {RegistrierungComponent} from './registrierung/registrierung.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {AnwenderverzeichnisseComponent} from './anwenderverzeichnisse/anwenderverzeichnisse.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegistrierungComponent
+    RegistrierungComponent,
+    AnwenderverzeichnisseComponent
   ],
   imports: [
     BrowserModule,

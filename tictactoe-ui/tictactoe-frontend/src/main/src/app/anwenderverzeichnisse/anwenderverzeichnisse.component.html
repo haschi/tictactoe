@@ -1,0 +1,9 @@
+<h2>Anwendeverzeichnisse</h2>
+
+<button (click)="anlegen()">Neues Anwenderverzeichnis anlegen</button>
+
+<ul>
+  <li *ngFor="let verzeichnis of verzeichnisse$ | async; let i = index" [attr.data-index]="i">
+    <a href="#">{{i + 1}}</a> {{verzeichnis.id}}
+  </li>
+</ul>
