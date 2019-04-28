@@ -1,0 +1,7 @@
+<p>
+  anwenderverzeichnis works!
+</p>
+
+<p>Anwenderverzeichnis {{(anwenderverzeichnis$ | async).id}}</p>
+
+<app-registrierung [anwenderverzeichnisId]="(anwenderverzeichnis$ | async)?.id"></app-registrierung>

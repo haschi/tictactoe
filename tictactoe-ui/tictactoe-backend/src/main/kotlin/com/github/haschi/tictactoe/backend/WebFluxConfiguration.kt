@@ -6,7 +6,6 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.web.reactive.config.WebFluxConfigurer
 
-//@EnableWebFlux
 @Configuration
 class WebFluxConfiguration(private val encoder: Jackson2JsonEncoder, private val decoder: Jackson2JsonDecoder) :
     WebFluxConfigurer {

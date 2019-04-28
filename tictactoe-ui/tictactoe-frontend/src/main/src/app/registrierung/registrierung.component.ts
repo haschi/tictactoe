@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {catchError, tap} from "rxjs/operators";
-import {Observable, of} from "rxjs";
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {catchError, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-registrierung',
@@ -10,6 +10,8 @@ import {Observable, of} from "rxjs";
   styleUrls: ['./registrierung.component.less']
 })
 export class RegistrierungComponent implements OnInit {
+
+  @Input() anwenderverzeichnisId: string;
 
   registrierungForm = this.fb.group({
     name: ['', Validators.required]
@@ -52,12 +54,12 @@ export class RegistrierungComponent implements OnInit {
     const options = {
       observe: 'response',
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain',
         'Authorization': 'my-auth-token'
       })
     };
 
-    return this.http.post('/api/registrierung', this.registrierungForm.value, {observe: "response"})
+    return this.http.post('/api/anwendungsverzeichnisse/' + this.anwenderverzeichnisId, 'Matthias', {observe: 'response'})
       .pipe(
         tap(message => {
           console.info('TAP: ' + JSON.stringify(message))

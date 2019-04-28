@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {flatMap, map} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {Anwenderverzeichnisse} from './anwenderverzeichnisse.model';
+import {Anwenderverzeichnis, Anwenderverzeichnisse} from './anwenderverzeichnisse.model';
 import * as oboe from 'oboe';
 import {isUndefined} from 'util';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-anwenderverzeichnisse',
@@ -15,7 +16,7 @@ export class AnwenderverzeichnisseComponent implements OnInit {
 
   verzeichnisse$: Subject<Anwenderverzeichnisse> = new Subject<Anwenderverzeichnisse>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
 
@@ -50,8 +51,13 @@ export class AnwenderverzeichnisseComponent implements OnInit {
     console.info('Anwenderverzeichnis anlegen');
     this.http.post('/api/anwenderverzeichnisse', {}, {observe: 'response'})
       .pipe(
-        map(response => response.headers.get('Location'))
+        map(response => response.headers.get('Location')),
+        flatMap(location => this.http.get<Anwenderverzeichnis>(location))
+        // TODO: flatMap GET LOCATION => Anwenderverzeichnis => ID => routing
       )
-      .subscribe(value => console.info(value), error => console.error(error));
+      .subscribe(value => {
+        console.info(value);
+        this.router.navigate(['/anwenderverzeichnis', value.id]);
+      }, error => console.error(error));
   }
 }
