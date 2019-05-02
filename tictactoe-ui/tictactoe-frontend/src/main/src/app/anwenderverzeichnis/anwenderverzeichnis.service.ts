@@ -9,6 +9,7 @@ export class AnwenderverzeichnisService {
   }
 
   getAnwenderverzeichnis(id: string): Observable<Anwenderverzeichnis> {
+    console.info(`Anwenderverzeichnis Service: Get Anwenderverzeichnis: ${id}`);
     return this.http.get<Anwenderverzeichnis>(`/api/anwenderverzeichnisse/${id}`);
   }
 }

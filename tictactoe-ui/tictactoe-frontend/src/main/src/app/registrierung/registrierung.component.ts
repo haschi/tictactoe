@@ -52,17 +52,20 @@ export class RegistrierungComponent implements OnInit {
 
   benutzerRegistrieren(): Observable<any> {
     const options = {
-      observe: 'response',
       headers: new HttpHeaders({
         'Content-Type': 'text/plain',
-        'Authorization': 'my-auth-token'
-      })
+        Accept: '*/*'
+      }),
+      observe: 'response',
+      body: this.registrierungForm.value
     };
 
-    return this.http.post('/api/anwendungsverzeichnisse/' + this.anwenderverzeichnisId, 'Matthias', {observe: 'response'})
+
+    return this.http.post('/api/anwenderverzeichnisse/' + this.anwenderverzeichnisId,
+      this.registrierungForm.value, {observe: 'response'})
       .pipe(
         tap(message => {
-          console.info('TAP: ' + JSON.stringify(message))
+          console.info('TAP: ' + JSON.stringify(message));
         }),
         catchError(RegistrierungComponent.handleError)
       )

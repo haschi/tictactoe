@@ -25,11 +25,13 @@ class AnwenderverzeichnisController(
         return Mono.just(AnwenderverzeichnisResource(id))
     }
 
-    @RequestMapping(method = [RequestMethod.POST], consumes = [MediaType.TEXT_PLAIN_VALUE])
+    @RequestMapping(method = [RequestMethod.POST], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun `post`(@PathVariable("id") id: Aggregatkennung, @RequestBody anwender: String): Mono<HttpHeaders> {
-        return anwenderverzeichnis.send(RegistriereAnwender(id, anwender))
-            .locationHeader(UriTemplate("/api/anwenderverzeichnisse/{id}"))
+    fun post(@PathVariable("id") id: String, @RequestBody anwender: Mono<AnwenderResource>): Mono<HttpHeaders> {
+        return anwender.flatMap {
+            anwenderverzeichnis.send(RegistriereAnwender(Aggregatkennung(id), it.eigenschaften.name))
+                .locationHeader(UriTemplate("/api/anwender/{id}"))
+        }
     }
 }
 
