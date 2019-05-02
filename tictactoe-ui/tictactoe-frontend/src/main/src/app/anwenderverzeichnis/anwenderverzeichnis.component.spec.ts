@@ -13,18 +13,27 @@ describe('AnwenderverzeichnisComponent', () => {
   const spy = jasmine.createSpyObj('AnwenderverzeichnisService', ['getAnwenderverzeichnis']);
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [AnwenderverzeichnisComponent],
-      imports: [ReactiveFormsModule],
-      providers: [
-        {provide: AnwenderverzeichnisService, useValue: spy},
-        {provide: APP_BASE_HREF, useValue: '/'},
-        {provide: ActivatedRoute, useValue: {paramMap: of(convertToParamMap({id: 4711}))}}
-      ],
-      // TODO: Entfernen: RegistrierungComponent deklarieren. Aber dazu muss diese den Anwenderservice benutzen
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    TestBed
+      .configureTestingModule({
+        declarations: [AnwenderverzeichnisComponent],
+        imports: [ReactiveFormsModule],
+        providers: [
+          {provide: APP_BASE_HREF, useValue: '/'},
+          {provide: ActivatedRoute, useValue: {paramMap: of(convertToParamMap({id: 4711}))}}
+        ],
+        // TODO: Entfernen: RegistrierungComponent deklarieren. Aber dazu muss diese den Anwenderservice benutzen
+        schemas: [NO_ERRORS_SCHEMA]
+      })
+      .overrideComponent(AnwenderverzeichnisComponent, {
+        set: {
+          providers: [{
+            provide: AnwenderverzeichnisService,
+            useValue: spy
+          }]
+        }
+      })
+      .compileComponents().then(() => {
+    });
   }));
 
   it('should create', (done: DoneFn) => {

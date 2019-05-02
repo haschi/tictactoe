@@ -2,6 +2,12 @@
   anwenderverzeichnis works!
 </p>
 
-<p>Anwenderverzeichnis {{(anwenderverzeichnis$ | async).id}}</p>
+<div *ngIf="anwenderverzeichnis$ | async as anwenderverzeichnis; else loading">
+  <p>Anwenderverzeichnis {{anwenderverzeichnis.id}}</p>
+  <app-registrierung [anwenderverzeichnisId]="anwenderverzeichnis.id"></app-registrierung>
+</div>
 
-<app-registrierung [anwenderverzeichnisId]="(anwenderverzeichnis$ | async)?.id"></app-registrierung>
+<ng-template #loading>
+  <p>Anwenderverzeichnis</p>
+  <p>Loading....</p>
+</ng-template>

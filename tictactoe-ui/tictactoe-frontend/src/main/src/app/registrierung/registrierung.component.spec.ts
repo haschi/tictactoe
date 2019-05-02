@@ -5,15 +5,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Component} from '@angular/core';
 
-@Component({
-  selector: 'test-host',
-  template: '<app-registrierung [anwenderverzeichnisId]="anwenderverzeichnisId"></app-registrierung>'
-})
-class RegistrierungTestHostComponent {
-  anwenderverzeichnisid = '4711';
-}
-
 describe('RegistrierungComponent', () => {
+  // noinspection AngularMissingOrInvalidDeclarationInModule
+  @Component({
+    selector: 'app-test-host',
+    template: '<app-registrierung [anwenderverzeichnisId]="anwenderverzeichnisId"></app-registrierung>'
+  })
+  class RegistrierungTestHostComponent {
+    anwenderverzeichnisId = '4711';
+  }
+
   let component: RegistrierungTestHostComponent;
   let fixture: ComponentFixture<RegistrierungTestHostComponent>;
 
@@ -22,7 +23,8 @@ describe('RegistrierungComponent', () => {
       declarations: [RegistrierungTestHostComponent, RegistrierungComponent],
       imports: [ReactiveFormsModule, HttpClientTestingModule]
     })
-      .compileComponents();
+      .compileComponents().then(() => {
+    });
   }));
 
   beforeEach(() => {
