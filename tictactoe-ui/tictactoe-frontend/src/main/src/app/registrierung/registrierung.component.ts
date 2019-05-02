@@ -62,7 +62,7 @@ export class RegistrierungComponent implements OnInit {
 
 
     return this.http.post('/api/anwenderverzeichnisse/' + this.anwenderverzeichnisId,
-      this.registrierungForm.value, {observe: 'response'})
+      {eigenschaften: this.registrierungForm.value}, {observe: 'response'})
       .pipe(
         tap(message => {
           console.info('TAP: ' + JSON.stringify(message));

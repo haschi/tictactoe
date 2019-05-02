@@ -10,7 +10,9 @@ Content-Type: application/json
 Accept: */*
 
 {
-  "name": "Matthias"
+  "eigenschaften": {
+    "name": "Matthias"
+  }
 }
 
 ###

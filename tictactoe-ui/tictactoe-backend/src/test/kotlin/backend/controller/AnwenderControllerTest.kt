@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.codec.json.Jackson2JsonDecoder
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.FluxExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -29,13 +30,8 @@ import java.util.concurrent.CompletableFuture
 
 @ExtendWith(SpringExtension::class)
 @WebFluxTest(controllers = [AnwenderController::class])
-//@Import(value = [WebFluxConfiguration::class, CodecsConfiguration::class])
-@Import
-@ControllerTest(
-    profiles = ["test"],
-//    controllers = [AnwenderController::class],
-    imports = [WebFluxConfiguration::class, CodecsConfiguration::class]
-)
+@Import(value = [WebFluxConfiguration::class, CodecsConfiguration::class])
+@ActiveProfiles("test")
 class AnwenderControllerTest(
     @Autowired private val decoder: Jackson2JsonDecoder,
     @Autowired private val client: WebTestClient
