@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {Anwenderverzeichnis, Anwenderverzeichnisse} from './anwenderverzeichnisse.model';
 import * as oboe from 'oboe';
 import {isUndefined} from 'util';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-anwenderverzeichnisse',
@@ -53,7 +53,6 @@ export class AnwenderverzeichnisseComponent implements OnInit {
       .pipe(
         map(response => response.headers.get('Location')),
         flatMap(location => this.http.get<Anwenderverzeichnis>(location))
-        // TODO: flatMap GET LOCATION => Anwenderverzeichnis => ID => routing
       )
       .subscribe(value => {
         console.info(value);

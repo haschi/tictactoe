@@ -5,7 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Anwenderverzeichnis} from '../anwenderverzeichnisse/anwenderverzeichnisse.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AnwenderverzeichnisService} from './anwenderverzeichnis.service';
-import {flatMap, tap} from "rxjs/operators";
+import {flatMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-anwenderverzeichnis',
@@ -21,9 +21,7 @@ export class AnwenderverzeichnisComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.info('ngOnInit');
     this.anwenderverzeichnis$ = this.route.paramMap.pipe(
-      tap(params => console.info('AnwenderverzeichnisComponent#ngOnInit(): params  = ' + JSON.stringify(params))),
       flatMap(params => this.service.getAnwenderverzeichnis(params.get('id')))
     );
   }
