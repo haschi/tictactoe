@@ -19,5 +19,12 @@ describe('AnwenderserviceService', () => {
       service.getAnwender('4711').subscribe(value => {
         expect(value).toEqual({eigenschaften: {name: 'Matthias'}});
       });
+
+      http.expectOne('/api/anwender/4711')
+        .flush({eigenschaften: {name: 'Matthias'}});
     }));
+
+  afterEach(inject([HttpTestingController], (http: HttpTestingController) => {
+    http.verify();
+  }));
 });
