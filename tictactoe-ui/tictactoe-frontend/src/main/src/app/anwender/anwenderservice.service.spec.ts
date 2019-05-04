@@ -16,7 +16,7 @@ describe('AnwenderserviceService', () => {
 
   it('Kann Eigenschaften des Anwenders lesen', inject([AnwenderserviceService, HttpTestingController],
     (service: AnwenderserviceService, http: HttpTestingController) => {
-      service.getEigenschaften('4711').subscribe(value => {
+      service.getAnwender('4711').subscribe(value => {
         expect(value).toEqual({eigenschaften: {name: 'Matthias'}});
       });
     }));

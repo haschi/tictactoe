@@ -9,7 +9,7 @@ export class AnwenderserviceService {
   constructor(private http: HttpClient) {
   }
 
-  getEigenschaften(id: string): Observable<Anwender> {
+  getAnwender(id: string): Observable<Anwender> {
     return this.http.get<Anwender>(`/api/anwender/${id}`);
   }
 }
