@@ -1,8 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-registrierung',
@@ -17,7 +18,7 @@ export class RegistrierungComponent {
     name: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
   }
 
   private static handleError(error: HttpErrorResponse): Observable<any> {
@@ -37,16 +38,17 @@ export class RegistrierungComponent {
 
   onSubmit() {
     this.benutzerRegistrieren()
-      .subscribe(response => {
-        console.info('Ergebnis: ' + JSON.stringify(response));
+      .subscribe(aggregatId => {
+        this.router.navigate(['/anwender', aggregatId]);
       });
   }
 
-  benutzerRegistrieren(): Observable<any> {
+  benutzerRegistrieren(): Observable<string> {
 
     return this.http.post('/api/anwenderverzeichnisse/' + this.anwenderverzeichnisId,
       {eigenschaften: this.registrierungForm.value}, {observe: 'response'})
       .pipe(
+        map(response => response.headers.get('AggregatId')),
         catchError(RegistrierungComponent.handleError)
       );
   }

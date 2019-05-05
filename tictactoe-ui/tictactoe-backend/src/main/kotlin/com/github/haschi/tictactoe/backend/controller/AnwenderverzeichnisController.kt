@@ -30,7 +30,10 @@ class AnwenderverzeichnisController(
     fun post(@PathVariable("id") id: String, @RequestBody anwender: Mono<AnwenderResource>): Mono<HttpHeaders> {
         return anwender.flatMap {
             anwenderverzeichnis.send(RegistriereAnwender(Aggregatkennung(id), it.eigenschaften.name))
-                .locationHeader(UriTemplate("/api/anwender/{id}"))
+                .headers { h, id ->
+                    h.set("AggregatId", id.id)
+                    h.location = UriTemplate("/api/anwender/{id}").expand(id)
+                }
         }
     }
 }

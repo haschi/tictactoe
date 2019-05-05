@@ -4,6 +4,7 @@ import {RegistrierungComponent} from './registrierung.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Component} from '@angular/core';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('RegistrierungComponent', () => {
   // noinspection AngularMissingOrInvalidDeclarationInModule
@@ -21,7 +22,7 @@ describe('RegistrierungComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [RegistrierungTestHostComponent, RegistrierungComponent],
-      imports: [ReactiveFormsModule, HttpClientTestingModule]
+      imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule]
     })
       .compileComponents().then(() => {
     });

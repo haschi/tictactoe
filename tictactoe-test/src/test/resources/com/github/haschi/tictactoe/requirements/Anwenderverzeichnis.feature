@@ -18,6 +18,7 @@ Funktionalität: Anwenderverzeichnis
     Angenommen ich habe das Anwenderverzeichnis angelegt
     Wenn ich mich als Anwender "Matthias" registriere
     Dann werde ich den Anwender "Matthias" im Anwenderverzeichnis nicht gefunden haben
+    Und ich werde die vom Profilersteller erstellten Eigenschaften von "Matthias" abrufen können
 
   @core
   Szenario: Anwender doppelt registrieren

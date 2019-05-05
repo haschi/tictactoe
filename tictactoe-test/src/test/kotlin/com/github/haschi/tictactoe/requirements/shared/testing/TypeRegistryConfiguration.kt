@@ -5,6 +5,7 @@ import com.github.haschi.tictactoe.domain.values.Spieler
 import com.github.haschi.tictactoe.domain.values.Spielzug
 import com.github.haschi.tictactoe.domain.values.Zeichen
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
+import com.github.haschi.tictactoe.requirements.core.testing.Person
 import cucumber.api.TypeRegistry
 import cucumber.api.TypeRegistryConfigurer
 import io.cucumber.cucumberexpressions.ParameterType
@@ -41,6 +42,14 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
             }
         })
 
+        registry.defineParameterType(ParameterType("anwender", ".*", Resolver::class.java) { name: String ->
+            object : Resolver<Person> {
+                override fun resolve(zustand: IZustand): Person {
+                    return zustand.anwender.getValue(name)
+                }
+            }
+        })
+
         registry.defineParameterType(ParameterType("zeitraum", ".*", Duration::class.java) { _: String ->
             Duration.ofMillis(500)
 //            val pattern = Pattern.compile("^((?<wert>\\d+) (?<einheit>Sekunde(n*)|Millisekunde(n*)))$")
@@ -73,8 +82,9 @@ class TypeRegistryConfiguration : TypeRegistryConfigurer {
                                 return Spielzug(spieler, feld(entry["Feld"]!!))
                             }
                         }
-            }
-        }))
+                    }
+                })
+        )
     }
 
     private fun feld(wert: String): Feld {
