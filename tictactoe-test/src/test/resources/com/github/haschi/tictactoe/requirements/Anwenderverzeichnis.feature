@@ -14,11 +14,16 @@ Funktionalität: Anwenderverzeichnis
     Dann werde ich einen Warteraum dazu eingerichtet haben
 
   @core
-  Szenario: Anwender registrieren
+  Szenariogrundriss: Anwender registrieren
     Angenommen ich habe das Anwenderverzeichnis angelegt
-    Wenn ich mich als Anwender "Matthias" registriere
-    Dann werde ich den Anwender "Matthias" im Anwenderverzeichnis nicht gefunden haben
-    Und ich werde die vom Profilersteller erstellten Eigenschaften von "Matthias" abrufen können
+    Wenn ich mich als Anwender "<Name>" registriere
+    Dann werde ich den Anwender "<Name>" im Anwenderverzeichnis nicht gefunden haben
+    Und ich werde die vom Profilersteller erstellten Eigenschaften von "<Name>" abrufen können
+
+    Beispiele:
+      | Name     |
+      | Matthias |
+      | Martin   |
 
   @core
   Szenario: Anwender doppelt registrieren

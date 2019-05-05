@@ -1,10 +1,6 @@
-<p>
-  anwender works!
-</p>
-
+<h2>Profil</h2>
 <div *ngIf="anwender$ | async as anwender else loading">
-  <p>Anwender</p>
-  <!--  <app-eigenschaften [anwender]="anwender"></app-eigenschaften>-->
+  <app-eigenschaften [anwender]="anwender"></app-eigenschaften>
 </div>
 
 <ng-template #loading>
