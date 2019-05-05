@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {EigenschaftenComponent} from './eigenschaften.component';
 import {Component} from '@angular/core';
-import {Anwender} from '../anwender.model';
+import {Eigenschaften} from '../anwender.model';
 import {By} from "@angular/platform-browser";
 
 describe('EigenschaftenComponent', () => {
@@ -10,10 +10,10 @@ describe('EigenschaftenComponent', () => {
   // noinspection AngularMissingOrInvalidDeclarationInModule
   @Component({
     selector: 'app-test-host',
-    template: '<app-eigenschaften [anwender]="anwender"></app-eigenschaften>'
+    template: '<app-eigenschaften [eigenschaften]="eigenschaften"></app-eigenschaften>'
   })
   class EigenschaftenTestHostComponent {
-    anwender: Anwender = {eigenschaften: {name: 'Matthias'}};
+    eigenschaften: Eigenschaften = {name: 'Matthias'};
   }
 
 

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Anwender} from "../anwender.model";
+import {Eigenschaften} from "../anwender.model";
 
 @Component({
   selector: 'app-eigenschaften',
@@ -8,7 +8,7 @@ import {Anwender} from "../anwender.model";
 })
 export class EigenschaftenComponent implements OnInit {
 
-  @Input() anwender: Anwender;
+  @Input() eigenschaften: Eigenschaften;
 
   constructor() {
   }

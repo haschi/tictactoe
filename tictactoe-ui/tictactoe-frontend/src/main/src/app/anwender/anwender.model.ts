@@ -3,6 +3,6 @@ export interface Eigenschaften {
 }
 
 export interface Anwender {
+  id: string;
   eigenschaften: Eigenschaften;
 }
-

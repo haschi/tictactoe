@@ -77,7 +77,7 @@ class AnwenderControllerTest(
 
             val result = getAnwender(id)
             result.responseBody.test()
-                .expectNext(AnwenderResource(Anwendereigenschaften("Matthias")))
+                .expectNext(AnwenderResource(Aggregatkennung(id), Anwendereigenschaften("Matthias")))
                 .thenCancel()
                 .verify()
         }

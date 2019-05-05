@@ -17,11 +17,11 @@ describe('AnwenderserviceService', () => {
   it('Kann Eigenschaften des Anwenders lesen', inject([AnwenderserviceService, HttpTestingController],
     (service: AnwenderserviceService, http: HttpTestingController) => {
       service.getAnwender('4711').subscribe(value => {
-        expect(value).toEqual({eigenschaften: {name: 'Matthias'}});
+        expect(value).toEqual({id: '4711', eigenschaften: {name: 'Matthias'}});
       });
 
       http.expectOne('/api/anwender/4711')
-        .flush({eigenschaften: {name: 'Matthias'}});
+        .flush({id: '4711', eigenschaften: {name: 'Matthias'}});
     }));
 
   afterEach(inject([HttpTestingController], (http: HttpTestingController) => {

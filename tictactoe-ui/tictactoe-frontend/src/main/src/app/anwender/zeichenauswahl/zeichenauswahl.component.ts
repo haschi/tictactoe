@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-zeichenauswahl',
@@ -7,10 +8,24 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ZeichenauswahlComponent implements OnInit {
 
-  constructor() {
+  @Input() id: string;
+
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
   }
 
+  zeichenAusgewaehlt(zeichen: string) {
+    const url = `/api/anwender/${this.id}`;
+    console.info(`Zeichen ausgewählt: ${zeichen} für ${this.id} an ${url}`);
+    this.http.patch(url, {zeichenauswahl: zeichen}, {}).subscribe(
+      result => {
+        console.info(`POST ${JSON.stringify(result)}`);
+      },
+      error => {
+        console.error(JSON.stringify(error));
+      }
+    );
+  }
 }

@@ -1,6 +1,7 @@
 <h2>Profil</h2>
 <div *ngIf="anwender$ | async as anwender else loading">
-  <app-eigenschaften [anwender]="anwender"></app-eigenschaften>
+  <app-eigenschaften [eigenschaften]="anwender.eigenschaften"></app-eigenschaften>
+  <app-zeichenauswahl [id]="anwender.id"></app-zeichenauswahl>
 </div>
 
 <ng-template #loading>

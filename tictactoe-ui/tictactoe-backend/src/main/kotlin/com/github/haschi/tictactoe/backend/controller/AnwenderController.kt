@@ -15,12 +15,18 @@ class AnwenderController(private val queryGateway: QueryGateway) {
 
     @RequestMapping(method = [RequestMethod.GET])
     @ResponseStatus(HttpStatus.OK)
-    fun `get`(@PathVariable("id") id: String): Mono<AnwenderResource> {
+    fun `get`(@PathVariable("id") id: Aggregatkennung): Mono<AnwenderResource> {
         return queryGateway.query(
-            WelcheEigenschaftenBesitztAnwender(Aggregatkennung(id)),
+            WelcheEigenschaftenBesitztAnwender(id),
             Anwendereigenschaften::class.java
         )
             .toMono()
-            .map { AnwenderResource(it) }
+            .map { AnwenderResource(id, it) }
+    }
+
+    @RequestMapping(method = [RequestMethod.PATCH])
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun patch(@PathVariable("id") id: Aggregatkennung): Mono<Void> {
+        return Mono.empty<Void>()
     }
 }

@@ -5,7 +5,7 @@ import {APP_BASE_HREF} from '@angular/common';
 import {ActivatedRoute, convertToParamMap} from '@angular/router';
 import {of} from 'rxjs';
 import {AnwenderserviceService} from './anwenderservice.service';
-import {NO_ERRORS_SCHEMA} from "@angular/core";
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('AnwenderComponent', () => {
 
@@ -36,7 +36,7 @@ describe('AnwenderComponent', () => {
   });
 
   it('should create', (done: DoneFn) => {
-    spy.getAnwender.and.returnValue(of({eigenschaften: {name: 'Matthias'}}));
+    spy.getAnwender.and.returnValue(of({id: '4711', eigenschaften: {name: 'Matthias'}}));
 
     const fixture = TestBed.createComponent(AnwenderComponent);
     fixture.detectChanges();
@@ -44,7 +44,7 @@ describe('AnwenderComponent', () => {
     expect(fixture.componentInstance.anwender$).toBeTruthy();
     fixture.componentInstance.anwender$.subscribe(
       value => {
-        expect(value).toEqual({eigenschaften: {name: 'Matthias'}});
+        expect(value).toEqual({id: '4711', eigenschaften: {name: 'Matthias'}});
         done();
       }
     );

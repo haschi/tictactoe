@@ -46,7 +46,7 @@ export class RegistrierungComponent {
   benutzerRegistrieren(): Observable<string> {
 
     return this.http.post('/api/anwenderverzeichnisse/' + this.anwenderverzeichnisId,
-      {eigenschaften: this.registrierungForm.value}, {observe: 'response'})
+      {id: this.anwenderverzeichnisId, eigenschaften: this.registrierungForm.value}, {observe: 'response'})
       .pipe(
         map(response => response.headers.get('AggregatId')),
         catchError(RegistrierungComponent.handleError)
