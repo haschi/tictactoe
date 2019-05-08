@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ZeichenauswahlComponent} from './zeichenauswahl.component';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('ZeichenauswahlComponent', () => {
   let component: ZeichenauswahlComponent;

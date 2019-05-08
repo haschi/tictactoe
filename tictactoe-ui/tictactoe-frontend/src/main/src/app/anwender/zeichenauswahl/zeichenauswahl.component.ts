@@ -18,10 +18,9 @@ export class ZeichenauswahlComponent implements OnInit {
 
   zeichenAusgewaehlt(zeichen: string) {
     const url = `/api/anwender/${this.id}`;
-    console.info(`Zeichen ausgewählt: ${zeichen} für ${this.id} an ${url}`);
     this.http.patch(url, {zeichenauswahl: zeichen}, {}).subscribe(
       result => {
-        console.info(`POST ${JSON.stringify(result)}`);
+        console.error('Die Weiterleitung zum Spiel ist noch nicht implementiert');
       },
       error => {
         console.error(JSON.stringify(error));
