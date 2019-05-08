@@ -1,6 +1,8 @@
 package com.github.haschi.tictactoe.requirements.core.steps
 
+import com.github.haschi.tictactoe.domain.Anwendereigenschaften
 import com.github.haschi.tictactoe.domain.WelcheAnwenderSindBekannt
+import com.github.haschi.tictactoe.domain.WelcheEigenschaftenBesitztAnwender
 import com.github.haschi.tictactoe.domain.commands.LegeAnwenderverzeichnisAn
 import com.github.haschi.tictactoe.domain.commands.RegistriereAnwender
 import com.github.haschi.tictactoe.domain.events.AnwenderNichtGefunden
@@ -10,8 +12,10 @@ import com.github.haschi.tictactoe.domain.values.AnwenderÜbersicht
 import com.github.haschi.tictactoe.domain.values.WarteraumEingerichtet
 import com.github.haschi.tictactoe.requirements.core.testing.DieWelt
 import com.github.haschi.tictactoe.requirements.core.testing.Person
+import com.github.haschi.tictactoe.requirements.shared.testing.Resolver
 import cucumber.api.java.de.Angenommen
 import cucumber.api.java.de.Dann
+import cucumber.api.java.de.Und
 import cucumber.api.java.de.Wenn
 import domain.WelcheAnwenderverzeichnisseGibtEs
 import domain.values.AnwenderverzeichnisÜbersicht
@@ -20,7 +24,6 @@ import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 
 class AnwenderverzeichnisSteps(private val welt: DieWelt) {
-
 
     @Wenn("^ich das Anwenderverzeichnis anlege$")
     fun ich_das_Anwenderverzeichnis_anlege() {
@@ -31,7 +34,6 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
                 }
         }
     }
-
 
     @Dann("^wird das Anwenderverzeichnis keine Anwender enthalten$")
     fun wird_das_Anwenderverzeichnis_keine_Anwender_enthalten() {
@@ -151,6 +153,19 @@ class AnwenderverzeichnisSteps(private val welt: DieWelt) {
 
             assertThat(antwort)
                 .isEqualTo(AnwenderverzeichnisÜbersicht(zustand.anwenderverzeichnisId))
+        }
+    }
+
+    @Und("ich werde die vom Profilersteller erstellten Eigenschaften von \"{anwender}\" abrufen können")
+    fun `Und ich werde die vom Profiler erstellten Eigenschaften von Anwender abrufen können`(anwender: Resolver<Person>) {
+        welt.versuche { zustand ->
+            val antwort = welt.ask(
+                WelcheEigenschaftenBesitztAnwender(anwender.resolve(zustand).id),
+                Anwendereigenschaften::class.java
+            )
+                .join()
+            assertThat(antwort)
+                .isEqualTo(Anwendereigenschaften(anwender.resolve(zustand).name))
         }
     }
 

@@ -1,3 +1,5 @@
-package domain
+package com.github.haschi.tictactoe.domain
 
-data class WelcheEigenschaftenBesitztAnwender(val s: String)
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
+
+data class WelcheEigenschaftenBesitztAnwender(val s: Aggregatkennung)

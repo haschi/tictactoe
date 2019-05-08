@@ -2,10 +2,6 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {inject, TestBed} from '@angular/core/testing';
 import {AnwenderverzeichnisService} from './anwenderverzeichnis.service';
 
-// interface Data {
-//   name: string;
-// }
-
 describe('AnwenderverzeichnisService', () => {
 
   beforeEach(() => {

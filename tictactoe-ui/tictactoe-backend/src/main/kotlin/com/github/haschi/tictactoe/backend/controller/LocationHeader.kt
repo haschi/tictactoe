@@ -18,3 +18,11 @@ fun CompletableFuture<Aggregatkennung>.locationHeader(
         headers
     }.toMono()
 }
+
+fun CompletableFuture<Aggregatkennung>.headers(body: (HttpHeaders, Aggregatkennung) -> Unit): Mono<HttpHeaders> {
+    return this.thenApply { id ->
+        val headers = HttpHeaders()
+        body(headers, id)
+        headers
+    }.toMono()
+}

@@ -41,7 +41,7 @@ class DieWelt(
         val ich: Person,
         val spielId: Aggregatkennung,
         val warteraumId: Aggregatkennung,
-        val anwender: Map<String, Person>,
+        override val anwender: Map<String, Person>,
         val ereignisse: List<Any>,
         override val spieler: Map<Char, Spieler>
     ) : IZustand {
@@ -67,7 +67,7 @@ class DieWelt(
 
     // Führt einen Schritt asynchron aus. Der Schritt transformiert dabei den
     // Zustand.
-    inline final fun compose(crossinline block: DieWelt.Zustand.() -> CompletableFuture<Zustand>) {
+    inline final fun compose(crossinline block: Zustand.() -> CompletableFuture<Zustand>) {
         if (stepping) {
             throw UngültigeSchrittausführung()
         }
@@ -95,7 +95,7 @@ class DieWelt(
         pending = pending + { zustand: CompletableFuture<Zustand> -> zustand.thenApply { block(it) } }
     }
 
-    inline final fun join(crossinline block: DieWelt.Ergebnis.() -> Unit) {
+    inline final fun join(crossinline block: Ergebnis.() -> Unit) {
         block(
             try {
                 Ergebnis(zustand.get(), null)

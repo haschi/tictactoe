@@ -3,9 +3,10 @@ package com.github.haschi.tictactoe.backend.controller
 import backend.controller.withDecoder
 import com.github.haschi.tictactoe.backend.WebFluxConfiguration
 import com.github.haschi.tictactoe.backend.marshalling.CodecsConfiguration
+import com.github.haschi.tictactoe.domain.Anwendereigenschaften
+import com.github.haschi.tictactoe.domain.WelcheEigenschaftenBesitztAnwender
+import com.github.haschi.tictactoe.domain.values.Aggregatkennung
 import com.nhaarman.mockitokotlin2.whenever
-import domain.Anwendereigenschaften
-import domain.WelcheEigenschaftenBesitztAnwender
 import org.assertj.core.api.Assertions.assertThat
 import org.axonframework.queryhandling.QueryGateway
 import org.junit.jupiter.api.DisplayName
@@ -68,7 +69,7 @@ class AnwenderControllerTest(
         fun `liefert Response mit Anwender Resource`(id: String) {
             whenever(
                 queryBus.query(
-                    WelcheEigenschaftenBesitztAnwender(id),
+                    WelcheEigenschaftenBesitztAnwender(Aggregatkennung(id)),
                     Anwendereigenschaften::class.java
                 )
             )
@@ -76,7 +77,7 @@ class AnwenderControllerTest(
 
             val result = getAnwender(id)
             result.responseBody.test()
-                .expectNext(AnwenderResource(Anwendereigenschaften("Matthias")))
+                .expectNext(AnwenderResource(Aggregatkennung(id), Anwendereigenschaften("Matthias")))
                 .thenCancel()
                 .verify()
         }
