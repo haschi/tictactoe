@@ -1,10 +1,16 @@
-<h2>Anwendeverzeichnisse</h2>
+<mat-card>
+  <mat-card-title>Anwendeverzeichnisse</mat-card-title>
 
-<button (click)="anlegen()">Neues Anwenderverzeichnis anlegen</button>
-
-<ul>
-  <li *ngFor="let verzeichnis of verzeichnisse$ | async; let i = index" [attr.data-index]="i">
-    <a href="#">{{i + 1}}</a> {{verzeichnis.id}}
-    <a [routerLink]="['/anwenderverzeichnis', verzeichnis.id]">{{i + 1}}</a>
-  </li>
-</ul>
+  <mat-card-content>
+    <mat-nav-list>
+      <mat-list-item
+        *ngFor="let verzeichnis of verzeichnisse$ | async; let i = index"
+        [attr.data-index]="i">
+        <a [routerLink]="['/anwenderverzeichnis', verzeichnis.id]">Verzeichnis {{i + 1}}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="anlegen()" color="primary" mat-button>Neues Anwenderverzeichnis anlegen</button>
+  </mat-card-actions>
+</mat-card>

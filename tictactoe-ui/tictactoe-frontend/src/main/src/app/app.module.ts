@@ -11,7 +11,7 @@ import {AnwenderverzeichnisComponent} from './anwenderverzeichnis/anwenderverzei
 import {AnwenderComponent} from './anwender/anwender.component';
 import {EigenschaftenComponent} from './anwender/eigenschaften/eigenschaften.component';
 import {ZeichenauswahlComponent} from './anwender/zeichenauswahl/zeichenauswahl.component';
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule} from "@angular/material";
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatListModule} from "@angular/material";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
@@ -34,6 +34,7 @@ import {NoopAnimationsModule} from "@angular/platform-browser/animations";
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
