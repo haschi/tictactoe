@@ -1,11 +1,18 @@
-<h2>Registrierung</h2>
-
 <form [formGroup]="registrierungForm" (ngSubmit)="onSubmit()">
-  <label>
-    Name:
-    <input type="text" formControlName="name" required="required">
-  </label>
 
-  <p>Name: {{registrierungForm.value}}</p>
-  <button type="submit" [disabled]="!registrierungForm.valid">Submit</button>
+  <mat-card>
+    <mat-card-title>Registrierung</mat-card-title>
+
+    <mat-card-content>
+      <mat-form-field appearance="standard">
+        <mat-label>Name</mat-label>
+        <input formControlName="name" matInput required="required" type="text">
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button [disabled]="!registrierungForm.valid" color="primary" mat-button type="submit">Submit</button>
+    </mat-card-actions>
+
+  </mat-card>
 </form>

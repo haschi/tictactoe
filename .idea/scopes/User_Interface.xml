@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="User Interface" pattern="file[Backend]:*/||file[Frontend]:src/main/src//*" />
-</component>

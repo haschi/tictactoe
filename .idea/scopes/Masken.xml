@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Masken" pattern="file[Frontend]:src/main/src//*.html||file[Frontend]:src/main/src//*.less" />
+</component>
