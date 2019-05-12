@@ -1,7 +1,14 @@
-<h2>Profil</h2>
 <div *ngIf="anwender$ | async as anwender else loading">
-  <app-eigenschaften [eigenschaften]="anwender.eigenschaften"></app-eigenschaften>
-  <app-zeichenauswahl [id]="anwender.id"></app-zeichenauswahl>
+  <mat-grid-list cols="2">
+    <mat-grid-tile>
+
+      <app-eigenschaften [eigenschaften]="anwender.eigenschaften"></app-eigenschaften>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-zeichenauswahl [id]="anwender.id"></app-zeichenauswahl>
+    </mat-grid-tile>
+  </mat-grid-list>
+
 </div>
 
 <ng-template #loading>

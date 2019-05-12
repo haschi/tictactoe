@@ -1,4 +1,12 @@
-<p>Zeichen auswählen und Spiel starten</p>
-<p>{{id}}</p>
-<button (click)="zeichenAusgewaehlt('X')">X</button>
-<button (click)="zeichenAusgewaehlt('O')">O</button>
+<mat-card>
+  <mat-card-title>Zeichen auswählen und Spiel starten</mat-card-title>
+  <mat-card-content>
+    <p>{{id}}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="zeichenAusgewaehlt('X')" color="accent" mat-button>X</button>
+    <button (click)="zeichenAusgewaehlt('O')" color="accent" mat-button>O</button>
+  </mat-card-actions>
+</mat-card>
+
+
