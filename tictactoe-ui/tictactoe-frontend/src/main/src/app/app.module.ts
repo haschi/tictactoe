@@ -11,8 +11,18 @@ import {AnwenderverzeichnisComponent} from './anwenderverzeichnis/anwenderverzei
 import {AnwenderComponent} from './anwender/anwender.component';
 import {EigenschaftenComponent} from './anwender/eigenschaften/eigenschaften.component';
 import {ZeichenauswahlComponent} from './anwender/zeichenauswahl/zeichenauswahl.component';
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatListModule} from "@angular/material";
-import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {LayoutModule} from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -22,7 +32,7 @@ import {NoopAnimationsModule} from "@angular/platform-browser/animations";
     AnwenderverzeichnisComponent,
     AnwenderComponent,
     EigenschaftenComponent,
-    ZeichenauswahlComponent
+    ZeichenauswahlComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +45,10 @@ import {NoopAnimationsModule} from "@angular/platform-browser/animations";
     MatButtonModule,
     MatCardModule,
     MatListModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

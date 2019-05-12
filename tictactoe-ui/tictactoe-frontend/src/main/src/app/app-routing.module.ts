@@ -9,7 +9,7 @@ const routes: Routes = [
   {path: 'registrierung', component: RegistrierungComponent},
   {path: 'anwenderverzeichnisse', component: AnwenderverzeichnisseComponent},
   {path: 'anwenderverzeichnis/:id', component: AnwenderverzeichnisComponent},
-  {path: 'anwender/:id', component: AnwenderComponent}
+  {path: 'anwender/:id', component: AnwenderComponent},
 ];
 
 @NgModule({
